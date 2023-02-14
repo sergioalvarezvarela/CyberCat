@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.webjars.bower:jquery-form-validator:2.3.77">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/webjars/bower/jquery-form-validator/2.3.77/jquery-form-validator-2.3.77.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/webjars/bower/jquery-form-validator/2.3.77/jquery-form-validator-2.3.77-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/webjars/bower/jquery-form-validator/2.3.77/jquery-form-validator-2.3.77-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
