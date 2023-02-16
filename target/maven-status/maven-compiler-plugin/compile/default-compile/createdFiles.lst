@@ -1,2 +1,11 @@
+es\cybercatapp\business\repositories\AbstractRepository.class
+es\cybercatapp\business\services\UserService.class
 es\cybercatapp\business\exceptions\InputValidationException.class
+es\cybercatapp\business\exceptions\DuplicatedResourceException.class
+es\cybercatapp\business\entities\User.class
 es\cybercatapp\business\exceptions\InstanceNotFoundException.class
+es\cybercatapp\Application.class
+es\cybercatapp\common\ConfigurationParameters.class
+es\cybercatapp\common\Constants.class
+es\cybercatapp\business\repositories\UserRepository.class
+es\cybercatapp\business\utils\ExceptionGenerationUtils.class
