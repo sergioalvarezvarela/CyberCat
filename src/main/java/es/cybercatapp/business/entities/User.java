@@ -1,5 +1,4 @@
 package es.cybercatapp.business.entities;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;

@@ -1,6 +1,10 @@
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\business\entities\User.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\business\exceptions\DuplicatedResourceException.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\business\utils\ExceptionGenerationUtils.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\business\exceptions\InstanceNotFoundException.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\Application.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\common\Constants.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\business\repositories\AbstractRepository.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\business\exceptions\InputValidationException.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\business\services\UserService.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\common\ConfigurationParameters.java

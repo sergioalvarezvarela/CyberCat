@@ -45,8 +45,9 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derby</artifactId>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.24</version>
         </dependency>
         <dependency>
             <groupId>org.mindrot</groupId>
@@ -200,16 +201,16 @@
                 <version>1.5</version>
                 <dependencies>
                     <dependency>
-                        <groupId>org.apache.derby</groupId>
-                        <artifactId>derby</artifactId>
-                        <version>10.14.2.0</version>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>8.0.29</version>
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <driver>org.apache.derby.jdbc.EmbeddedDriver</driver>
-                    <url>jdbc:derby:work/database;create=true</url>
-                    <username>app</username>
-                    <password>secr3t</password>
+                    <driver>com.mysql.cj.jdbc.Driver</driver>
+                    <url>jdbc:mysql://localhost/work</url>
+                    <username>root</username>
+                    <password>root</password>
                     <autocommit>true</autocommit>
                     <onError>continue</onError>
                     <srcFiles>
