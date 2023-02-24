@@ -1,5 +1,6 @@
 package es.cybercatapp.model.impl;
 
+import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Users;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.repositories.UserRepository;
@@ -42,17 +43,18 @@ public class UserImpl {
     @Transactional
     public Users create(String username, String email, String password,
                         String image, byte[] imageContents) throws DuplicatedResourceException {
-      /*  if (userRepository.findByEmail(email) != null) {
+        if (userRepository.findByEmail(email) != null) {
+
             throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.EMAIL_FIELD, email,
-                    Constants.DUPLICATED_INSTANCE_MESSAGE);
+                    "registration.duplicated.exception");
         }
         if (userRepository.findByUsername(username) != null) {
             throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USERNAME_FIELD, username,
-                    Constants.DUPLICATED_INSTANCE_MESSAGE);
-        }*/
-        Users users = userRepository.create(new Users(username, email, BCrypt.hashpw(password, SALT), false, LocalDateTime.now(),"prueba"));
-     //   saveProfileImage(user.getUserId(), image, imageContents);
-        return users;
+                    "registration.duplicated.exception");
+        }
+        Users user = userRepository.create(new Users(username, email, BCrypt.hashpw(password, SALT),false,LocalDateTime.now(), image));
+        saveProfileImage(user.getUserId(), image, imageContents);
+        return user;
     }
     private void saveProfileImage(Long id, String image, byte[] imageContents) {
         if (image != null && image.trim().length() > 0 && imageContents != null) {

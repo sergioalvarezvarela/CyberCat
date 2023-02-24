@@ -1,0 +1,49 @@
+
+.show-password-icon {
+    float: right;
+    position: relative;
+    margin: -45px -30px 0 0;
+    cursor: pointer;
+    font-size: 25px;
+}
+
+
+.register-background-color{
+    background-color:#d7e7f2;
+}
+
+.register-button-color{
+    background-color:#1d70a2;
+}
+
+.register-custom-btn {
+    width: 500px;
+    padding: 10px;
+}
+
+.wrong{
+    border-color: red;
+}
+.wrong:focus{
+    border-color: red;
+    box-shadow: 0 0 5px red;
+}
+
+.acierto:focus{
+    border-color: green;
+    box-shadow: 0 0 5px green;
+}
+.acierto{
+    border-color: green;
+}
+
+.hide_alert{
+    display: none;
+}
+
+.show_alert{
+    display: inline;
+}
+
+
+

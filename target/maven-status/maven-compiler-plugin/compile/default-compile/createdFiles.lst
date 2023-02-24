@@ -9,5 +9,4 @@ es\cybercatapp\common\ConfigurationParameters.class
 es\cybercatapp\model\repositories\UserRepository.class
 es\cybercatapp\common\Constants.class
 es\cybercatapp\model\exceptions\DuplicatedResourceException.class
-es\cybercatapp\service\dto\UserDtoForm.class
 es\cybercatapp\service\Controllers\UserOperations.class

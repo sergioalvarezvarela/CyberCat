@@ -21,14 +21,13 @@ public class ServiceExceptions {
     @Autowired
     private MessageSource messageSource;
 
-    public String serviceInvalidFormError(BindingResult result, String template,
-                                         Model model, Locale locale) {
+    public void serviceInvalidFormError(BindingResult result, String template,
+                                        Model model, Locale locale) {
         if (logger.isErrorEnabled()) {
             logger.error(result.toString());
         }
         String message = messageSource.getMessage(template, new Object[0], locale);
         model.addAttribute(Constants.ERROR_MESSAGE, message);
-        return Constants.ERROR_PAGE;
     }
 
     public String serviceInstanceNotFoundException(InstanceNotFoundException e, Model model, Locale locale) {
@@ -38,12 +37,10 @@ public class ServiceExceptions {
         return Constants.ERROR_PAGE;
     }
 
-    public String serviceDuplicatedResourceException(DuplicatedResourceException e, String targetPage,
-                                                    Model model, Locale locale) {
-        logger.error(e.getMessage(), e);
+    public void serviceDuplicatedResourceException(DuplicatedResourceException e ,
+                                                     Model model) {
+        logger.error(e.getMessage(),e);
         model.addAttribute(Constants.ERROR_MESSAGE, e.getMessage());
-        model.addAttribute(Constants.EXCEPTION, e);
-        return targetPage;
     }
     public String serviceUnexpectedException(Exception e, Model model) {
         logger.error(e.getMessage(), e);

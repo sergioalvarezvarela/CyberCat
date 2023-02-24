@@ -1,28 +1,37 @@
 package es.cybercatapp.service.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class UserDtoForm {
+public class RegisterDtoForm {
 
     @NotNull
     @Size(min=6)
+    @Pattern(regexp = "^[a-zA-Z0-9]*$")
     private String username;
 
+
     @NotNull
+    @Size(min = 8)
+    @Pattern(regexp =  "^.*(?=\\S+$)(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=._]).*$")
     private String password;
 
     @NotNull
     @Email
     private String email;
 
+    private MultipartFile image;
 
-    public UserDtoForm(){
+
+    public RegisterDtoForm(){
 
     }
 
-    public UserDtoForm(String username, String password, String email ){
+    public RegisterDtoForm(String username, String password, String email ){
         this.username = username;
         this.password = password;
         this.email = email;
@@ -52,4 +61,11 @@ public class UserDtoForm {
         this.email = email;
     }
 
+    public MultipartFile getImage() {
+        return image;
+    }
+
+    public void setImage(MultipartFile image) {
+        this.image = image;
+    }
 }
