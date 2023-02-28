@@ -1,6 +1,7 @@
 package es.cybercatapp.service.Exceptions;
 
 import es.cybercatapp.common.Constants;
+import es.cybercatapp.model.exceptions.AuthenticationException;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import org.slf4j.Logger;
@@ -47,6 +48,13 @@ public class ServiceExceptions {
         model.addAttribute(Constants.ERROR_MESSAGE, e.getMessage());
         model.addAttribute(Constants.EXCEPTION, e);
         return Constants.ERROR_PAGE;
+    }
+    public String serviceAuthenticationException(AuthenticationException e, String user, String targetPage,
+                                                 Model model, Locale locale) {
+        logger.error(e.getMessage(), e);
+        model.addAttribute(Constants.ERROR_MESSAGE, e.getMessage());
+        model.addAttribute(Constants.EXCEPTION, e);
+        return targetPage;
     }
 
 }

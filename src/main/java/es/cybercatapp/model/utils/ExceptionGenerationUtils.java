@@ -1,5 +1,7 @@
 package es.cybercatapp.model.utils;
 
+
+import es.cybercatapp.model.exceptions.AuthenticationException;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +29,12 @@ public class ExceptionGenerationUtils {
         Locale locale = LocaleContextHolder.getLocale();
         String message = messageSource.getMessage(messageKey, new Object[]{value, resource}, locale);
         return new DuplicatedResourceException(resource, value, message);
+    }
+
+    public AuthenticationException toAuthenticationException(String messageKey, String user)
+            throws AuthenticationException {
+        Locale locale = LocaleContextHolder.getLocale();
+        String message = messageSource.getMessage(messageKey, new Object[] {user}, locale);
+        return new AuthenticationException(message);
     }
 }

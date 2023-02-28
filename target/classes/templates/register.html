@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<header th:replace="tools/package :: #package-include"></header>
+
+<body class="register-background-color">
+
+<div class="container d-flex justify-content-center align-items-center" style="height: 125vh;">
+    <div class="row">
+        <div class="col-md-25 mx-auto">
+            <div class="row mb-4">
+                <div class="col-2">
+
+                </div>
+
+                <div class="col">
+                    <a href="/">
+                        <img src="/images/logo2.png"   alt="Error al cargar la imagen" class="logo_tamano">
+                    </a>
+                </div>
+                <div class="col-2 ">
+
+                </div>
+            </div>
+            <h3 class="text-center">Regístrate</h3>
+            <form th:action="@{/register}" method="post" class="text-left" id="miFormulario" enctype="multipart/form-data">
+                <div class="form-group row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <label for="email">Email</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <input type="email" class="form-control form-control-lg" id="email"
+                                       aria-describedby="emailHelp"
+                                       placeholder="Introduce email" th:field="*{RegisterDtoForm.email}">
+                                <p class="hide_alert text-danger" id="alert_email">El campo Email es obligatorio</p>
+                                <p class="hide_alert text-danger" id="alert_email1">El campo Email no sigue el formato
+                                    correcto</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <label for="username">Nombre de usuario</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+
+                                <input type="text" class="form-control form-control-lg" id="username"
+                                       placeholder="Introduce usuario" th:field="*{RegisterDtoForm.username}">
+                                <p class="hide_alert text-danger" id="alert_user">El campo Nombre de usuario es
+                                    obligatorio</p>
+                                <p class="hide_alert text-danger" id="alert_user2">El campo Nombre de usuario no puede
+                                    contener
+                                    símbolos especiales</p>
+                                <br class="hide_alert" id="br5">
+                                <p class="hide_alert text-danger" id="alert_user3">El campo Nombre de usuario debe
+                                    contener al
+                                    menos
+                                    6 caracteres</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <label for="password1">Contraseña</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <input type="password" name="password1" class=" password1 form-control form-control-lg"
+                                       id="password1" placeholder="Introduce contraseña"
+                                       th:field="*{RegisterDtoForm.password}">
+                                <span class="bi bi-eye-fill show-password-icon show-password" id="eyeid"></span>
+                                <p class="hide_alert text-danger" id="alert_pass1">El campo Contraseña es
+                                    obligatorio</p>
+                                <p class="hide_alert text-danger" id="alert_pass3">La contraseña debe contener al menos
+                                    una
+                                    letra minúscula</p>
+                                <br class="hide_alert" id="br1">
+                                <p class="hide_alert text-danger" id="alert_pass4">La contraseña debe contener al menos
+                                    una
+                                    letra mayúscula</p>
+                                <br class="hide_alert" id="br2">
+                                <p class="hide_alert text-danger" id="alert_pass5">La contraseña debe contener al menos
+                                    un
+                                    número</p>
+                                <br class="hide_alert" id="br3">
+                                <p class="hide_alert text-danger" id="alert_pass6">La contraseña debe contener al menos
+                                    8
+                                    caracteres</p>
+                                <br class="hide_alert" id="br4">
+                                <p class="hide_alert text-danger" id="alert_pass7">La contraseña debe contener al menos
+                                    1
+                                    caracter especial</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <label for="password2">Repetir Contraseña</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <input type="password" name="password2" class=" password2 form-control form-control-lg"
+                                       id="password2" placeholder="Repite la contraseña">
+                                <p class="hide_alert text-danger" id="alert_pass2">Las contraseñas deben coincidir</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <label for="image">Foto de perfil</label>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col">
+                                <input type="file" class="form-control-file form-control-lg" id="image"
+                                       th:field="*{RegisterDtoForm.image}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <br>
+                        <input type="submit" onclick="comprobarErrores()" id="register" value="Regístrate"
+                               class=" register-button-color btn btn-primary register-custom-btn"
+                               style="margin-bottom: 20px">
+                        <div th:replace="tools/Messages :: #messages-fragment"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const formulario = document.getElementById('miFormulario');
+    let reg = null;
+
+    window.addEventListener("load", function () {
+        showPassword = document.querySelector('.show-password');
+        showPassword.addEventListener('click', () => {
+
+            password1 = document.querySelector('.password1');
+            password2 = document.querySelector('.password2');
+            eye = document.getElementById("eyeid");
+
+            if (password1.type === "text") {
+                password1.type = "password"
+                password2.type = "password"
+                eye.className = 'bi bi-eye-fill show-password-icon';
+            } else {
+                password1.type = "text"
+                password2.type = "text"
+                eye.className = "bi bi-eye-slash-fill show-password-icon";
+
+            }
+        })
+    });
+
+    function comprobarPass(reg) {
+        var password = document.getElementById("password1").value;
+        document.getElementById("alert_pass3").className = "hide_alert text-danger";
+        document.getElementById("alert_pass4").className = "hide_alert text-danger";
+        document.getElementById("alert_pass5").className = "hide_alert text-danger";
+        document.getElementById("alert_pass6").className = "hide_alert text-danger";
+        document.getElementById("alert_pass7").className = "hide_alert text-danger";
+        document.getElementById("br1").className = "hide_alert";
+        document.getElementById("br2").className = "hide_alert";
+        document.getElementById("br3").className = "hide_alert";
+        document.getElementById("br4").className = "hide_alert";
+        var bol = null;
+
+
+        if (/[a-z]/.test(password) === false) {
+            document.getElementById("alert_pass3").className = "show_alert text-danger";
+            document.getElementById("br1").className = "show_alert";
+            bol = true;
+        }
+        if (/[A-Z]/.test(password) === false) {
+            document.getElementById("alert_pass4").className = "show_alert text-danger";
+            document.getElementById("br2").className = "show_alert";
+            bol = true;
+        }
+        if (/\d/.test(password) === false) {
+            document.getElementById("alert_pass5").className = "show_alert text-danger";
+            document.getElementById("br3").className = "show_alert";
+            bol = true;
+        }
+        if (/.{8,}/.test(password) === false) {
+            document.getElementById("alert_pass6").className = "show_alert text-danger";
+            document.getElementById("br4").className = "show_alert";
+            bol = true;
+        }
+        if (/[!@#$%^&*(),.?":{}|<>]/.test(password) === false) {
+            document.getElementById("alert_pass7").className = "show_alert text-danger";
+            bol = true;
+        }
+        if (bol) {
+            document.getElementById("password1").className = "password1 form-control form-control-lg wrong";
+        }
+        return reg || bol;
+
+    }
+
+    function comprobarErrores() {
+        reg = false;
+        var username = document.getElementById("username");
+        username.className = "form-control form-control-lg acierto";
+        document.getElementById("alert_user").className = "hide_alert text-danger";
+        var email = document.getElementById("email");
+        email.className = "form-control form-control-lg acierto";
+        document.getElementById("alert_email").className = "hide_alert text-danger";
+        document.getElementById("alert_email1").className = "hide_alert text-danger";
+        var pass1 = document.getElementById("password1");
+        pass1.className = "password1 form-control form-control-lg acierto";
+        document.getElementById("alert_pass1").className = "hide_alert text-danger";
+        var pass2 = document.getElementById("password2");
+        pass2.className = "password2 form-control form-control-lg acierto";
+        document.getElementById("alert_pass2").className = "hide_alert text-danger";
+        document.getElementById("alert_user2").className = "hide_alert text-danger";
+        document.getElementById("alert_user3").className = "hide_alert text-danger";
+        var validEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+        var invalidUsername1 = /^[a-zA-Z0-9]*$/;
+        var invalidUsername2 = /^(?=.{6,})/;
+
+
+        if (pass1.value !== pass2.value || pass1.value === "") {
+            pass2.className = "password2 form-control form-control-lg wrong";
+            document.getElementById("alert_pass2").className = "show_alert text-danger";
+            reg = true;
+        }
+        if (username.value === "") {
+            username.className = "form-control form-control-lg wrong";
+            document.getElementById("alert_user").className = "show_alert text-danger";
+            reg = true;
+        }
+        if (invalidUsername1.test(username.value) === false && username.value !== "") {
+            username.className = "form-control form-control-lg wrong";
+            document.getElementById("alert_user2").className = "show_alert text-danger";
+            reg = true;
+        }
+        if ((invalidUsername1.test(username.value) === false) && (invalidUsername2.test(username.value) === false)) {
+            document.getElementById("br5").className = "show_alert";
+        }
+        if (invalidUsername2.test(username.value) === false && username.value !== "") {
+            username.className = "form-control form-control-lg wrong";
+            document.getElementById("alert_user3").className = "show_alert text-danger";
+            reg = true;
+        }
+        if (email.value === "") {
+            document.getElementById("alert_email").className = "show_alert text-danger";
+            email.className = "email form-control form-control-lg wrong";
+            reg = true;
+        }
+        if (validEmail.test(email.value) === false && (email.value !== "")) {
+
+            email.className = "email form-control form-control-lg wrong";
+            document.getElementById("alert_email1").className = "show_alert text-danger";
+            reg = true;
+        }
+        if (pass1.value !== "") {
+            reg = comprobarPass(reg);
+        }
+        if (pass1.value === "") {
+            pass1.className = "password1 form-control form-control-lg wrong";
+            document.getElementById("alert_pass1").className = "show_alert text-danger";
+            reg = true;
+
+        }
+    }
+
+    formulario.addEventListener('submit', function (evento) {
+        if (reg === true) {
+            evento.preventDefault();
+        }
+    });
+
+
+</script>
+</body>

@@ -1,292 +1,206 @@
 <!DOCTYPE html>
 <header th:replace="tools/package :: #package-include"></header>
 
+<header class="navbar navbar-expand" style="background-color: #173753">
+    <nav class="container">
+        <a href="/">
+            <img src="/images/logo.png"   alt="Error al cargar la imagen" class="logo_tamano">
+        </a>
+        <a class="nav-item nav-link home-letter-nav" href="#">Catálogo</a>
+        <a class="nav-item nav-link home-letter-nav" href="register">Regístrate</a>
+        <a class="nav-item nav-link home-letter-nav" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Loguéate</a>
+    </nav>
+
+</header>
 <body class="register-background-color">
-
-<div class="container d-flex justify-content-center align-items-center" style="height: 125vh;">
+<div class="container-flex">
     <div class="row">
-        <div class="col-md-25 mx-auto">
-            <h3 class="text-center">Regístrate</h3>
-            <form th:action="@{/}" method="post" class="text-left" id="miFormulario" enctype="multipart/form-data">
-                <div class="form-group row">
-                    <div class="col">
-                        <div class="row">
-                            <div class="col">
-                                <label for="email">Email</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <input type="email" class="form-control form-control-lg" id="email"
-                                       aria-describedby="emailHelp"
-                                       placeholder="Introduce email" th:field="*{RegisterDtoForm.email}">
-                                <p class="hide_alert text-danger" id="alert_email">El campo Email es obligatorio</p>
-                                <p class="hide_alert text-danger" id="alert_email1">El campo Email no sigue el formato
-                                    correcto</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col">
-                        <div class="row">
-                            <div class="col">
-                                <label for="username">Nombre de usuario</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
+        <div class="col-3">
+        </div>
+        <div class="col-6 text-center mt-2">
+            <h2 class="fst-normal">Nuestros cursos más demandados <i class="bi bi-fire"
+                                                                     style="color: orangered"></i></h2>
+        </div>
+        <div class="col-3">
+        </div>
+        <div class="row mt-3">
+            <div class="col-3">
 
-                                <input type="text" class="form-control form-control-lg" id="username"
-                                       placeholder="Introduce usuario" th:field="*{RegisterDtoForm.username}">
-                                <p class="hide_alert text-danger" id="alert_user">El campo Nombre de usuario es
-                                    obligatorio</p>
-                                <p class="hide_alert text-danger" id="alert_user2">El campo Nombre de usuario no puede
-                                    contener
-                                    símbolos especiales</p>
-                                <br class="hide_alert" id="br5">
-                                <p class="hide_alert text-danger" id="alert_user3">El campo Nombre de usuario debe
-                                    contener al
-                                    menos
-                                    6 caracteres</p>
-                            </div>
+            </div>
+            <div class="col-6">
+                <div id="demo" class="carousel slide carousel-border" style="width: 100%" data-bs-ride="carousel">
+
+                    <!-- Indicators/dots -->
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
+                        <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
+                        <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+                    </div>
+
+                    <!-- The slideshow/carousel -->
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="/images/descarga.jpeg" alt="Error en foto 1" class="d-block tam-car-fot"
+                                 style="width: 100%">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="/images/phishing.jpg" alt="Error en foto 2" class="d-block tam-car-fot"
+                                 style="width: 100%">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="/images/herramientas-informática-forense.jpg" alt="Error en foto 3"
+                                 class="d-block tam-car-fot" style="width: 100%">
                         </div>
                     </div>
+
+                    <!-- Left and right controls/icons -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
                 </div>
-                <div class="form-group row">
-                    <div class="col">
-                        <div class="row">
-                            <div class="col">
-                                <label for="password1">Contraseña</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <input type="password" name="password1" class=" password1 form-control form-control-lg"
-                                       id="password1" placeholder="Introduce contraseña"
-                                       th:field="*{RegisterDtoForm.password}">
-                                <span class="bi bi-eye-fill show-password-icon show-password" id="eyeid"></span>
-                                <p class="hide_alert text-danger" id="alert_pass1">El campo Contraseña es
-                                    obligatorio</p>
-                                <p class="hide_alert text-danger" id="alert_pass3">La contraseña debe contener al menos
-                                    una
-                                    letra minúscula</p>
-                                <br class="hide_alert" id="br1">
-                                <p class="hide_alert text-danger" id="alert_pass4">La contraseña debe contener al menos
-                                    una
-                                    letra mayúscula</p>
-                                <br class="hide_alert" id="br2">
-                                <p class="hide_alert text-danger" id="alert_pass5">La contraseña debe contener al menos
-                                    un
-                                    número</p>
-                                <br class="hide_alert" id="br3">
-                                <p class="hide_alert text-danger" id="alert_pass6">La contraseña debe contener al menos
-                                    8
-                                    caracteres</p>
-                                <br class="hide_alert" id="br4">
-                                <p class="hide_alert text-danger" id="alert_pass7">La contraseña debe contener al menos
-                                    1
-                                    caracter especial</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col">
-                        <div class="row">
-                            <div class="col">
-                                <label for="password2">Repetir Contraseña</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <input type="password" name="password2" class=" password2 form-control form-control-lg"
-                                       id="password2" placeholder="Repite la contraseña">
-                                <p class="hide_alert text-danger" id="alert_pass2">Las contraseñas deben coincidir</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="form-group row">
-                    <div class="col">
-                        <div class="row">
-                            <div class="col">
-                                <label for="image">Foto de perfil</label>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col">
-                                <input type="file" class="form-control-file form-control-lg" id="image"
-                                       th:field="*{RegisterDtoForm.image}">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <br>
-                        <input type="submit" onclick="comprobarErrores()" id="register" value="Regístrate"
-                               class=" register-button-color btn btn-primary register-custom-btn"
-                               style="margin-bottom: 20px">
-                        <div th:replace="tools/Messages :: #messages-fragment"></div>
-                    </div>
-                </div>
-            </form>
+            </div>
+            <div class="col-3">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mt-3" style="text-align: center">
+            <h2>Sobre nosotros:</h2>
+        </div>
+    </div>
+    <div class="row justify-content-around">
+        <div class="col-2">
+
+        </div>
+        <div class="col-8">
+
             <div class="row">
-                <div class="col">
-            <hr>
-            <p class="text-center">¿Ya tienes una cuenta? <a href="">Inicia sesión</a></p>
+                <div class="col-4 mt-5">
+                    <div class="card" style="width: 18rem; height: 29em; background-color: #6DAEDB; border: 4px solid #173753 ">
+                        <img src="/images/card1.png" class="card-img-top" alt="...">
+                        <h5 class="card-title" style="text-align: center">Como comenzar</h5>
+                        <div class="card-body">
+                            <p class="card-text">Regístrate en nuestra página, busca entre nuestra amplia variedad de
+                                cursos e
+                                ingresa a aquellos que más se ajusten a lo que desees aprender.</p>
+                        </div>
+                    </div>
                 </div>
+                <div class="col-4 mt-5">
+                    <div class="card" style="width: 18rem;height: 29rem; background-color: #6DAEDB; border: 4px solid #173753 ">
+                        <img src="/images/card2.png" class="card-img-top" alt="...">
+                        <h5 class="card-title" style="text-align: center">Aprendiendo con nosotros</h5>
+                        <div class="card-body">
+                            <p class="card-text">Visualiza el contenido teórico y completa todas las pruebas para finalizar el curso con éxito.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 mt-5">
+                    <div class="card" style="width: 18rem;height: 29rem; background-color: #6DAEDB; border: 4px solid #173753 ">
+                        <img src="/images/card3.png" class="card-img-top" alt="...">
+                        <h5 class="card-title" style="text-align: center">Mostrando resultados</h5>
+                        <div class="card-body">
+                            <p class="card-text">Realiza el pago a través de una de nuestras plataformas y obtén el diploma que abala tus conocimientos obtenidos. </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-2">
+
+        </div>
+    </div>
+
+
+</div>
+<div class="modal fade modal-login" id="loginModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Iniciar sesión</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form th:action="@{/}" method="post">
+                    <div class="row">
+                        <div class="col">
+                            <label for="email" class="form-label">Correo electrónico</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-11">
+                            <input type="email" th:field="*{LoginDtoForm.email}" class="form-control" id="email"
+                                   aria-describedby="emailHelp" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="password1" class="form-label">Contraseña</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-11">
+                            <input type="password" class="form-control" id="password1"
+                                   th:field="*{LoginDtoForm.password}" required>
+                        </div>
+                        <div class="col-1">
+                            <i class="bi bi-eye-fill show-password-icon-index" id="eyeid"> </i>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-check" style="margin-left: 12px">
+                            <input type="checkbox" class="form-check-input" th:field="*{LoginDtoForm.rememberMe}" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Recuérdame</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary" style="margin-bottom: 20px">Iniciar sesión
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div th:replace="tools/Messages :: #messages-fragment"></div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
-
+<footer class="bg-light text-center text-lg-start mt-3">
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: #173753; color: white; height: 70px">
+        © 2023 Copyright:
+        <p style="color: white" href="#">Hecho por: Sergio Álvarez Varela <i class="bi bi-laptop" style="color: white"></i> </p>
+    </div>
+    <!-- Copyright -->
+</footer>
+</body>
 <script>
-    const formulario = document.getElementById('miFormulario');
-    let reg = null;
+    let eye = document.getElementById('eyeid');
 
-    window.addEventListener("load", function () {
-        showPassword = document.querySelector('.show-password');
-        showPassword.addEventListener('click', () => {
+    eye.addEventListener("click", function () {
+        var passwordField = document.getElementById('password1');
+        password1 = document.querySelector('.password1');
 
-            password1 = document.querySelector('.password1');
-            password2 = document.querySelector('.password2');
-            eye = document.getElementById("eyeid");
-
-            if (password1.type === "text") {
-                password1.type = "password"
-                password2.type = "password"
-                eye.className = 'bi bi-eye-fill show-password-icon';
-            } else {
-                password1.type = "text"
-                password2.type = "text"
-                eye.className = "bi bi-eye-slash-fill show-password-icon";
-
-            }
-        })
-    });
-
-    function comprobarPass(reg) {
-        var password = document.getElementById("password1").value;
-        document.getElementById("alert_pass3").className = "hide_alert text-danger";
-        document.getElementById("alert_pass4").className = "hide_alert text-danger";
-        document.getElementById("alert_pass5").className = "hide_alert text-danger";
-        document.getElementById("alert_pass6").className = "hide_alert text-danger";
-        document.getElementById("alert_pass7").className = "hide_alert text-danger";
-        document.getElementById("br1").className = "hide_alert";
-        document.getElementById("br2").className = "hide_alert";
-        document.getElementById("br3").className = "hide_alert";
-        document.getElementById("br4").className = "hide_alert";
-        var bol = null;
-
-
-        if (/[a-z]/.test(password) === false) {
-            document.getElementById("alert_pass3").className = "show_alert text-danger";
-            document.getElementById("br1").className = "show_alert";
-            bol = true;
+        if (passwordField.type === 'password') {
+            eye.className = "bi bi-eye-slash-fill show-password-icon-index";
+            passwordField.type = 'text';
+        } else {
+            eye.className = "bi bi-eye-fill show-password-icon-index";
+            passwordField.type = 'password';
         }
-        if (/[A-Z]/.test(password) === false) {
-            document.getElementById("alert_pass4").className = "show_alert text-danger";
-            document.getElementById("br2").className = "show_alert";
-            bol = true;
-        }
-        if (/\d/.test(password) === false) {
-            document.getElementById("alert_pass5").className = "show_alert text-danger";
-            document.getElementById("br3").className = "show_alert";
-            bol = true;
-        }
-        if (/.{8,}/.test(password) === false) {
-            document.getElementById("alert_pass6").className = "show_alert text-danger";
-            document.getElementById("br4").className = "show_alert";
-            bol = true;
-        }
-        if (/[!@#$%^&*(),.?":{}|<>]/.test(password) === false) {
-            document.getElementById("alert_pass7").className = "show_alert text-danger";
-            bol = true;
-        }
-        if (bol) {
-            document.getElementById("password1").className = "password1 form-control form-control-lg wrong";
-        }
-        return reg || bol;
-
-    }
-
-    function comprobarErrores() {
-        reg = false;
-        var username = document.getElementById("username");
-        username.className = "form-control form-control-lg acierto";
-        document.getElementById("alert_user").className = "hide_alert text-danger";
-        var email = document.getElementById("email");
-        email.className = "form-control form-control-lg acierto";
-        document.getElementById("alert_email").className = "hide_alert text-danger";
-        document.getElementById("alert_email1").className = "hide_alert text-danger";
-        var pass1 = document.getElementById("password1");
-        pass1.className = "password1 form-control form-control-lg acierto";
-        document.getElementById("alert_pass1").className = "hide_alert text-danger";
-        var pass2 = document.getElementById("password2");
-        pass2.className = "password2 form-control form-control-lg acierto";
-        document.getElementById("alert_pass2").className = "hide_alert text-danger";
-        document.getElementById("alert_user2").className = "hide_alert text-danger";
-        document.getElementById("alert_user3").className = "hide_alert text-danger";
-        var validEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
-        var invalidUsername1 = /^[a-zA-Z0-9]*$/;
-        var invalidUsername2 = /^(?=.{6,})/;
-
-
-        if (pass1.value !== pass2.value || pass1.value === "") {
-            pass2.className = "password2 form-control form-control-lg wrong";
-            document.getElementById("alert_pass2").className = "show_alert text-danger";
-            reg = true;
-        }
-        if (username.value === "") {
-            username.className = "form-control form-control-lg wrong";
-            document.getElementById("alert_user").className = "show_alert text-danger";
-            reg = true;
-        }
-        if (invalidUsername1.test(username.value) === false && username.value !== "") {
-            username.className = "form-control form-control-lg wrong";
-            document.getElementById("alert_user2").className = "show_alert text-danger";
-            reg = true;
-        }
-        if ((invalidUsername1.test(username.value) === false) && (invalidUsername2.test(username.value) === false)) {
-            document.getElementById("br5").className = "show_alert";
-        }
-        if (invalidUsername2.test(username.value) === false && username.value !== "") {
-            username.className = "form-control form-control-lg wrong";
-            document.getElementById("alert_user3").className = "show_alert text-danger";
-            reg = true;
-        }
-        if (email.value === "") {
-            document.getElementById("alert_email").className = "show_alert text-danger";
-            email.className = "email form-control form-control-lg wrong";
-            reg = true;
-        }
-        if (validEmail.test(email.value) === false && (email.value !== "")) {
-
-            email.className = "email form-control form-control-lg wrong";
-            document.getElementById("alert_email1").className = "show_alert text-danger";
-            reg = true;
-        }
-        if (pass1.value !== "") {
-            reg = comprobarPass(reg);
-        }
-        if (pass1.value === "") {
-            pass1.className = "password1 form-control form-control-lg wrong";
-            document.getElementById("alert_pass1").className = "show_alert text-danger";
-            reg = true;
-
-        }
-    }
-
-    formulario.addEventListener('submit', function (evento) {
-        if (reg === true) {
-            evento.preventDefault();
-        }
-    });
+    })
 
 
 </script>
-</body>
+
+</html>

@@ -24,18 +24,10 @@ public class Constants {
     //success
     public static final String SUCCESS_MESSAGE = "successMessage";
     //paginas
-    public static final String USER_PROFILE_PAGE = "Profile";
 
     public static final String SEND_REDIRECT = "redirect:";
     public static final String ROOT_ENDPOINT = "/";
     public static final String USER_SESSION = "user";
-
-
-    // REGISTRATION
-
-    public static final String REGISTRATION_INVALID_PARAMETERS = "registration.invalid.parameters";
-
-    public static final String REGISTRATION_SUCCESS_MESSAGE = "registration.success";
 
 
 

@@ -1,10 +1,32 @@
 
+
+@font-face {
+    font-family: "Roboto";
+    src: url("fuentes/Roboto-Regular.ttf");
+}
+
+p{
+    font-family: Roboto, sans-serif;
+}
+
+h2{
+    font-family: Roboto, sans-serif;
+}
+
 .show-password-icon {
     float: right;
     position: relative;
     margin: -45px -30px 0 0;
     cursor: pointer;
     font-size: 25px;
+}
+
+.show-password-icon-index {
+    float: right;
+    position: relative;
+    margin: -5px 0 0 0;
+    cursor: pointer;
+    font-size: 30px;
 }
 
 
@@ -45,5 +67,25 @@
     display: inline;
 }
 
+.logo_tamano{
+    width: 275px;
+    height: 65px;
+}
+
+.home-letter-nav {
+    font-weight: bold;
+    color: white;
+    font-size: 20px;
+}
+
+.tam-car-fot{
+    width: 200px ;
+    height: 425px;
+}
+
+
+.carousel-border{
+    border: 5px solid #1B4353;
+}
 
 
