@@ -7,9 +7,8 @@ import javax.validation.constraints.Size;
 public class LoginDtoForm {
 
     @NotNull
-    @Email
     @Size(min=1)
-    private String email;
+    private String username;
 
     @NotNull
     @Size(min=1)
@@ -17,12 +16,13 @@ public class LoginDtoForm {
 
     private Boolean rememberMe;
 
-    public String getEmail() {
-        return email;
+
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

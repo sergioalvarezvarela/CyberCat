@@ -1,10 +1,232 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+
+<header th:replace="tools/package :: #package-include"></header>
+
+<header class="navbar navbar-expand" style="background-color: #173753">
+    <nav class="container">
+        <div class="col-3">
+            <a href="/">
+                <img src="/images/logo.png" alt="Error al cargar la imagen" class="logo_tamano">
+            </a>
+        </div>
+        <div class="col-1">
+
+        </div>
+        <div class="col-4 mr-2">
+            <div class="input-group" style="width: 100%">
+                <div class="input-group-prepend">
+                    <select class="form-select rounded-0 " style="background-color:  #d4e4f4 " id="cat1" name="catlist">
+                        <option>Todos</option>
+                        <option>Forense</option>
+                        <option>Criptografía</option>
+                        <option>Correo</option>
+                    </select>
+                </div>
+                <input type="text" class="form-control" aria-label="Text input with dropdown button">
+                <button type="submit" class="btn btn-light rounded-0" style="background-color:  #d4e4f4 "><i
+                        class="bi bi-search"></i></button>
+
+            </div>
+        </div>
+        <div class="col-1">
+
+        </div>
+        <div class="col-2">
+            <a class="nav-item nav-link home-letter-nav" style="font-size: 17px" href="#">Catálogo</a>
+        </div>
+        <div class="col-1">
+            <a class="nav-item nav-link home-letter-nav" style="font-size: 17px" href="/">Cerrar sesión</a>
+        </div>
+    </nav>
+
+</header>
 <body>
 
+<div class="container">
+    <div class="main-body mt-2">
+        <div class="row gutters-sm">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin"
+                                 class="rounded-circle" width="150">
+                            <div class="mt-3">
+                                <h4>sergio.alvarez.varela</h4>
+                                <p class="text-secondary mb-1">sergio.alvarez.varela@udc.es</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Nombre de usuario</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                sergio.alvarez.varela
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Email</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                sergio.alvarez.varela@udc.es
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Contraseña</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                ********
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Fecha alta</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                01/03/2023
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a class="btn btn-info " target="__blank"
+                                   href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Editar
+                                    perfil</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <h5 class="text-center"> Mis cursos</h5>
+                        <div id="demo" class="carousel slide carousel-border" style="width: 100%"
+                             data-bs-ride="carousel">
+
+                            <!-- Indicators/dots -->
+                            <div class="carousel-indicators">
+                                <button type="button" data-bs-target="#demo" data-bs-slide-to="0"
+                                        class="active"></button>
+                                <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
+                                <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+                            </div>
+
+                            <!-- The slideshow/carousel -->
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="/images/descarga.jpeg" alt="Error en foto 1"
+                                         class="d-block tam-car-fot-car-prof"
+                                         style="width: 100%">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h2>Curso 1</h2>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="/images/phishing.jpg" alt="Error en foto 2"
+                                         class="d-block tam-car-fot-car-prof"
+                                         style="width: 100%">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h2>Curso 2</h2>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="/images/herramientas-informática-forense.jpg" alt="Error en foto 3"
+                                         class="d-block tam-car-fot-car-prof" style="width: 100%">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h2>Curso 3</h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Left and right controls/icons -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#demo"
+                                    data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#demo"
+                                    data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <h5 class="text-center"> Mis diplomas</h5>
+                        <div id="demo1" class="carousel slide carousel-border" style="width: 100%"
+                             data-bs-ride="carousel">
+
+                            <!-- Indicators/dots -->
+                            <div class="carousel-indicators">
+                                <button type="button" data-bs-target="#demo1" data-bs-slide-to="0"
+                                        class="active"></button>
+                                <button type="button" data-bs-target="#demo1" data-bs-slide-to="1"></button>
+                                <button type="button" data-bs-target="#demo1" data-bs-slide-to="2"></button>
+                            </div>
+
+                            <!-- The slideshow/carousel -->
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="/images/descarga.jpeg" alt="Error en foto 1"
+                                         class="d-block tam-car-fot-car-prof"
+                                         style="width: 100%">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h2>Diploma 1</h2>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="/images/phishing.jpg" alt="Error en foto 2"
+                                         class="d-block tam-car-fot-car-prof   "
+                                         style="width: 100%">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h2>Diploma 2</h2>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="/images/herramientas-informática-forense.jpg" alt="Error en foto 3"
+                                         class="d-block tam-car-fot-car-prof" style="width: 100%">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h2>Diploma 3</h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Left and right controls/icons -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#demo1"
+                                    data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#demo1"
+                                    data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<footer class="bg-light text-center text-lg-start mt-3">
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: #173753; color: white; height: 70px">
+        © 2023 Copyright:
+        <p style="color: white" href="#">Hecho por: Sergio Álvarez Varela <i class="bi bi-laptop"
+                                                                             style="color: white"></i></p>
+    </div>
+    <!-- Copyright -->
+</footer>
 </body>
 </html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<body>
+<div id='login'>
+    <div class="modal fade modal-login" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Iniciar sesión</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <form th:action="@{/login}" method="post">
+                        <div class="row">
+                            <div class="col">
+                                <label for="username" class="form-label">Nombre de usuario</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-11">
+                                <input type="text" th:field="*{LoginDtoForm.username}" class="form-control" id="username"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="password" class="form-label">Contraseña</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-11">
+                                <input type="password" class="form-control" id="password"
+                                       th:field="*{LoginDtoForm.password}" required>
+                            </div>
+                            <div class="col-1">
+                                <i class="bi bi-eye-fill show-password-icon-index" id="eyeid"> </i>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-check" style="margin-left: 12px">
+                                <input type="checkbox" class="form-check-input" th:field="*{LoginDtoForm.rememberMe}" id="rememberMe">
+                                <label class="form-check-label" for="rememberMe">Recuérdame</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary" style="margin-bottom: 20px">Iniciar sesión
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div th:if="${param.loginerror != null}" class="alert alert-danger" role="alert">
+                                    Nombre de usuario o contraseña inválidos
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>

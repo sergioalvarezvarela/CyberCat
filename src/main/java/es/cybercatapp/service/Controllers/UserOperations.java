@@ -94,7 +94,7 @@ public class UserOperations {
             return "Index"; //
     }
 
-    @PostMapping("/")
+    @PostMapping("/login")
     public String login(@Valid @ModelAttribute("LoginDtoForm") LoginDtoForm loginDtoForm, BindingResult result,
                         @RequestParam(value = "next", required = false) String next,
                         HttpSession session,
@@ -108,7 +108,7 @@ public class UserOperations {
         }
         Users user;
         try {
-            user = userImpl.login(loginDtoForm.getEmail(), loginDtoForm.getPassword());
+            user = userImpl.login(loginDtoForm.getUsername(), loginDtoForm.getPassword());
             session.setAttribute(Constants.USER_SESSION, user);
             if(logger.isDebugEnabled()) {
                 logger.debug(MessageFormat.format("El usuario {0} se ha logueado", user.getEmail()));
@@ -118,9 +118,9 @@ public class UserOperations {
             }
         } catch (AuthenticationException ex) {
             if(logger.isDebugEnabled()) {
-                logger.debug(MessageFormat.format("User {0} not logged in ", loginDtoForm.getEmail()));
+                logger.debug(MessageFormat.format("User {0} not logged in ", loginDtoForm.getUsername()));
             }
-            return serviceExceptions.serviceAuthenticationException(ex, loginDtoForm.getEmail(),
+            return serviceExceptions.serviceAuthenticationException(ex, loginDtoForm.getUsername(),
                     "Index", model, locale);
         }
         if (next != null && next.trim().length() > 0) {
@@ -128,6 +128,13 @@ public class UserOperations {
         }
         return Constants.SEND_REDIRECT + "/profile";
     }
+
+
+    @GetMapping(value = {"/profile"})
+        public String doGetProfilePage(Model model) {
+        return "profile";
+    }
+
 
 }
 

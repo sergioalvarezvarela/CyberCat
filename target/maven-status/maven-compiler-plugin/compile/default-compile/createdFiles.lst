@@ -1,16 +1,1 @@
-es\cybercatapp\service\Exceptions\ServiceExceptions.class
-es\cybercatapp\model\repositories\AbstractRepository.class
-es\cybercatapp\Application.class
-es\cybercatapp\model\impl\UserImpl.class
-es\cybercatapp\common\ConfigurationParameters.class
-es\cybercatapp\model\repositories\UserRepository.class
-es\cybercatapp\service\cookies\UserInfo.class
-es\cybercatapp\model\utils\ExceptionGenerationUtils.class
-es\cybercatapp\model\entities\Users.class
-es\cybercatapp\model\exceptions\InstanceNotFoundException.class
-es\cybercatapp\model\exceptions\InputValidationException.class
-es\cybercatapp\model\exceptions\AuthenticationException.class
-es\cybercatapp\service\dto\LoginDtoForm.class
-es\cybercatapp\common\Constants.class
-es\cybercatapp\model\exceptions\DuplicatedResourceException.class
-es\cybercatapp\service\Controllers\UserOperations.class
+es\cybercatapp\model\entities\Roles.class

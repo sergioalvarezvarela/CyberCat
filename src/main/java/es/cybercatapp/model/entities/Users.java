@@ -14,7 +14,7 @@ public class Users implements Serializable {
     public Users() {
     }
 
-    public Users(String username, String email, String password, boolean tipo, LocalDateTime fecha_creacion, String imagen_perfil) {
+    public Users(String username, String email, String password, Roles tipo, LocalDateTime fecha_creacion, String imagen_perfil) {
         this.username = username;
         this.email = email;
         this.password= password;
@@ -37,7 +37,7 @@ public class Users implements Serializable {
     private String password;
 
     @Column(name = "tipo", nullable = false)
-    private boolean tipo;
+    private Roles  tipo;
 
     @Column(name = "fecha_creacion", nullable = false)
     private LocalDateTime fecha_creacion;
@@ -77,11 +77,11 @@ public class Users implements Serializable {
         this.password = password;
     }
 
-    public boolean isTipo() {
+    public Roles getTipo() {
         return tipo;
     }
 
-    public void setTipo(boolean tipo) {
+    public void setTipo(Roles tipo) {
         this.tipo = tipo;
     }
 
@@ -103,7 +103,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "Users{" +
                 "userId=" + userId +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +

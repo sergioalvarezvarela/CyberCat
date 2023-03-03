@@ -4,11 +4,12 @@
 <header class="navbar navbar-expand" style="background-color: #173753">
     <nav class="container">
         <a href="/">
-            <img src="/images/logo.png"   alt="Error al cargar la imagen" class="logo_tamano">
+            <img src="/images/logo.png" alt="Error al cargar la imagen" class="logo_tamano">
         </a>
         <a class="nav-item nav-link home-letter-nav" href="#">Catálogo</a>
         <a class="nav-item nav-link home-letter-nav" href="register">Regístrate</a>
-        <a class="nav-item nav-link home-letter-nav" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Loguéate</a>
+        <a class="nav-item nav-link home-letter-nav" href="#loginModal" data-bs-toggle="modal">Inicia
+            Sesión</a>
     </nav>
 
 </header>
@@ -78,8 +79,9 @@
         <div class="col-8">
 
             <div class="row">
-                <div class="col-4 mt-5">
-                    <div class="card" style="width: 18rem; height: 29em; background-color: #6DAEDB; border: 4px solid #173753 ">
+                <div class="col-3 mt-5">
+                    <div class="card"
+                         style="width: 18rem; height: 29em; background-color: #6DAEDB; border: 4px solid #173753 ">
                         <img src="/images/card1.png" class="card-img-top" alt="...">
                         <h5 class="card-title" style="text-align: center">Como comenzar</h5>
                         <div class="card-body">
@@ -89,21 +91,31 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-4 mt-5">
-                    <div class="card" style="width: 18rem;height: 29rem; background-color: #6DAEDB; border: 4px solid #173753 ">
+                <div class="col">
+
+                </div>
+                <div class="col-3 mt-5">
+                    <div class="card"
+                         style="width: 18rem;height: 29rem; background-color: #6DAEDB; border: 4px solid #173753 ">
                         <img src="/images/card2.png" class="card-img-top" alt="...">
                         <h5 class="card-title" style="text-align: center">Aprendiendo con nosotros</h5>
                         <div class="card-body">
-                            <p class="card-text">Visualiza el contenido teórico y completa todas las pruebas para finalizar el curso con éxito.</p>
+                            <p class="card-text">Visualiza el contenido teórico y completa todas las pruebas para
+                                finalizar el curso con éxito.</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-4 mt-5">
-                    <div class="card" style="width: 18rem;height: 29rem; background-color: #6DAEDB; border: 4px solid #173753 ">
+                <div class="col">
+
+                </div>
+                <div class="col-3 mt-5">
+                    <div class="card"
+                         style="width: 18rem;height: 29rem; background-color: #6DAEDB; border: 4px solid #173753 ">
                         <img src="/images/card3.png" class="card-img-top" alt="...">
                         <h5 class="card-title" style="text-align: center">Mostrando resultados</h5>
                         <div class="card-body">
-                            <p class="card-text">Realiza el pago a través de una de nuestras plataformas y obtén el diploma que abala tus conocimientos obtenidos. </p>
+                            <p class="card-text">Realiza el pago a través de una de nuestras plataformas y obtén el
+                                diploma que abala tus conocimientos obtenidos. </p>
                         </div>
                     </div>
                 </div>
@@ -118,78 +130,21 @@
 
 
 </div>
-<div class="modal fade modal-login" id="loginModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="loginModalLabel">Iniciar sesión</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-
-                <form th:action="@{/}" method="post">
-                    <div class="row">
-                        <div class="col">
-                            <label for="email" class="form-label">Correo electrónico</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-11">
-                            <input type="email" th:field="*{LoginDtoForm.email}" class="form-control" id="email"
-                                   aria-describedby="emailHelp" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <label for="password1" class="form-label">Contraseña</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-11">
-                            <input type="password" class="form-control" id="password1"
-                                   th:field="*{LoginDtoForm.password}" required>
-                        </div>
-                        <div class="col-1">
-                            <i class="bi bi-eye-fill show-password-icon-index" id="eyeid"> </i>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col form-check" style="margin-left: 12px">
-                            <input type="checkbox" class="form-check-input" th:field="*{LoginDtoForm.rememberMe}" id="rememberMe">
-                            <label class="form-check-label" for="rememberMe">Recuérdame</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary" style="margin-bottom: 20px">Iniciar sesión
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div th:replace="tools/Messages :: #messages-fragment"></div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<div th:replace="login :: #loginModal"></div>
 <footer class="bg-light text-center text-lg-start mt-3">
-    <!-- Copyright -->
     <div class="text-center p-3" style="background-color: #173753; color: white; height: 70px">
         © 2023 Copyright:
-        <p style="color: white" href="#">Hecho por: Sergio Álvarez Varela <i class="bi bi-laptop" style="color: white"></i> </p>
+        <p style="color: white" href="#">Hecho por: Sergio Álvarez Varela <i class="bi bi-laptop"
+                                                                             style="color: white"></i></p>
     </div>
-    <!-- Copyright -->
 </footer>
 </body>
 <script>
     let eye = document.getElementById('eyeid');
 
     eye.addEventListener("click", function () {
-        var passwordField = document.getElementById('password1');
-        password1 = document.querySelector('.password1');
+        var passwordField = document.getElementById('password');
+        password = document.querySelector('.password');
 
         if (passwordField.type === 'password') {
             eye.className = "bi bi-eye-slash-fill show-password-icon-index";
@@ -199,6 +154,13 @@
             passwordField.type = 'password';
         }
     })
+    $(document).ready(function() {
+        var hash = window.location.hash;
+        var myModal = new bootstrap.Modal(document.getElementById('loginModal'))
+        if (hash === '#loginModal') {
+            $('#loginModal').myModal;
+        }
+    });
 
 
 </script>
