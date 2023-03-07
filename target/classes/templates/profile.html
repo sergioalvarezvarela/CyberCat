@@ -35,7 +35,7 @@
             <a class="nav-item nav-link home-letter-nav" style="font-size: 17px" href="#">Catálogo</a>
         </div>
         <div class="col-1">
-            <a class="nav-item nav-link home-letter-nav" style="font-size: 17px" href="/">Cerrar sesión</a>
+            <a class="nav-item nav-link home-letter-nav" data-method="post" th:href="@{/logout}" style="font-size: 17px" >Cerrar sesión</a>
         </div>
     </nav>
 
@@ -48,12 +48,13 @@
             <div class="col-md-4 mb-3">
                 <div class="card">
                     <div class="card-body">
-                        <div class="d-flex flex-column align-items-center text-center">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin"
-                                 class="rounded-circle" width="150">
+                        <div class="d-flex flex-column align-items-center text-center" >
+                            <div class="rounded-circle" style="overflow: hidden; width: 100px; height: 100px;">
+                                <img th:if="${ProfileDtoForm.image != null}" th:src="${ProfileDtoForm.image}" alt="imagen" style="width: 100%; height: auto;">
+                            </div>
                             <div class="mt-3">
-                                <h4>sergio.alvarez.varela</h4>
-                                <p class="text-secondary mb-1">sergio.alvarez.varela@udc.es</p>
+                                <h4 th:text="${ProfileDtoForm.username}"></h4>
+                                <p class="text-secondary mb-1" th:text="${ProfileDtoForm.email}"></p>
                             </div>
                         </div>
                     </div>
@@ -66,8 +67,7 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Nombre de usuario</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                sergio.alvarez.varela
+                            <div class="col-sm-9 text-secondary " th:text="${ProfileDtoForm.username}">
                             </div>
                         </div>
                         <hr>
@@ -75,8 +75,7 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Email</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                sergio.alvarez.varela@udc.es
+                            <div class="col-sm-9 text-secondary" th:text="${ProfileDtoForm.email}">
                             </div>
                         </div>
                         <hr>
@@ -93,15 +92,14 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Fecha alta</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                01/03/2023
+                            <div class="col-sm-9 text-secondary" th:text="${ProfileDtoForm.date}">
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-sm-12">
                                 <a class="btn btn-info " target="__blank"
-                                   href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Editar
+                                   href="editprofile">Editar
                                     perfil</a>
                             </div>
                         </div>

@@ -5,12 +5,15 @@ C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\impl\User
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\Users.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\dto\LoginDtoForm.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\repositories\AbstractRepository.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\dto\ProfileDtoForm.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\common\ConfigurationParameters.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\exceptions\DuplicatedResourceException.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\utils\ExceptionGenerationUtils.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\common\Constants.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\Roles.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\exceptions\InputValidationException.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\Controllers\UserOperations.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\Exceptions\ServiceExceptions.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\dto\RegisterDtoForm.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\repositories\UserRepository.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\config\WebSecurityConfig.java

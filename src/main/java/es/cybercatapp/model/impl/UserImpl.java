@@ -6,6 +6,7 @@ import es.cybercatapp.model.entities.Roles;
 import es.cybercatapp.model.entities.Users;
 import es.cybercatapp.model.exceptions.AuthenticationException;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
+import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.repositories.UserRepository;
 import es.cybercatapp.model.utils.ExceptionGenerationUtils;
 import org.apache.commons.io.IOUtils;
@@ -21,9 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -67,6 +66,11 @@ public class UserImpl implements UserDetailsService {
     }
 
 
+    @Transactional(readOnly = true)
+    public Users findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
     private static List<SimpleGrantedAuthority> getRoles(Roles tipo) {
         String  rolesAsString = tipo.toString();
         List<SimpleGrantedAuthority> roles = new ArrayList<>();
@@ -95,6 +99,34 @@ public class UserImpl implements UserDetailsService {
         return user;
     }
 
+    @Transactional
+    public void Remove(String username) {
+        Users user = findByUsername(username);
+        userRepository.remove(user);
+    }
+
+    @Transactional
+    public byte[] getImage(Long id) throws InstanceNotFoundException {
+        Users user = userRepository.findById(id);
+        try {
+            return getProfileImage(id, user.getImagen_perfil());
+        } catch (IOException ex) {
+            logger.error(ex.getMessage(), ex);
+            return null;
+        }
+    }
+
+    private byte[] getProfileImage(Long id, String image) throws IOException {
+        if (image != null && image.trim().length() > 0) {
+            File userDir = new File(resourcesDir, id.toString());
+            File profilePicture = new File(userDir, image);
+            try (FileInputStream input = new FileInputStream(profilePicture)) {
+                return IOUtils.toByteArray(input);
+            }
+        }
+        return null;
+    }
+
     private void saveProfileImage(Long id, String image, byte[] imageContents) {
         if (image != null && image.trim().length() > 0 && imageContents != null) {
             File userDir = new File(resourcesDir, id.toString());
@@ -109,20 +141,5 @@ public class UserImpl implements UserDetailsService {
     }
 
 
-    @Transactional(readOnly = true)
-    public Users login(String username, String clearPassword) throws AuthenticationException {
-        Users user = userRepository.findByUsername(username);
 
-        if (user == null) {
-            throw exceptionGenerationUtils.toAuthenticationException("auth.invalid.username", username);
-        } else {
-
-
-            boolean matches = BCrypt.checkpw(clearPassword, user.getPassword());
-            if (!matches) {
-                throw exceptionGenerationUtils.toAuthenticationException("auth.invalid.password", username);
-            }
-            return user;
-        }
-    }
 }

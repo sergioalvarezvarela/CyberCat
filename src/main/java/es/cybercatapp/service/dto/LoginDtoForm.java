@@ -14,8 +14,6 @@ public class LoginDtoForm {
     @Size(min=1)
     private String password;
 
-    private Boolean rememberMe;
-
 
     public String getUsername() {
         return username;
@@ -33,11 +31,4 @@ public class LoginDtoForm {
         this.password = password;
     }
 
-    public Boolean getRememberMe() {
-        return rememberMe;
-    }
-
-    public void setRememberMe(Boolean rememberMe) {
-        this.rememberMe = rememberMe;
-    }
 }

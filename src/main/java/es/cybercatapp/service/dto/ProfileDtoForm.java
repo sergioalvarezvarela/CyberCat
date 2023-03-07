@@ -1,27 +1,25 @@
 package es.cybercatapp.service.dto;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import org.springframework.http.ResponseEntity;
 
 public class ProfileDtoForm {
 
-    @NotNull
     private String username;
 
-
-    @NotNull
-    private String password;
-
-    @NotNull
-    @Email
     private String email;
 
-    private MultipartFile image;
 
-    private LocalDateTime date;
+    private String date;
+
+    private byte[] image;
+
+
+    public ProfileDtoForm(String username, String email, String date, byte[] image) {
+        this.username=username;
+        this.email=email;
+        this.date=date;
+        this.image = image;
+    }
 
     public String getUsername() {
         return username;
@@ -29,14 +27,6 @@ public class ProfileDtoForm {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getEmail() {
@@ -47,19 +37,20 @@ public class ProfileDtoForm {
         this.email = email;
     }
 
-    public MultipartFile getImage() {
-        return image;
-    }
 
-    public void setImage(MultipartFile image) {
-        this.image = image;
-    }
-
-    public LocalDateTime getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(String date) {
         this.date = date;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }

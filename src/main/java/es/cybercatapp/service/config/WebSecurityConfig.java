@@ -14,6 +14,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +28,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private DataSource dataSource;
+
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -32,22 +39,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/profile").authenticated()
+                .antMatchers("/profile","/logout").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/profile", true)
                 .failureUrl("/?loginerror=true")
                 .and()
                 .logout()
+                .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .and()
-                .rememberMe()
-                .key("uniqueAndSecret")
+                .rememberMe().rememberMeParameter("remember-me")
                 .tokenValiditySeconds(86400)
+                .key("uniqueAndSecret")
                 .and()
                 .csrf()
                 .disable();

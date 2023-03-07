@@ -30,7 +30,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="jquery-3.6.0" level="application" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.7.8" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.7.8" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:2.7.8" level="project" />
@@ -49,10 +48,7 @@
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.71" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-websocket:9.0.71" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-web:5.3.25" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.3.25" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:5.3.25" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-context:5.3.25" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.3.25" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-thymeleaf:2.7.8" level="project" />
     <orderEntry type="library" name="Maven: org.thymeleaf:thymeleaf-spring5:3.0.15.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.thymeleaf:thymeleaf:3.0.15.RELEASE" level="project" />
@@ -111,7 +107,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: com.vaadin.external.google:android-json:0.0.20131108.vaadin1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-core:5.3.25" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.25" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:5.3.25" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.9.1" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.24" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.11.4" level="project" />
@@ -132,11 +127,15 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-security:2.7.8" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:5.3.25" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-config:5.7.6" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:5.7.6" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:5.7.6" level="project" />
     <orderEntry type="library" name="Maven: io.jsonwebtoken:jjwt:0.9.1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.13.4.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.13.4" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.13.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:5.7.7" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:5.7.6" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.3.25" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context:5.3.25" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.3.25" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-test:5.3.25" level="project" />
   </component>
 </module>
