@@ -8,6 +8,7 @@ import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.UserImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.conversor.UserConversor;
+import es.cybercatapp.service.dto.EditProfileDtoForm;
 import es.cybercatapp.service.dto.LoginDtoForm;
 import es.cybercatapp.service.dto.ProfileDtoForm;
 import es.cybercatapp.service.dto.RegisterDtoForm;
@@ -16,30 +17,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.RememberMeAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.util.CookieGenerator;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.beans.XMLEncoder;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.Principal;
-import java.security.SecureRandom;
 import java.text.MessageFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Base64;
 import java.util.Locale;
 
 
@@ -120,6 +113,7 @@ public class UserOperations {
 
     @GetMapping("/{username}/editprofile")
     public String doGetEditProfile(@PathVariable String username, Model model, Principal principal, Locale locale) throws IOException {
+        model.addAttribute("EditProfileDtoForm", new  EditProfileDtoForm());
         return "editprofile";
     }
 
@@ -133,6 +127,25 @@ public class UserOperations {
         redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                 "removeprofile.success", new Object[]{principal.getName()}, locale));
         return Constants.SEND_REDIRECT + "/logout";
+    }
+
+    @PostMapping("/profile/editprofile/changepassword")
+    public String doPostChangePassword(Principal principal, @Valid @ModelAttribute("EditProfileDtoForm") EditProfileDtoForm editProfileDtoForm,
+                                       RedirectAttributes redirectAttributes,
+                                       Locale locale,
+                                       Model model) {
+        principal.getName();
+
+        try {
+            userImpl.changePassword(principal.getName(),editProfileDtoForm.getOldPass(),editProfileDtoForm.getNewPassword() );
+        } catch (AuthenticationException e) {
+            serviceExceptions.serviceAuthenticationException(e,model);
+            return "editprofile";
+        }
+
+        model.addAttribute(Constants.SUCCESS_MESSAGE,messageSource.getMessage(
+                "changepassword.success", new Object[]{principal.getName()}, locale));
+        return "editprofile";
     }
 }
 

@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-8">
+        <div class="col-xl-8 mb-3">
             <div class="card mb-4">
                 <div class="card-header">Detalles de la cuenta</div>
                 <div class="card-body">
@@ -62,7 +62,8 @@
                         <div class="mb-3">
                             <label class="small mb-1" for="inputUsername">Nombre de usuario (Este nombre es único y será
                                 tu identificador)</label>
-                            <input class="form-control" id="inputUsername" type="text" placeholder="Introduce tu nombre de usuario"
+                            <input class="form-control" id="inputUsername" type="text"
+                                   placeholder="Introduce tu nombre de usuario"
                                    value="username">
                         </div>
                         <div class="mb-3">
@@ -72,7 +73,7 @@
                         </div>
                         <!-- Save changes button-->
                         <button class="btn btn-primary" type="button">Guardar cambios</button>
-                        <a href="#removeModal" class="btn btn-primary" data-bs-toggle="modal" >Eliminar cuenta</a>
+                        <a href="#removeModal" class="btn btn-primary" data-bs-toggle="modal">Eliminar cuenta</a>
                     </form>
                 </div>
 
@@ -80,28 +81,58 @@
             <div class="card mt-3">
                 <div class="card-header">Seguridad de la cuenta</div>
                 <div class="card-body">
-                    <form>
+                    <form th:action="@{/profile/editprofile/changepassword}" method="post" id="miFormulario">
                         <div class="mb-3">
                             <label class="small mb-1" for="inputlastPass">Contraseña actual</label>
-                            <input class="form-control" id="inputlastPass" type="password"
-                                   placeholder="Introduce tu contraseña actual"
-                                   value="username">
+                            <div class="row">
+                                <div class="col">
+                                    <input class="form-control" id="inputlastPass" th:field="*{EditProfileDtoForm.oldPass}" type="password"
+                                           placeholder="Introduce tu contraseña actual">
+                                </div>
+                                <div class="col-1">
+                                    <i class="bi bi-eye-fill show-password-icon-index" id="eyeid"> </i>
+                                </div>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="small mb-1" for="inputPass1">Nueva contraseña</label>
                             <input class="form-control" id="inputPass1" type="password"
-                                   placeholder="Introduce tu nueva contraseña" value="name@example.com">
+                                   placeholder="Introduce tu nueva contraseña" th:field="*{EditProfileDtoForm.newPassword}">
+                            <p class="hide_alert text-danger" id="alert_pass1">El campo Contraseña es
+                                obligatorio</p>
+                            <p class="hide_alert text-danger" id="alert_pass3">La contraseña debe contener al menos
+                                una
+                                letra minúscula</p>
+                            <br class="hide_alert" id="br1">
+                            <p class="hide_alert text-danger" id="alert_pass4">La contraseña debe contener al menos
+                                una
+                                letra mayúscula</p>
+                            <br class="hide_alert" id="br2">
+                            <p class="hide_alert text-danger" id="alert_pass5">La contraseña debe contener al menos
+                                un
+                                número</p>
+                            <br class="hide_alert" id="br3">
+                            <p class="hide_alert text-danger" id="alert_pass6">La contraseña debe contener al menos
+                                8
+                                caracteres</p>
+                            <br class="hide_alert" id="br4">
+                            <p class="hide_alert text-danger" id="alert_pass7">La contraseña debe contener al menos
+                                1
+                                caracter especial</p>
+
                         </div>
                         <div class="mb-3">
                             <label class="small mb-1" for="inputPass2">Repite contraseña</label>
                             <input class="form-control" id="inputPass2" type="password"
-                                   placeholder="Repite tu nueva contraseña" value="name@example.com">
+                                   placeholder="Repite tu nueva contraseña">
+                            <p class="hide_alert text-danger" id="alert_pass2">Las contraseñas deben coincidir</p>
                         </div>
-                        <button class="btn btn-primary" type="button">Cambiar contraseña</button>
+                        <button class="btn btn-primary" onclick="comprobarErrores()" type="submit">Cambiar contraseña</button>
                     </form>
                 </div>
             </div>
         </div>
+        <div th:replace="tools/Messages :: #messages-fragment"></div>
     </div>
 </div>
 
@@ -114,18 +145,20 @@
             </div>
             <div class="modal-body">
                 <div class="row iconx-size">
-                        <i class="bi bi-x-circle" style="color: red; display: flex; justify-content: center; align-items: center"></i>
+                    <i class="bi bi-x-circle"
+                       style="color: red; display: flex; justify-content: center; align-items: center"></i>
                 </div>
                 <div class="row mt-3">
-                        <p>¿Estás seguro de que deseas eliminar tu cuenta? Este proceso es definitivo. </p>
+                    <p>¿Estás seguro de que deseas eliminar tu cuenta? Este proceso es definitivo. </p>
                 </div>
 
 
             </div>
             <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar
+                </button>
                 <form th:action="@{/profile/editprofile/remove}" method="post" id="delete-form">
-                <button type="submit"  class="btn btn-danger">Eliminar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
                 </form>
             </div>
         </div>
@@ -142,5 +175,103 @@
     <!-- Copyright -->
 </footer>
 </body>
+
+<script>
+    const formulario = document.getElementById('miFormulario');
+    let reg = null;
+    let eye = document.getElementById('eyeid');
+
+    eye.addEventListener("click", function () {
+        var lastpassword = document.getElementById('inputlastPass');
+        var newpass = document.getElementById('inputPass1');
+        var newpass2 = document.getElementById('inputPass2');
+        password = document.querySelector('.password');
+
+        if (lastpassword.type === 'password') {
+            eye.className = "bi bi-eye-slash-fill show-password-icon-index";
+            lastpassword.type = 'text';
+            newpass.type = 'text';
+            newpass2.type = 'text';
+        } else {
+            eye.className = "bi bi-eye-fill show-password-icon-index";
+            lastpassword.type = 'password';
+            newpass.type = 'password';
+            newpass2.type = 'password';
+        }
+    })
+
+    function comprobarPass(reg) {
+        var password = document.getElementById("inputPass1").value;
+        document.getElementById("alert_pass3").className = "hide_alert text-danger";
+        document.getElementById("alert_pass4").className = "hide_alert text-danger";
+        document.getElementById("alert_pass5").className = "hide_alert text-danger";
+        document.getElementById("alert_pass6").className = "hide_alert text-danger";
+        document.getElementById("alert_pass7").className = "hide_alert text-danger";
+        document.getElementById("br1").className = "hide_alert";
+        document.getElementById("br2").className = "hide_alert";
+        document.getElementById("br3").className = "hide_alert";
+        document.getElementById("br4").className = "hide_alert";
+        var bol = null;
+
+
+        if (/[a-z]/.test(password) === false) {
+            document.getElementById("alert_pass3").className = "show_alert text-danger";
+            document.getElementById("br1").className = "show_alert";
+            bol = true;
+        }
+        if (/[A-Z]/.test(password) === false) {
+            document.getElementById("alert_pass4").className = "show_alert text-danger";
+            document.getElementById("br2").className = "show_alert";
+            bol = true;
+        }
+        if (/\d/.test(password) === false) {
+            document.getElementById("alert_pass5").className = "show_alert text-danger";
+            document.getElementById("br3").className = "show_alert";
+            bol = true;
+        }
+        if (/.{8,}/.test(password) === false) {
+            document.getElementById("alert_pass6").className = "show_alert text-danger";
+            document.getElementById("br4").className = "show_alert";
+            bol = true;
+        }
+        if (/[!@#$%^&*(),.?":{}|<>]/.test(password) === false) {
+            document.getElementById("alert_pass7").className = "show_alert text-danger";
+            bol = true;
+        }
+        return reg || bol;
+
+    }
+
+    function comprobarErrores() {
+        reg = false;
+        var pass1 = document.getElementById("inputPass1");
+        document.getElementById("alert_pass1").className = "hide_alert text-danger";
+        var pass2 = document.getElementById("inputPass2");
+        document.getElementById("alert_pass2").className = "hide_alert text-danger";
+
+
+        if (pass1.value !== pass2.value || pass1.value === "") {
+            document.getElementById("alert_pass2").className = "show_alert text-danger";
+            reg = true;
+        }
+        if (pass1.value !== "") {
+            comprobarPass(reg);
+        }
+        if (pass1.value === "") {
+            document.getElementById("alert_pass1").className = "show_alert text-danger";
+            reg = true;
+
+        }
+    }
+
+    formulario.addEventListener('submit', function (evento) {
+        if (reg === true) {
+            evento.preventDefault();
+        }
+    });
+
+
+</script>
+
 
 </html>

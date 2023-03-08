@@ -18,6 +18,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +29,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static org.apache.catalina.realm.UserDatabaseRealm.getRoles;
 
 @Service(value = "userService")
 public class UserImpl implements UserDetailsService {
@@ -42,6 +41,7 @@ public class UserImpl implements UserDetailsService {
 
     @Autowired
     ExceptionGenerationUtils exceptionGenerationUtils;
+
 
     @Autowired
     private UserRepository userRepository;
@@ -57,7 +57,7 @@ public class UserImpl implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         Optional<Users> optUser = Optional.ofNullable(userRepository.findByUsername(userName));
-        if(!optUser.isPresent()) {
+        if (!optUser.isPresent()) {
             throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", userName));
         }
         Users user = optUser.get();
@@ -72,9 +72,9 @@ public class UserImpl implements UserDetailsService {
     }
 
     private static List<SimpleGrantedAuthority> getRoles(Roles tipo) {
-        String  rolesAsString = tipo.toString();
+        String rolesAsString = tipo.toString();
         List<SimpleGrantedAuthority> roles = new ArrayList<>();
-        if(rolesAsString != null && !rolesAsString.isEmpty()) {
+        if (rolesAsString != null && !rolesAsString.isEmpty()) {
             String[] arrayOfRoles = rolesAsString.split(",");
             for (String role : arrayOfRoles) {
                 roles.add(new SimpleGrantedAuthority(role));
@@ -82,6 +82,7 @@ public class UserImpl implements UserDetailsService {
         }
         return roles;
     }
+
     @Transactional
     public Users create(String username, String email, String password,
                         String image, byte[] imageContents) throws DuplicatedResourceException {
@@ -102,8 +103,29 @@ public class UserImpl implements UserDetailsService {
     @Transactional
     public void Remove(String username) {
         Users user = findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
+        }
         userRepository.remove(user);
     }
+
+    @Transactional
+    public void changePassword(String username,String oldPass, String password) throws AuthenticationException {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        Users user = findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
+        }
+        if (passwordEncoder.matches(oldPass, user.getPassword())) {
+            user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt(SALT_ROUNDS)));
+            userRepository.update(user);
+
+        } else {
+            throw exceptionGenerationUtils.toAuthenticationException("auth.password.dont.matches", user.getUsername());
+        }
+
+    }
+
 
     @Transactional
     public byte[] getImage(Long id) throws InstanceNotFoundException {
@@ -139,7 +161,6 @@ public class UserImpl implements UserDetailsService {
             }
         }
     }
-
 
 
 }

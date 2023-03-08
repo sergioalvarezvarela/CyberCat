@@ -49,12 +49,10 @@ public class ServiceExceptions {
         model.addAttribute(Constants.EXCEPTION, e);
         return Constants.ERROR_PAGE;
     }
-    public String serviceAuthenticationException(AuthenticationException e, String user, String targetPage,
-                                                 Model model, Locale locale) {
-        logger.error(e.getMessage(), e);
+    public void serviceAuthenticationException(AuthenticationException e,
+                                               Model model) {
+        logger.error(e.getMessage(),e);
         model.addAttribute(Constants.ERROR_MESSAGE, e.getMessage());
-        model.addAttribute(Constants.EXCEPTION, e);
-        return targetPage;
     }
 
 }
