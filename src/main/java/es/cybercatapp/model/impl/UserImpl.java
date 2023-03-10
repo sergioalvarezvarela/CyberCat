@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -123,6 +124,34 @@ public class UserImpl implements UserDetailsService {
         } else {
             throw exceptionGenerationUtils.toAuthenticationException("auth.password.dont.matches", user.getUsername());
         }
+
+    }
+
+    @Transactional
+    public void EditProfile(String oldusername, String newusername,String email) throws DuplicatedResourceException {
+        Users users = userRepository.findByUsername(oldusername);
+        boolean change;
+        if (userRepository.findByEmail(email) != null) {
+
+            throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.EMAIL_FIELD, email,
+                    "modifyemail.duplicated.exception");
+        }else{
+            change = true;
+            users.setEmail(email);
+        }
+
+        if (userRepository.findByUsername(newusername) != null) {
+            throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USERNAME_FIELD, newusername,
+                    "modifyuser.duplicated.exception");
+        }else{
+            change = true;
+            users.setUsername(newusername);
+        }
+
+        if (change){
+            userRepository.update(users);
+        }
+
 
     }
 

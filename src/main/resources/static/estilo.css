@@ -39,7 +39,6 @@ h2{
 }
 
 .register-custom-btn {
-    width: 500px;
     padding: 10px;
 }
 
@@ -80,7 +79,7 @@ h2{
 
 .tam-car-fot{
     width: 200px ;
-    height: 425px;
+    height: 350px;
 }
 
 
@@ -92,13 +91,22 @@ h2{
     width: 15%;
 }
 
-.tam-car-fot-car-prof{
-    height: 200px;
-}
 
 .iconx-size{
     font-size: 60px;
 }
+
+.tam-car-fot-car-prof{
+    height: 200px;
+}
+
+@media (max-width: 992px) {
+    .navbar-nav {
+        flex-direction: column ;
+        text-align: center;}
+}
+
+
 
 
 

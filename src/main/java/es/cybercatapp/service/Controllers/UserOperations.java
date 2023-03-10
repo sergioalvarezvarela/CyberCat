@@ -8,10 +8,7 @@ import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.UserImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.conversor.UserConversor;
-import es.cybercatapp.service.dto.EditProfileDtoForm;
-import es.cybercatapp.service.dto.LoginDtoForm;
-import es.cybercatapp.service.dto.ProfileDtoForm;
-import es.cybercatapp.service.dto.RegisterDtoForm;
+import es.cybercatapp.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,8 +109,10 @@ public class UserOperations {
     }
 
     @GetMapping("/{username}/editprofile")
-    public String doGetEditProfile(@PathVariable String username, Model model, Principal principal, Locale locale) throws IOException {
-        model.addAttribute("EditProfileDtoForm", new  EditProfileDtoForm());
+    public String doGetEditProfile(@PathVariable String username, Model model, Principal principal) throws IOException {
+        model.addAttribute("ChangePasswordDtoForm", new ChangePasswordDtoForm());
+        Users user = userImpl.findByUsername(principal.getName());
+        model.addAttribute("EditProfileDtoForm", new EditProfileDtoForm(user.getUsername(),user.getEmail()));
         return "editprofile";
     }
 
@@ -130,14 +129,18 @@ public class UserOperations {
     }
 
     @PostMapping("/profile/editprofile/changepassword")
-    public String doPostChangePassword(Principal principal, @Valid @ModelAttribute("EditProfileDtoForm") EditProfileDtoForm editProfileDtoForm,
-                                       RedirectAttributes redirectAttributes,
-                                       Locale locale,
+    public String doPostChangePassword(Principal principal, @Valid @ModelAttribute("ChangePasswordDtoForm") ChangePasswordDtoForm changePasswordDtoForm,
+                                       Locale locale, BindingResult result,
                                        Model model) {
-        principal.getName();
+
+        if (result.hasErrors()) {
+            serviceExceptions.serviceInvalidFormError(result,
+                    "changepassword.invalid.parameters", model, locale);
+            return "editprofile";
+        }
 
         try {
-            userImpl.changePassword(principal.getName(),editProfileDtoForm.getOldPass(),editProfileDtoForm.getNewPassword() );
+            userImpl.changePassword(principal.getName(), changePasswordDtoForm.getOldPass(), changePasswordDtoForm.getNewPassword() );
         } catch (AuthenticationException e) {
             serviceExceptions.serviceAuthenticationException(e,model);
             return "editprofile";
@@ -147,6 +150,8 @@ public class UserOperations {
                 "changepassword.success", new Object[]{principal.getName()}, locale));
         return "editprofile";
     }
+
+
 }
 
 

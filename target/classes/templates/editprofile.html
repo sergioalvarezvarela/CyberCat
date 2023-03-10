@@ -1,43 +1,51 @@
 <!DOCTYPE html>
 <header th:replace="tools/package :: #package-include"></header>
-<header class="navbar navbar-expand" style="background-color: #173753">
-    <nav class="container">
-        <div class="col-3">
-            <a href="/">
-                <img src="/images/logo.png" alt="Error al cargar la imagen" class="logo_tamano">
-            </a>
-        </div>
-        <div class="col-1">
+<header style="background-color: #173753">
+    <nav class="navbar navbar-expand" id="nav">
+        <div class="container-fluid col-md-12 col-sm-6">
+            <ul class="navbar-nav navbar-expand-lg ">
+                <li class="nav-item mx-lg-5">
+                    <a href="/">
+                        <img src="/images/logo.png" alt="Error al cargar la imagen" class="logo_tamano"
+                             style="max-width: 100% ; max-height: 100%">
+                    </a>
+                </li>
 
-        </div>
-        <div class="col-4 mr-2">
-            <div class="input-group" style="width: 100%">
-                <div class="input-group-prepend">
-                    <select class="form-select rounded-0 " style="background-color:  #d4e4f4 " id="cat1" name="catlist">
-                        <option>Todos</option>
-                        <option>Forense</option>
-                        <option>Criptografía</option>
-                        <option>Correo</option>
-                    </select>
-                </div>
-                <input type="text" class="form-control" aria-label="Text input with dropdown button">
-                <button type="submit" class="btn btn-light rounded-0" style="background-color:  #d4e4f4 "><i
-                        class="bi bi-search"></i></button>
+            </ul>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-dark navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item mx-lg-5 mt-3">
+                        <div class="input-group" style="width: 100%">
+                            <div class="input-group-prepend">
+                                <select class="form-select rounded-0 " style="background-color:  #d4e4f4 " id="cat1"
+                                        name="catlist">
+                                    <option>Todos</option>
+                                    <option>Forense</option>
+                                    <option>Criptografía</option>
+                                    <option>Correo</option>
+                                </select>
+                            </div>
+                            <input type="text" class="form-control" aria-label="Text input with dropdown button">
+                            <button type="submit" class="btn btn-light rounded-0" style="background-color:  #d4e4f4 "><i
+                                    class="bi bi-search"></i></button>
 
+                        </div>
+                    </li>
+                    <li class="nav-item mx-lg-5 mt-3">
+                        <a class="nav-item nav-link home-letter-nav" style="font-size: 17px" href="#">Catálogo</a>
+                    </li>
+                    <li class="nav-item mx-lg-5 mt-3">
+                        <a class="nav-item nav-link home-letter-nav" data-method="post" th:href="@{/logout}"
+                           style="font-size: 15px">Cerrar sesión</a>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="col-1">
-
-        </div>
-        <div class="col-2">
-            <a class="nav-item nav-link home-letter-nav" style="font-size: 17px" href="#">Catálogo</a>
-        </div>
-        <div class="col-1">
-            <a class="nav-item nav-link home-letter-nav" data-method="post" th:href="@{/logout}"
-               style="font-size: 17px">Cerrar sesión</a>
-        </div>
     </nav>
-
 </header>
 
 <body>
@@ -48,7 +56,8 @@
                 <div class="card-header">Foto de perfil</div>
                 <div class="card-body text-center">
                     <img class="img-account-profile rounded-circle mb-2"
-                         src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                         src="http://bootdey.com/img/Content/avatar/avatar1.png" alt=""
+                         style="max-height: 100%; max-width: 100%">
                     <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                     <button class="btn btn-primary" id="btnDelete" type="button">Upload new image</button>
                 </div>
@@ -58,22 +67,31 @@
             <div class="card mb-4">
                 <div class="card-header">Detalles de la cuenta</div>
                 <div class="card-body">
-                    <form>
+                    <form th:action="@{/profile/editprofile/modify}" method="post">
                         <div class="mb-3">
                             <label class="small mb-1" for="inputUsername">Nombre de usuario (Este nombre es único y será
                                 tu identificador)</label>
                             <input class="form-control" id="inputUsername" type="text"
                                    placeholder="Introduce tu nombre de usuario"
-                                   value="username">
+                                   th:value="*{EditProfileDtoForm.username}" th:field="*{EditProfileDtoForm.username}">
                         </div>
                         <div class="mb-3">
                             <label class="small mb-1" for="inputEmailAddress">Correo electrónico</label>
                             <input class="form-control" id="inputEmailAddress" type="email"
-                                   placeholder="Introduce tu correo electrónico" value="name@example.com">
+                                   placeholder="Introduce tu correo electrónico" th:value="*{EditProfileDtoForm.email}"
+                                   th:field="*{EditProfileDtoForm.email}">
                         </div>
                         <!-- Save changes button-->
-                        <button class="btn btn-primary" type="button">Guardar cambios</button>
-                        <a href="#removeModal" class="btn btn-primary" data-bs-toggle="modal">Eliminar cuenta</a>
+                        <div class="row d-flex">
+                            <div class="col-md-3 col-sm-3 d-flex flex-column flex-sm-row">
+                                <button class="btn btn-primary mb-2 mb-sm-0" type="button">Guardar cambios</button>
+                            </div>
+
+                            <div class="col-md-3 col-sm-3 d-flex flex-column flex-sm-row">
+                                <a href="#removeModal" class="btn btn-primary" data-bs-toggle="modal">Eliminar cuenta</a>
+                            </div>
+                        </div>
+
                     </form>
                 </div>
 
@@ -84,20 +102,16 @@
                     <form th:action="@{/profile/editprofile/changepassword}" method="post" id="miFormulario">
                         <div class="mb-3">
                             <label class="small mb-1" for="inputlastPass">Contraseña actual</label>
-                            <div class="row">
-                                <div class="col">
-                                    <input class="form-control" id="inputlastPass" th:field="*{EditProfileDtoForm.oldPass}" type="password"
-                                           placeholder="Introduce tu contraseña actual">
-                                </div>
-                                <div class="col-1">
-                                    <i class="bi bi-eye-fill show-password-icon-index" id="eyeid"> </i>
-                                </div>
+                            <div class="input-group mb-3">
+                                <input type="password" class="form-control " id="inputlastPass" th:field="*{ChangePasswordDtoForm.oldPass}" placeholder="Introduce tu contraseña actual" aria-label="Contraseña actual" aria-describedby="basic-addon2">
+                                <span class="input-group-text" id="basic-addon2" style="background-color: #f7f7f7"><i class="bi bi-eye-fill show-password-icon-index" id="eyeid" style="font-size: 1.3em"></i></span>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="small mb-1" for="inputPass1">Nueva contraseña</label>
                             <input class="form-control" id="inputPass1" type="password"
-                                   placeholder="Introduce tu nueva contraseña" th:field="*{EditProfileDtoForm.newPassword}">
+                                   placeholder="Introduce tu nueva contraseña"
+                                   th:field="*{ChangePasswordDtoForm.newPassword}">
                             <p class="hide_alert text-danger" id="alert_pass1">El campo Contraseña es
                                 obligatorio</p>
                             <p class="hide_alert text-danger" id="alert_pass3">La contraseña debe contener al menos
@@ -127,7 +141,8 @@
                                    placeholder="Repite tu nueva contraseña">
                             <p class="hide_alert text-danger" id="alert_pass2">Las contraseñas deben coincidir</p>
                         </div>
-                        <button class="btn btn-primary" onclick="comprobarErrores()" type="submit">Cambiar contraseña</button>
+                        <button class="btn btn-primary" onclick="comprobarErrores()" type="submit">Cambiar contraseña
+                        </button>
                     </form>
                 </div>
             </div>
@@ -164,17 +179,9 @@
         </div>
     </div>
 </div>
-
-<footer class="bg-light text-center text-lg-start mt-3">
-    <!-- Copyright -->
-    <div class="text-center p-3" style="background-color: #173753; color: white; height: 70px">
-        © 2023 Copyright:
-        <p style="color: white" href="#">Hecho por: Sergio Álvarez Varela <i class="bi bi-laptop"
-                                                                             style="color: white"></i></p>
-    </div>
-    <!-- Copyright -->
-</footer>
 </body>
+
+<footer th:replace="tools/footer :: #footer-include"></footer>
 
 <script>
     const formulario = document.getElementById('miFormulario');
@@ -255,7 +262,7 @@
             reg = true;
         }
         if (pass1.value !== "") {
-            comprobarPass(reg);
+            reg = comprobarPass(reg);
         }
         if (pass1.value === "") {
             document.getElementById("alert_pass1").className = "show_alert text-danger";
@@ -269,6 +276,19 @@
             evento.preventDefault();
         }
     });
+
+    const navbarToggler = document.getElementById("nav");
+
+    function checkWindowSize() {
+        if (window.innerWidth < 1025) {
+            navbarToggler.className = "navbar";
+        } else {
+            navbarToggler.className = "navbar navbar-expand-md";
+        }
+    }
+
+    checkWindowSize();
+    window.addEventListener('resize', checkWindowSize);
 
 
 </script>

@@ -1,34 +1,45 @@
 <!DOCTYPE html>
 <header th:replace="tools/package :: #package-include"></header>
 
-<header class="navbar navbar-expand" style="background-color: #173753">
-    <nav class="container">
-        <a href="/">
-            <img src="/images/logo.png" alt="Error al cargar la imagen" class="logo_tamano">
-        </a>
-        <a class="nav-item nav-link home-letter-nav" href="#">Catálogo</a>
-        <a class="nav-item nav-link home-letter-nav" href="register">Regístrate</a>
-        <a class="nav-item nav-link home-letter-nav" href="#loginModal" data-bs-toggle="modal">Inicia
-            Sesión</a>
-    </nav>
+<header style="background-color: #173753">
+    <nav class="navbar navbar-expand-md">
+        <div class="container-fluid col-md-10 col-sm-6">
+            <ul class="navbar-nav">
+            <li class="nav-item mx-lg-5">
+            <a href="/">
+                <img src="/images/logo.png" alt="Error al cargar la imagen" class="logo_tamano" style="max-width: 100% ; max-height: 100%">
+            </a>
+            </li>
 
+            </ul>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-dark navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item mx-lg-5">
+                        <a class="nav-link" style="color: white; font-size: 16px; font-weight: bold" href="#">Catálogo</a>
+                    </li>
+                    <li class="nav-item mx-lg-5">
+                        <a class="nav-link" style="color: white; font-size: 16px; font-weight: bold" href="register">Regístrate</a>
+                    </li>
+                    <li class="nav-item mx-lg-5">
+                        <a class="nav-link" style="color: white; font-size: 16px; font-weight: bold" href="#loginModal" data-bs-toggle="modal">Inicia Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 </header>
 <body class="register-background-color">
-<div class="container-flex">
-    <div class="row">
-        <div class="col-3">
-        </div>
+<div class="container-fluid">
+    <div class="row justify-content-around">
         <div class="col-6 text-center mt-2">
-            <h2 class="fst-normal">Nuestros cursos más demandados <i class="bi bi-fire"
-                                                                     style="color: orangered"></i></h2>
+            <h5 class="fst-normal">Nuestros cursos más demandados <i class="bi bi-fire"
+                                                                     style="color: orangered"></i></h5>
         </div>
-        <div class="col-3">
-        </div>
-        <div class="row mt-3">
-            <div class="col-3">
-
-            </div>
-            <div class="col-6">
+        <div class="row mt-3 justify-content-around">
+            <div class="col-md-6 col-sm-5">
                 <div id="demo" class="carousel slide carousel-border" style="width: 100%" data-bs-ride="carousel">
 
                     <!-- Indicators/dots -->
@@ -63,82 +74,68 @@
                     </button>
                 </div>
             </div>
-            <div class="col-3">
-            </div>
         </div>
     </div>
     <div class="row">
         <div class="col mt-3" style="text-align: center">
-            <h2>Sobre nosotros:</h2>
+            <h5>Sobre nosotros:</h5>
         </div>
     </div>
     <div class="row justify-content-around">
-        <div class="col-2">
-
-        </div>
-        <div class="col-8">
-
-            <div class="row">
-                <div class="col-3 mt-5">
-                    <div class="card"
-                         style="width: 18rem; height: 29em; background-color: #6DAEDB; border: 4px solid #173753 ">
-                        <img src="/images/card1.png" class="card-img-top" alt="...">
-                        <h5 class="card-title" style="text-align: center">Como comenzar</h5>
+        <div class="col-md-10 col-sm-6">
+            <div class="row row-cols g-3 justify-content-around flex-column flex-sm-row">
+                <div class="col-md-3 col-sm-2 col-xs-12">
+                    <div class="card" style="background-color: #6DAEDB; border: 4px solid #173753">
+                        <img src="/images/card1.png" class="card-img-top" style="height: 250px"
+                             alt="No se ha podido cargar la imagen" />
                         <div class="card-body">
-                            <p class="card-text">Regístrate en nuestra página, busca entre nuestra amplia variedad de
-                                cursos e
-                                ingresa a aquellos que más se ajusten a lo que desees aprender.</p>
+                            <h5 class="card-title">Como comenzar</h5>
+                            <p class="card-text">
+                                Regístrate en nuestra página, busca entre nuestra amplia variedad de
+                                cursos e ingresa a aquellos que más se ajusten a lo que desees aprender.
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-
-                </div>
-                <div class="col-3 mt-5">
-                    <div class="card"
-                         style="width: 18rem;height: 29rem; background-color: #6DAEDB; border: 4px solid #173753 ">
-                        <img src="/images/card2.png" class="card-img-top" alt="...">
-                        <h5 class="card-title" style="text-align: center">Aprendiendo con nosotros</h5>
+                <div class="col-md-3 col-sm-2 col-xs-12">
+                    <div class="card" style="height: 100%; background-color: #6DAEDB; border: 4px solid #173753">
+                        <img src="/images/card2.png" class="card-img-top "
+                             alt="No se ha podido cargar la imagen" />
                         <div class="card-body">
-                            <p class="card-text">Visualiza el contenido teórico y completa todas las pruebas para
-                                finalizar el curso con éxito.</p>
+                            <h5 class="card-title" style="font-size: 17px">Aprendiendo con nosotros</h5>
+                            <p class="card-text">
+                                Visualiza el contenido teórico y completa todas las pruebas para
+                                finalizar el curso con éxito.
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-
-                </div>
-                <div class="col-3 mt-5">
-                    <div class="card"
-                         style="width: 18rem;height: 29rem; background-color: #6DAEDB; border: 4px solid #173753 ">
-                        <img src="/images/card3.png" class="card-img-top" alt="...">
-                        <h5 class="card-title" style="text-align: center">Mostrando resultados</h5>
+                <div class="col-md-3 col-sm-2 col-xs-12">
+                    <div class="card" style="height: 100%; background-color: #6DAEDB; border: 4px solid #173753">
+                        <img src="/images/card3.png" class="card-img-top "
+                             alt="No se ha podido cargar la imagen" />
                         <div class="card-body">
+                            <h5 class="card-title">Mostrando resultados</h5>
                             <p class="card-text">Realiza el pago a través de una de nuestras plataformas y obtén el
-                                diploma que abala tus conocimientos obtenidos. </p>
+                                diploma que abala tus conocimientos obtenidos.</p>
                         </div>
                     </div>
                 </div>
-
             </div>
-
-        </div>
-        <div class="col-2">
-
         </div>
     </div>
+
+
 
 
 </div>
 <div th:replace="login :: #loginModal"></div>
-<footer class="bg-light text-center text-lg-start mt-3">
-    <div class="text-center p-3" style="background-color: #173753; color: white; height: 70px">
-        © 2023 Copyright:
-        <p style="color: white" href="#">Hecho por: Sergio Álvarez Varela <i class="bi bi-laptop"
-                                                                             style="color: white"></i></p>
-    </div>
-</footer>
 </body>
+
+<footer th:replace="tools/footer :: #footer-include"></footer>
+
+
+
 <script>
     let eye = document.getElementById('eyeid');
 

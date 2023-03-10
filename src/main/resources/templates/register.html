@@ -1,23 +1,15 @@
 <!DOCTYPE html>
 <header th:replace="tools/package :: #package-include"></header>
 
-<body class="register-background-color">
-
-<div class="container d-flex justify-content-center align-items-center" style="height: 125vh;">
+<body class="register-background-color container d-flex justify-content-center align-items-center mt-4">
     <div class="row">
-        <div class="col-md-25 mx-auto">
-            <div class="row mb-4">
-                <div class="col-2">
+        <div class="col-md-12 mx-auto">
+            <div class="row mb-4 justify-content-center">
 
-                </div>
-
-                <div class="col">
+                <div class="col ml-3">
                     <a href="/">
                         <img src="/images/logo2.png"   alt="Error al cargar la imagen" class="logo_tamano">
                     </a>
-                </div>
-                <div class="col-2 ">
-
                 </div>
             </div>
             <h3 class="text-center">Regístrate</h3>
@@ -123,7 +115,7 @@
                 </div>
                 <br>
                 <div class="form-group row">
-                    <div class="col">
+                    <div class="col-md-12 col-sm-6">
                         <div class="row">
                             <div class="col">
                                 <label for="image">Foto de perfil</label>
@@ -132,18 +124,18 @@
                         <br>
                         <div class="row">
                             <div class="col">
-                                <input type="file" class="form-control-file form-control-lg" id="image"
+                                <input type="file" class="form-control-file" id="image"
                                        th:field="*{RegisterDtoForm.image}">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col">
+                    <div class="col-md-12 col-sm-6">
                         <br>
                         <input type="submit" onclick="comprobarErrores()" id="register" value="Regístrate"
                                class=" register-button-color btn btn-primary register-custom-btn"
-                               style="margin-bottom: 20px">
+                               style="margin-bottom: 20px; width: 100%">
                         <div th:replace="tools/Messages :: #messages-fragment"></div>
                     </div>
                 </div>
