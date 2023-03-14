@@ -14,7 +14,10 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -120,7 +123,7 @@ public class UserImpl implements UserDetailsService {
         if (passwordEncoder.matches(oldPass, user.getPassword())) {
             user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt(SALT_ROUNDS)));
             userRepository.update(user);
-
+            modifyAuthentification(user.getUsername(),user.getPassword());
         } else {
             throw exceptionGenerationUtils.toAuthenticationException("auth.password.dont.matches", user.getUsername());
         }
@@ -128,29 +131,30 @@ public class UserImpl implements UserDetailsService {
     }
 
     @Transactional
-    public void EditProfile(String oldusername, String newusername,String email) throws DuplicatedResourceException {
-        Users users = userRepository.findByUsername(oldusername);
-        boolean change;
-        if (userRepository.findByEmail(email) != null) {
-
-            throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.EMAIL_FIELD, email,
-                    "modifyemail.duplicated.exception");
+    public void modifyProfile(String username,String newusername, String newemail) throws DuplicatedResourceException {
+        Users user = findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
         }else{
-            change = true;
-            users.setEmail(email);
+            if(userRepository.findByUsername(newusername)!=null){
+                throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USERNAME_FIELD, newusername,
+                        "modifyusername.duplicated.exception");
+            }
+
+            if(userRepository.findByEmail(newemail)!=null){
+                throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USERNAME_FIELD, newemail,
+                        "modifyemail.duplicated.exception");
+            }
+        }
+        if ((!user.getUsername().equals(newusername))&&(!user.getEmail().equals(newemail))){
+            user.setUsername(newusername);
+            user.setEmail(newemail);
+            userRepository.update(user);
+            modifyAuthentification(user.getUsername(),user.getPassword());
+        } else {
+            throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USER_SESSION,username,"user.duplicated.exception");
         }
 
-        if (userRepository.findByUsername(newusername) != null) {
-            throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USERNAME_FIELD, newusername,
-                    "modifyuser.duplicated.exception");
-        }else{
-            change = true;
-            users.setUsername(newusername);
-        }
-
-        if (change){
-            userRepository.update(users);
-        }
 
 
     }
@@ -189,6 +193,22 @@ public class UserImpl implements UserDetailsService {
                 logger.error(e.getMessage(), e);
             }
         }
+    }
+
+    private void modifyAuthentification(String username, String password){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) auth.getPrincipal();
+        User updatedUser = new User(
+                username,
+                password,
+                currentUser.isEnabled(),
+                currentUser.isAccountNonExpired(),
+                currentUser.isCredentialsNonExpired(),
+                currentUser.isAccountNonLocked(),
+                currentUser.getAuthorities()
+        );
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(updatedUser, auth.getCredentials(), auth.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
 

@@ -19,10 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -100,7 +97,8 @@ public class UserOperations {
     }
 
     @GetMapping("/profile/{username}")
-    public String doGetProfile(@PathVariable String username, Model model, Principal principal, Locale locale) throws IOException, InstanceNotFoundException {
+    public String doGetProfile(@PathVariable String username, Model model) throws IOException, InstanceNotFoundException {
+        model.addAttribute("username", username);
         Users user = userImpl.findByUsername(username);
         byte[] image = userImpl.getImage(user.getUserId());
         ProfileDtoForm profileDtoForm = UserConversor.toProfile(user, image);
@@ -108,19 +106,19 @@ public class UserOperations {
         return "profile";
     }
 
-    @GetMapping("/{username}/editprofile")
-    public String doGetEditProfile(@PathVariable String username, Model model, Principal principal) throws IOException {
-        model.addAttribute("ChangePasswordDtoForm", new ChangePasswordDtoForm());
+    @GetMapping("/editprofile")
+    public String doGetEditProfile(Model model, Principal principal) {
+        System.out.println(principal);
+        System.out.println("hola");
         Users user = userImpl.findByUsername(principal.getName());
-        model.addAttribute("EditProfileDtoForm", new EditProfileDtoForm(user.getUsername(),user.getEmail()));
+        model.addAttribute("EditProfileDtoForm", new EditProfileDtoForm(user.getUsername(), user.getEmail()));
+        model.addAttribute("ChangePasswordDtoForm", new ChangePasswordDtoForm());
         return "editprofile";
     }
 
     @PostMapping("/profile/editprofile/remove")
     public String doPostRemoveProfile(Principal principal, Locale locale,
                                       RedirectAttributes redirectAttributes) {
-
-
 
         userImpl.Remove(principal.getName());
         redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
@@ -130,8 +128,10 @@ public class UserOperations {
 
     @PostMapping("/profile/editprofile/changepassword")
     public String doPostChangePassword(Principal principal, @Valid @ModelAttribute("ChangePasswordDtoForm") ChangePasswordDtoForm changePasswordDtoForm,
-                                       Locale locale, BindingResult result,
+                                       Locale locale, BindingResult result, HttpSession session,
                                        Model model) {
+        Users user = userImpl.findByUsername(principal.getName());
+        model.addAttribute("EditProfileDtoForm", new EditProfileDtoForm(user.getUsername(), user.getEmail()));
 
         if (result.hasErrors()) {
             serviceExceptions.serviceInvalidFormError(result,
@@ -140,14 +140,36 @@ public class UserOperations {
         }
 
         try {
-            userImpl.changePassword(principal.getName(), changePasswordDtoForm.getOldPass(), changePasswordDtoForm.getNewPassword() );
+            userImpl.changePassword(principal.getName(), changePasswordDtoForm.getOldPass(), changePasswordDtoForm.getNewPassword());
         } catch (AuthenticationException e) {
-            serviceExceptions.serviceAuthenticationException(e,model);
+            serviceExceptions.serviceAuthenticationException(e, model);
+            return "editprofile";
+        }
+        model.addAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
+                "changepassword.success", new Object[]{principal.getName()}, locale));
+        return "editprofile";
+    }
+
+    @PostMapping("/profile/editprofile/modify")
+    public String doPostModifyProfile(Principal principal, @Valid @ModelAttribute("EditProfileDtoForm") EditProfileDtoForm editProfileDtoForm,
+                                      Locale locale, BindingResult result,
+                                      Model model) {
+        model.addAttribute("ChangePasswordDtoForm", new ChangePasswordDtoForm());
+        if (result.hasErrors()) {
+            serviceExceptions.serviceInvalidFormError(result,
+                    "modifyprofile.invalid.parameters", model, locale);
             return "editprofile";
         }
 
-        model.addAttribute(Constants.SUCCESS_MESSAGE,messageSource.getMessage(
-                "changepassword.success", new Object[]{principal.getName()}, locale));
+        try {
+            userImpl.modifyProfile(principal.getName(), editProfileDtoForm.getUsername(), editProfileDtoForm.getEmail());
+        } catch (DuplicatedResourceException ex) {
+            serviceExceptions.serviceDuplicatedResourceException(ex, model);
+            return "editprofile";
+        }
+
+        model.addAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
+                "modifyprofile.success", new Object[]{principal.getName()}, locale));
         return "editprofile";
     }
 

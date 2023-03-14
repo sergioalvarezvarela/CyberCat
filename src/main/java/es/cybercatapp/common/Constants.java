@@ -27,7 +27,7 @@ public class Constants {
 
     public static final String SEND_REDIRECT = "redirect:";
     public static final String ROOT_ENDPOINT = "/";
-    public static final String USER_SESSION = "user";
+    public static final String USER_SESSION = "users";
 
 
 
