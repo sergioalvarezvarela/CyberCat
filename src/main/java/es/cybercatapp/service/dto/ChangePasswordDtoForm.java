@@ -13,7 +13,7 @@ public class ChangePasswordDtoForm {
 
     @NotNull
     @Size(min = 8)
-    @Pattern(regexp =  "^.*(?=\\S+$)(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=._]).*$")
+    @Pattern(regexp =  "^.*(?=\\S+$)(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$'?%^&+=._]).*$")
     private String newPassword;
 
     public String getOldPass() {

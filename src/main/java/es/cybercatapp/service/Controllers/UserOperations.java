@@ -6,6 +6,7 @@ import es.cybercatapp.model.exceptions.AuthenticationException;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.UserImpl;
+import es.cybercatapp.service.utils.AdminChecker;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.conversor.UserConversor;
 import es.cybercatapp.service.dto.*;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -97,12 +99,14 @@ public class UserOperations {
     }
 
     @GetMapping("/profile/{username}")
-    public String doGetProfile(@PathVariable String username, Model model) throws IOException, InstanceNotFoundException {
+    @PreAuthorize("#username == authentication.principal.username")
+    public String doGetProfile(@PathVariable String username, Model model, Authentication authentication) throws IOException, InstanceNotFoundException {
         model.addAttribute("username", username);
         Users user = userImpl.findByUsername(username);
         byte[] image = userImpl.getImage(user.getUserId());
         ProfileDtoForm profileDtoForm = UserConversor.toProfile(user, image);
         model.addAttribute("ProfileDtoForm", profileDtoForm);
+        AdminChecker.isAdmin(model,authentication);
         return "profile";
     }
 

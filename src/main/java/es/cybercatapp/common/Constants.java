@@ -8,6 +8,14 @@ public class Constants {
     public static final String USER_ENTITY = "User";
     public static final String USER_TABLE = "Users";
 
+    // Course
+
+    public static final String COURSE_ENTITY = "Course";
+    public static final String COURSE_TABLE = "Courses";
+
+    public static final String INSCRIPTIONS_ENTITY = "Inscription";
+    public static final String INSCRIPTIONS_TABLE = "Inscriptions";
+
     public static final String EMAIL_FIELD = "email";
     public static final String USERNAME_FIELD = "username";
 

@@ -1,5 +1,5 @@
 package es.cybercatapp.model.entities;
 
 public enum Roles {
-    USER,ADMIN
+    ROLE_USER,ROLE_ADMIN
 }

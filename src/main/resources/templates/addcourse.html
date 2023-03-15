@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div id='addcourse'>
+    <div class="modal fade modal-login" id="addcourseModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCourseModalLabel">Añadir curso</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="row g-3">
+                        <div class="col-md-12">
+                            <label for="inputCourse" class="form-label">Nombre del curso</label>
+                            <input type="text" class="form-control" id="inputCourse">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputMoney" class="form-label">Precio</label>
+                            <input type="number" class="form-outline form-control" id="inputMoney">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="category" class="form-label">Categoria</label>
+                            <select id="category" class="form-select" name="category">
+                                <option value="">Escoger...</option>
+                                <option th:each="category : ${category}"
+                                        th:value="${category}"
+                                        th:text="${category.getDescripcion()}"></option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">Foto para el curso</label>
+                                <input class="form-control" type="file" id="formFile">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary">Crear curso</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

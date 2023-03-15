@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -30,9 +31,7 @@ import javax.annotation.PostConstruct;
 import java.io.*;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service(value = "userService")
 public class UserImpl implements UserDetailsService {
@@ -65,8 +64,10 @@ public class UserImpl implements UserDetailsService {
             throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", userName));
         }
         Users user = optUser.get();
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(user.getTipo().name()));
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                user.getPassword(), getRoles(user.getTipo()));
+                user.getPassword(), grantedAuthorities);
     }
 
 
@@ -99,7 +100,7 @@ public class UserImpl implements UserDetailsService {
             throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USERNAME_FIELD, username,
                     "registration.duplicated.exception");
         }
-        Users user = userRepository.create(new Users(username, email, BCrypt.hashpw(password, BCrypt.gensalt(SALT_ROUNDS)), Roles.USER, LocalDateTime.now(), image));
+        Users user = userRepository.create(new Users(username, email, BCrypt.hashpw(password, BCrypt.gensalt(SALT_ROUNDS)), Roles.ROLE_USER, LocalDateTime.now(), image));
         saveProfileImage(user.getUserId(), image, imageContents);
         return user;
     }

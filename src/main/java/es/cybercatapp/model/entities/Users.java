@@ -2,6 +2,7 @@ package es.cybercatapp.model.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import es.cybercatapp.common.Constants;
 
@@ -44,6 +45,14 @@ public class Users implements Serializable {
 
     @Column(name = "imagen_perfil", nullable = true)
     private String imagen_perfil;
+
+    @ManyToMany
+    @JoinTable(
+            name = "inscriptions",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private List<Courses> courses;
 
     public Long getUserId() {
         return userId;
@@ -97,6 +106,14 @@ public class Users implements Serializable {
         return imagen_perfil;
     }
 
+    public List<Courses> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Courses> courses) {
+        this.courses = courses;
+    }
+
     public void setImagen_perfil(String imagen_perfil) {
         this.imagen_perfil = imagen_perfil;
     }
@@ -111,6 +128,7 @@ public class Users implements Serializable {
                 ", tipo=" + tipo +
                 ", fecha_creacion=" + fecha_creacion +
                 ", imagen_perfil='" + imagen_perfil + '\'' +
+                ", courses=" + courses +
                 '}';
     }
 }

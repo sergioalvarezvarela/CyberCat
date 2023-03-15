@@ -137,5 +137,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-context:5.3.25" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.3.25" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-test:5.3.25" level="project" />
+    <orderEntry type="library" name="bs-custom-file-input" level="application" />
   </component>
 </module>
