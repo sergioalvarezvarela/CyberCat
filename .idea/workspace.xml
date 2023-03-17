@@ -5,27 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="edafb670-42bd-4d3d-9e94-68c4f756d43c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/impl/CourseImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/repositories/CourseRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/dto/AddCourseDtoForm.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/work/1/image(50).webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/work/2/Color Hunt Palette f7fbfcd6e6f2b9d7ea769fcd.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/work/server.log.2023-03-15.0.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/work/server.log.2023-03-16.0.gz" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cybercat-app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/cybercat-app.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/common/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/common/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Roles.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Roles.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Users.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/impl/UserImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/impl/UserImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Controllers/CourseOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Controllers/CourseOperations.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Controllers/UserOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Controllers/UserOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Exceptions/ServiceExceptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Exceptions/ServiceExceptions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/config/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/config/WebSecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/dto/ChangePasswordDtoForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/dto/ChangePasswordDtoForm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/data.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/tables.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/editprofile.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/editprofile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/dto/RegisterDtoForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/dto/RegisterDtoForm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/messages.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/messages.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/addcourse.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/addcourse.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/messages.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/messages.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/tables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tables.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/editprofile.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/editprofile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-07.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/addcourse.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/addcourse.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-08.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-09.0.gz" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,8 +34,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="HTML File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -58,24 +57,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Errors&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;00c962d25b02745f19cb18b5a1f2ec50&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.settings.ide.settings.notifications",
+    "spring.configuration.checksum": "00c962d25b02745f19cb18b5a1f2ec50"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\34698\Desktop\TFG\CyberCat\src\main\resources" />
@@ -130,6 +129,7 @@
       <workItem from="1678790806844" duration="18197000" />
       <workItem from="1678871637559" duration="7123000" />
       <workItem from="1678900926926" duration="16813000" />
+      <workItem from="1678959219412" duration="19868000" />
     </task>
     <servers />
   </component>

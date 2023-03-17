@@ -33,7 +33,7 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
-@Service(value = "userService")
+@Service(value = "userImpl")
 public class UserImpl implements UserDetailsService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserImpl.class);

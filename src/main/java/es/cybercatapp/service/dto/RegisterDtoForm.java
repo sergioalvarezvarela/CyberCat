@@ -16,7 +16,7 @@ public class RegisterDtoForm {
 
 
     @NotNull
-    @Size(min = 8)
+    @Size(min = 8, max = 22)
     @Pattern(regexp =  "^.*(?=\\S+$)(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=._]).*$")
     private String password;
 
@@ -27,15 +27,6 @@ public class RegisterDtoForm {
     private MultipartFile image;
 
 
-    public RegisterDtoForm(){
-
-    }
-
-    public RegisterDtoForm(String username, String password, String email ){
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
 
     public String getUsername() {
         return username;

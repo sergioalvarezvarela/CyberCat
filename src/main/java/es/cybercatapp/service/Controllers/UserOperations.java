@@ -132,7 +132,7 @@ public class UserOperations {
 
     @PostMapping("/profile/editprofile/changepassword")
     public String doPostChangePassword(Principal principal, @Valid @ModelAttribute("ChangePasswordDtoForm") ChangePasswordDtoForm changePasswordDtoForm,
-                                       Locale locale, BindingResult result, HttpSession session,
+                                       Locale locale, BindingResult result,
                                        Model model) {
         Users user = userImpl.findByUsername(principal.getName());
         model.addAttribute("EditProfileDtoForm", new EditProfileDtoForm(user.getUsername(), user.getEmail()));
