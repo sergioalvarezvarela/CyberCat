@@ -17,10 +17,16 @@ public class EditProfileDtoForm {
     @Email
     private String email;
 
+    private String image;
 
-    public EditProfileDtoForm(String username, String email) {
+    private String imageType;
+
+
+    public EditProfileDtoForm(String username, String email, String image, String imageType) {
         this.username=username;
         this.email=email;
+        this.image = image;
+        this.imageType = imageType;
     }
 
     public String getUsername() {
@@ -37,5 +43,21 @@ public class EditProfileDtoForm {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 }

@@ -10,10 +10,20 @@
                 <div class="card-header">Foto de perfil</div>
                 <div class="card-body text-center">
                     <img class="img-account-profile rounded-circle mb-2"
-                         src="http://bootdey.com/img/Content/avatar/avatar1.png" alt=""
+                    th:src="'data:' + ${EditProfileDtoForm.imageType} + ';base64,' + ${EditProfileDtoForm.image}" alt="Profile image"
                          style="max-height: 100%; max-width: 100%">
                     <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-                    <button class="btn btn-primary" id="btnDelete" type="button">Upload new image</button>
+                    <form th:action="@{/profile/editprofile/uploadImage}" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                        <input type="file" name="profileImage" id="profileImage" style="display:none;" />
+                        <label for="profileImage" class="btn btn-primary mb-2" style="width: 85%">Actualizar</label>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                        <button type="submit" class="btn btn-success" style="width: 85%">Guardar</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -56,7 +66,7 @@
                             </div>
 
                             <div class="col-md-3 col-sm-3 d-flex flex-column flex-sm-row">
-                                <a href="#removeModal" class="btn btn-primary" data-bs-toggle="modal">Eliminar
+                                <a href="#removeModal" class="btn btn btn-danger" data-bs-toggle="modal">Eliminar
                                     cuenta</a>
                             </div>
                         </div>

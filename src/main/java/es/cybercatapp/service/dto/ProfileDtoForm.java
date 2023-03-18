@@ -11,14 +11,17 @@ public class ProfileDtoForm {
 
     private String date;
 
-    private byte[] image;
+    private String image;
+
+    private String imageType;
 
 
-    public ProfileDtoForm(String username, String email, String date, byte[] image) {
+    public ProfileDtoForm(String username, String email, String date, String image, String imageType) {
         this.username=username;
         this.email=email;
         this.date=date;
         this.image = image;
+        this.imageType = imageType;
     }
 
     public String getUsername() {
@@ -46,11 +49,19 @@ public class ProfileDtoForm {
         this.date = date;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 }

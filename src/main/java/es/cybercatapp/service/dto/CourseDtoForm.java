@@ -21,18 +21,22 @@ public class CourseDtoForm {
     @NotNull
     private String category;
 
-    private MultipartFile image;
-
     @NotNull
     @Size(min = 10)
     private String description;
 
-    public CourseDtoForm(Long id, String courseName, float price, String category, String description){
+    private String image;
+
+    private String imageType;
+
+    public CourseDtoForm(Long id, String courseName, float price, String category, String description, String image, String imageType){
         this.id = id;
         this.courseName = courseName;
         this.price = price;
         this.category = category;
         this.description = description;
+        this.image = image;
+        this.imageType = imageType;
     }
 
     public Long getId() {
@@ -67,19 +71,27 @@ public class CourseDtoForm {
         this.category = category;
     }
 
-    public MultipartFile getImage() {
-        return image;
-    }
-
-    public void setImage(MultipartFile image) {
-        this.image = image;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 }

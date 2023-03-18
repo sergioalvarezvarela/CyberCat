@@ -8,6 +8,7 @@ import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.CourseImpl;
 import es.cybercatapp.model.impl.UserImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
+import es.cybercatapp.service.conversor.CoursesConversor;
 import es.cybercatapp.service.dto.AddCourseDtoForm;
 import es.cybercatapp.service.dto.CourseDtoForm;
 import es.cybercatapp.service.dto.RegisterDtoForm;
@@ -49,17 +50,24 @@ public class CourseOperations {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = {"/managecourses"})
-    public String doGetCourseManagement(Model model, Principal principal) {
+    public String doGetCourseManagement(Model model, Principal principal, Locale locale) {
+
+        try {
+
 
         List<Courses> courses = courseImpl.findCoursesByOwner(principal.getName());
         List<CourseDtoForm> courseDtos = new ArrayList<>();
 
         for (Courses course : courses) {
-            courseDtos.add(new CourseDtoForm(course.getCourseId(), course.getCourse_name(), course.getCourse_price(), course.getCourse_category().getDescripcion(), course.getCourse_description()));
+            byte[] image = courseImpl.getImage(course.getCourseId());
+            courseDtos.add(CoursesConversor.toCourseDtoForm(course,image,course.getCourse_photo()));
         }
         model.addAttribute("CourseDtoForm", courseDtos);
         model.addAttribute("AddCourseDtoForm", new AddCourseDtoForm());
         model.addAttribute("category", Category.values());
+        } catch (InstanceNotFoundException ex){
+            serviceExceptions.serviceInstanceNotFoundException(ex,model,locale);
+        }
 
         return "managecourses";
     }

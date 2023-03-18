@@ -29,6 +29,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
 import java.text.MessageFormat;
+import java.util.Base64;
 import java.util.Locale;
 
 
@@ -100,24 +101,37 @@ public class UserOperations {
 
     @GetMapping("/profile/{username}")
     @PreAuthorize("#username == authentication.principal.username")
-    public String doGetProfile(@PathVariable String username, Model model, Authentication authentication) throws IOException, InstanceNotFoundException {
-        model.addAttribute("username", username);
+    public String doGetProfile(@PathVariable String username, Model model, Authentication authentication) {
+        try {
+            model.addAttribute("username", username);
         Users user = userImpl.findByUsername(username);
         byte[] image = userImpl.getImage(user.getUserId());
-        ProfileDtoForm profileDtoForm = UserConversor.toProfile(user, image);
+
+        ProfileDtoForm profileDtoForm = UserConversor.toProfile(user, image, user.getImagen_perfil());
         model.addAttribute("ProfileDtoForm", profileDtoForm);
         AdminChecker.isAdmin(model,authentication);
         return "profile";
+        } catch (Exception ex) {
+            return serviceExceptions.serviceUnexpectedException(ex,model);
+        }
+
     }
 
+
     @GetMapping("/editprofile")
-    public String doGetEditProfile(Model model, Principal principal) {
-        System.out.println(principal);
-        System.out.println("hola");
+    public String doGetEditProfile(Model model, Principal principal, Locale locale) {
+        try{
+
+
         Users user = userImpl.findByUsername(principal.getName());
-        model.addAttribute("EditProfileDtoForm", new EditProfileDtoForm(user.getUsername(), user.getEmail()));
+        byte[] image = userImpl.getImage(user.getUserId());
+        EditProfileDtoForm editProfileDtoForm = UserConversor.toEditProfile(user, image, user.getImagen_perfil());
+        model.addAttribute("EditProfileDtoForm", editProfileDtoForm);
         model.addAttribute("ChangePasswordDtoForm", new ChangePasswordDtoForm());
         return "editprofile";
+        } catch (InstanceNotFoundException ex){
+            return serviceExceptions.serviceInstanceNotFoundException(ex,model,locale);
+        }
     }
 
     @PostMapping("/profile/editprofile/remove")
@@ -134,8 +148,11 @@ public class UserOperations {
     public String doPostChangePassword(Principal principal, @Valid @ModelAttribute("ChangePasswordDtoForm") ChangePasswordDtoForm changePasswordDtoForm,
                                        Locale locale, BindingResult result,
                                        Model model) {
+        try {
         Users user = userImpl.findByUsername(principal.getName());
-        model.addAttribute("EditProfileDtoForm", new EditProfileDtoForm(user.getUsername(), user.getEmail()));
+        byte[] image = userImpl.getImage(user.getUserId());
+        EditProfileDtoForm editProfileDtoForm = UserConversor.toEditProfile(user, image, user.getImagen_perfil());
+        model.addAttribute("EditProfileDtoForm", editProfileDtoForm);
 
         if (result.hasErrors()) {
             serviceExceptions.serviceInvalidFormError(result,
@@ -143,10 +160,13 @@ public class UserOperations {
             return "editprofile";
         }
 
-        try {
+
             userImpl.changePassword(principal.getName(), changePasswordDtoForm.getOldPass(), changePasswordDtoForm.getNewPassword());
         } catch (AuthenticationException e) {
             serviceExceptions.serviceAuthenticationException(e, model);
+            return "editprofile";
+        } catch (InstanceNotFoundException ex) {
+            serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
             return "editprofile";
         }
         model.addAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(

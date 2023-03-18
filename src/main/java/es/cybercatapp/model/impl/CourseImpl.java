@@ -18,9 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.List;
@@ -95,4 +93,27 @@ public class CourseImpl {
             }
         }
     }
+    @Transactional
+    public byte[] getImage(Long id) throws InstanceNotFoundException {
+        Courses courses = courseRepository.findById(id);
+        try {
+            return getImageCourse(id,courses.getCourse_photo());
+        } catch (IOException ex) {
+            logger.error(ex.getMessage(), ex);
+            return null;
+        }
+    }
+
+    private byte[] getImageCourse(Long id, String image) throws IOException {
+        if (image != null && image.trim().length() > 0) {
+            File userDir = new File(resourcesDir, id.toString());
+            File profilePicture = new File(userDir, image);
+            try (FileInputStream input = new FileInputStream(profilePicture)) {
+                return IOUtils.toByteArray(input);
+            }
+        }
+        return null;
+    }
+
+
 }
