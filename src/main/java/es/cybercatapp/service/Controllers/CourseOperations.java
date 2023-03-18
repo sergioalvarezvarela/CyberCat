@@ -4,10 +4,12 @@ import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Category;
 import es.cybercatapp.model.entities.Courses;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
+import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.CourseImpl;
 import es.cybercatapp.model.impl.UserImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.dto.AddCourseDtoForm;
+import es.cybercatapp.service.dto.CourseDtoForm;
 import es.cybercatapp.service.dto.RegisterDtoForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -27,6 +30,8 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 @Controller
@@ -44,8 +49,15 @@ public class CourseOperations {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = {"/managecourses"})
-    public String doGetCourseManagement(Model model) {
+    public String doGetCourseManagement(Model model, Principal principal) {
 
+        List<Courses> courses = courseImpl.findCoursesByOwner(principal.getName());
+        List<CourseDtoForm> courseDtos = new ArrayList<>();
+
+        for (Courses course : courses) {
+            courseDtos.add(new CourseDtoForm(course.getCourseId(), course.getCourse_name(), course.getCourse_price(), course.getCourse_category().getDescripcion(), course.getCourse_description()));
+        }
+        model.addAttribute("CourseDtoForm", courseDtos);
         model.addAttribute("AddCourseDtoForm", new AddCourseDtoForm());
         model.addAttribute("category", Category.values());
 
@@ -77,6 +89,19 @@ public class CourseOperations {
                     "addcourse.success", new Object[]{course.getCourse_name()}, locale));
         } catch (IOException ex) {
             return serviceExceptions.serviceUnexpectedException(ex, model);
+        }
+        return Constants.SEND_REDIRECT + "/managecourses";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/managecourses/remove/{id}")
+    public String doPostRemoveCourses(@PathVariable String id, Locale locale, RedirectAttributes redirectAttributes, Model model) {
+        try {
+        courseImpl.Remove(Long.parseLong(id));
+        redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
+                "removecourses.success", new Object[]{id}, locale));
+        } catch (InstanceNotFoundException ex) {
+            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
         return Constants.SEND_REDIRECT + "/managecourses";
     }
