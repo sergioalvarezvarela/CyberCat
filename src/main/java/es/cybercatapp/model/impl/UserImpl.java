@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
+import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -131,6 +132,8 @@ public class UserImpl implements UserDetailsService {
 
     }
 
+
+
     @Transactional
     public void modifyProfile(String username,String newusername, String newemail) throws DuplicatedResourceException {
         Users user = findByUsername(username);
@@ -146,7 +149,9 @@ public class UserImpl implements UserDetailsService {
                 throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USERNAME_FIELD, newemail,
                         "modifyemail.duplicated.exception");
             }
+
         }
+
         if ((!user.getUsername().equals(newusername))&&(!user.getEmail().equals(newemail))){
             user.setUsername(newusername);
             user.setEmail(newemail);
@@ -154,6 +159,26 @@ public class UserImpl implements UserDetailsService {
             modifyAuthentification(user.getUsername(),user.getPassword());
         } else {
             throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USER_SESSION,username,"user.duplicated.exception");
+        }
+
+    }
+
+    @Transactional
+    public void updateProfileImage(String username,String image, byte [] imageContents) {
+        Users user = findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
+        }else{
+            if (image != null && image.trim().length() > 0 && imageContents != null) {
+                try {
+                    deleteProfileImage(user.getUserId(), image);
+                } catch (Exception ex) {
+                    logger.error(ex.getMessage(), ex);
+                }
+                saveProfileImage(user.getUserId(), image, imageContents);
+                user.setImagen_perfil(image);
+            }
+
         }
 
 
@@ -181,6 +206,14 @@ public class UserImpl implements UserDetailsService {
             }
         }
         return null;
+    }
+
+    private void deleteProfileImage(Long id, String image) throws IOException {
+        if (image != null && image.trim().length() > 0) {
+            File userDir = new File(resourcesDir, id.toString());
+            File profilePicture = new File(userDir, image);
+            Files.delete(profilePicture.toPath());
+        }
     }
 
     private void saveProfileImage(Long id, String image, byte[] imageContents) {

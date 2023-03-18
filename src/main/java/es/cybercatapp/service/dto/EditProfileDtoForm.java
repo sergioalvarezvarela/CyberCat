@@ -1,5 +1,7 @@
 package es.cybercatapp.service.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -20,6 +22,8 @@ public class EditProfileDtoForm {
     private String image;
 
     private String imageType;
+
+
 
 
     public EditProfileDtoForm(String username, String email, String image, String imageType) {
@@ -60,4 +64,6 @@ public class EditProfileDtoForm {
     public void setImageType(String imageType) {
         this.imageType = imageType;
     }
+
+
 }

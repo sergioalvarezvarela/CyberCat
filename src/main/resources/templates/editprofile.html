@@ -4,6 +4,7 @@
 
 <body>
 <div class="container-xl px-4 mt-4">
+    <div th:replace="tools/Messages :: #messages-fragment"></div>
     <div class="row">
         <div class="col-xl-4">
             <div class="card mb-4 mb-xl-0">
@@ -13,10 +14,10 @@
                     th:src="'data:' + ${EditProfileDtoForm.imageType} + ';base64,' + ${EditProfileDtoForm.image}" alt="Profile image"
                          style="max-height: 100%; max-width: 100%">
                     <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-                    <form th:action="@{/profile/editprofile/uploadImage}" method="post" enctype="multipart/form-data">
+                    <form th:action="@{/profile/editprofile/updatephoto}" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-6 col-sm-6">
-                        <input type="file" name="profileImage" id="profileImage" style="display:none;" />
+                        <input type="file" name="profileImage" id="profileImage" th:field="*{UpdateImageProfileDtoForm.imageFile}" style="display:none;" required />
                         <label for="profileImage" class="btn btn-primary mb-2" style="width: 85%">Actualizar</label>
                             </div>
                             <div class="col-md-6 col-sm-6">
@@ -130,7 +131,6 @@
                 </div>
             </div>
         </div>
-        <div th:replace="tools/Messages :: #messages-fragment"></div>
     </div>
 </div>
 

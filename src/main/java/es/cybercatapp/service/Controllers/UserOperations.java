@@ -104,15 +104,14 @@ public class UserOperations {
     public String doGetProfile(@PathVariable String username, Model model, Authentication authentication) {
         try {
             model.addAttribute("username", username);
-        Users user = userImpl.findByUsername(username);
-        byte[] image = userImpl.getImage(user.getUserId());
-
-        ProfileDtoForm profileDtoForm = UserConversor.toProfile(user, image, user.getImagen_perfil());
-        model.addAttribute("ProfileDtoForm", profileDtoForm);
-        AdminChecker.isAdmin(model,authentication);
-        return "profile";
+            Users user = userImpl.findByUsername(username);
+            byte[] image = userImpl.getImage(user.getUserId());
+            ProfileDtoForm profileDtoForm = UserConversor.toProfile(user, image, user.getImagen_perfil());
+            model.addAttribute("ProfileDtoForm", profileDtoForm);
+            AdminChecker.isAdmin(model, authentication);
+            return "profile";
         } catch (Exception ex) {
-            return serviceExceptions.serviceUnexpectedException(ex,model);
+            return serviceExceptions.serviceUnexpectedException(ex, model);
         }
 
     }
@@ -120,17 +119,19 @@ public class UserOperations {
 
     @GetMapping("/editprofile")
     public String doGetEditProfile(Model model, Principal principal, Locale locale) {
-        try{
+        try {
 
 
-        Users user = userImpl.findByUsername(principal.getName());
-        byte[] image = userImpl.getImage(user.getUserId());
-        EditProfileDtoForm editProfileDtoForm = UserConversor.toEditProfile(user, image, user.getImagen_perfil());
-        model.addAttribute("EditProfileDtoForm", editProfileDtoForm);
-        model.addAttribute("ChangePasswordDtoForm", new ChangePasswordDtoForm());
-        return "editprofile";
-        } catch (InstanceNotFoundException ex){
-            return serviceExceptions.serviceInstanceNotFoundException(ex,model,locale);
+            Users user = userImpl.findByUsername(principal.getName());
+            byte[] image = userImpl.getImage(user.getUserId());
+            EditProfileDtoForm editProfileDtoForm = UserConversor.toEditProfile(user, image, user.getImagen_perfil());
+            model.addAttribute("EditProfileDtoForm", editProfileDtoForm);
+            model.addAttribute("ChangePasswordDtoForm", new ChangePasswordDtoForm());
+            model.addAttribute("UpdateImageProfileDtoForm", new UpdateImageProfileDtoForm());
+
+            return "editprofile";
+        } catch (InstanceNotFoundException ex) {
+            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
     }
 
@@ -149,16 +150,18 @@ public class UserOperations {
                                        Locale locale, BindingResult result,
                                        Model model) {
         try {
-        Users user = userImpl.findByUsername(principal.getName());
-        byte[] image = userImpl.getImage(user.getUserId());
-        EditProfileDtoForm editProfileDtoForm = UserConversor.toEditProfile(user, image, user.getImagen_perfil());
-        model.addAttribute("EditProfileDtoForm", editProfileDtoForm);
+            Users user = userImpl.findByUsername(principal.getName());
+            byte[] image = userImpl.getImage(user.getUserId());
+            EditProfileDtoForm editProfileDtoForm = UserConversor.toEditProfile(user, image, user.getImagen_perfil());
+            model.addAttribute("EditProfileDtoForm", editProfileDtoForm);
+            model.addAttribute("UpdateImageProfileDtoForm", new UpdateImageProfileDtoForm());
 
-        if (result.hasErrors()) {
-            serviceExceptions.serviceInvalidFormError(result,
-                    "changepassword.invalid.parameters", model, locale);
-            return "editprofile";
-        }
+
+            if (result.hasErrors()) {
+                serviceExceptions.serviceInvalidFormError(result,
+                        "changepassword.invalid.parameters", model, locale);
+                return "editprofile";
+            }
 
 
             userImpl.changePassword(principal.getName(), changePasswordDtoForm.getOldPass(), changePasswordDtoForm.getNewPassword());
@@ -178,6 +181,7 @@ public class UserOperations {
     public String doPostModifyProfile(Principal principal, @Valid @ModelAttribute("EditProfileDtoForm") EditProfileDtoForm editProfileDtoForm,
                                       Locale locale, BindingResult result,
                                       Model model) {
+        model.addAttribute("UpdateImageProfileDtoForm", new UpdateImageProfileDtoForm());
         model.addAttribute("ChangePasswordDtoForm", new ChangePasswordDtoForm());
         if (result.hasErrors()) {
             serviceExceptions.serviceInvalidFormError(result,
@@ -194,6 +198,33 @@ public class UserOperations {
 
         model.addAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                 "modifyprofile.success", new Object[]{principal.getName()}, locale));
+        return "editprofile";
+    }
+
+    @PostMapping("/profile/editprofile/updatephoto")
+    public String doPostUpdatePhoto(Principal principal, @Valid @ModelAttribute("UpdateImageProfileDtoForm") UpdateImageProfileDtoForm updateImageProfileDtoForm,
+                                    Locale locale, BindingResult result,
+                                    Model model) {
+        model.addAttribute("ChangePasswordDtoForm", new ChangePasswordDtoForm());
+        if (result.hasErrors()) {
+            serviceExceptions.serviceInvalidFormError(result,
+                    "modifyprofile.invalid.parameters", model, locale);
+            return "editprofile";
+        }
+        try {
+            userImpl.updateProfileImage(principal.getName(), updateImageProfileDtoForm.getImageFile() != null ? updateImageProfileDtoForm.getImageFile().getOriginalFilename() : null,
+                    updateImageProfileDtoForm.getImageFile() != null ? updateImageProfileDtoForm.getImageFile().getBytes() : null);
+            Users user = userImpl.findByUsername(principal.getName());
+            byte[] image = userImpl.getImage(user.getUserId());
+            EditProfileDtoForm editProfileDtoForm = UserConversor.toEditProfile(user, image, user.getImagen_perfil());
+            model.addAttribute("EditProfileDtoForm", editProfileDtoForm);
+        } catch (IOException ex) {
+            return serviceExceptions.serviceUnexpectedException(ex, model);
+        } catch (InstanceNotFoundException ex) {
+            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        }
+        model.addAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
+                "photoprofile.success", new Object[]{principal.getName()}, locale));
         return "editprofile";
     }
 
