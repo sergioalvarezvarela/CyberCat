@@ -1,10 +1,13 @@
 package es.cybercatapp.model.entities;
 
 import es.cybercatapp.common.Constants;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(name = Constants.COURSE_ENTITY)
@@ -16,7 +19,7 @@ public class Courses implements Serializable {
     public Courses() {
     }
 
-    public Courses(String course_name, String course_description, LocalDate creation_date, String course_photo, Users user_owner, Category course_category, float course_price ) {
+    public Courses(String course_name, String course_description, LocalDate creation_date, String course_photo, Users user_owner, Category course_category, float course_price) {
         this.course_name = course_name;
         this.course_description = course_description;
         this.creation_date = creation_date;
@@ -41,7 +44,7 @@ public class Courses implements Serializable {
 
     @Column(name = "course_photo", nullable = false)
     private String course_photo;
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "course_category", nullable = false)
     private Category course_category;
 
@@ -49,11 +52,12 @@ public class Courses implements Serializable {
     private float course_price;
 
 
-
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "user_id", nullable = false)
     private Users user_owner;
+
+    @OneToMany(mappedBy = "courses", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Module> modulos = new ArrayList<>();
 
     public Long getCourseId() {
         return courseId;
@@ -120,6 +124,14 @@ public class Courses implements Serializable {
         this.course_price = course_price;
     }
 
+    public List<Module> getModulos() {
+        return modulos;
+    }
+
+    public void setModulos(List<Module> modulos) {
+        this.modulos = modulos;
+    }
+
     @Override
     public String toString() {
         return "Courses{" +
@@ -131,6 +143,7 @@ public class Courses implements Serializable {
                 ", course_category=" + course_category +
                 ", course_price=" + course_price +
                 ", user_owner=" + user_owner +
+                ", modulos=" + modulos +
                 '}';
     }
 

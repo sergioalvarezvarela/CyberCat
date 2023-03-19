@@ -6,6 +6,15 @@
 <div class="container-xl px-4 mt-4">
     <div th:replace="tools/Messages :: #messages-fragment"></div>
     <div class="row">
+        <div class="row d-flex align-items-center mb-2">
+            <div class="col d-flex justify-content-start">
+                <a th:href="@{'/profile/' + ${EditProfileDtoForm.username}}">
+                    <button type="button" class="btn btn-primary">
+                        <i class="bi bi-arrow-left"></i> Atrás
+                    </button>
+                </a>
+            </div>
+        </div>
         <div class="col-xl-4">
             <div class="card mb-4 mb-xl-0">
                 <div class="card-header">Foto de perfil</div>
@@ -14,7 +23,7 @@
                     th:src="'data:' + ${EditProfileDtoForm.imageType} + ';base64,' + ${EditProfileDtoForm.image}" alt="Profile image"
                          style="max-height: 100%; max-width: 100%">
                     <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-                    <form th:action="@{/profile/editprofile/updatephoto}" method="post" enctype="multipart/form-data">
+                    <form th:action="@{/editprofile/updatephoto}" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-6 col-sm-6">
                         <input type="file" name="profileImage" id="profileImage" th:field="*{UpdateImageProfileDtoForm.imageFile}" style="display:none;" required />
@@ -32,7 +41,7 @@
             <div class="card mb-4">
                 <div class="card-header">Detalles de la cuenta</div>
                 <div class="card-body">
-                    <form th:action="@{/profile/editprofile/modify}" id="miFormulario" method="post">
+                    <form th:action="@{/editprofile/modify}" id="miFormulario" method="post">
                         <div class="mb-3">
                             <label class="small mb-1" for="inputUsername">Nombre de usuario (Este nombre es único y será
                                 tu identificador)</label>
@@ -79,7 +88,7 @@
             <div class="card mt-3">
                 <div class="card-header">Seguridad de la cuenta</div>
                 <div class="card-body">
-                    <form th:action="@{/profile/editprofile/changepassword}" method="post" id="miFormulario2">
+                    <form th:action="@{/editprofile/changepassword}" method="post" id="miFormulario2">
                         <div class="mb-3">
                             <label class="small mb-1" for="inputlastPass">Contraseña actual</label>
                             <div class="input-group mb-3">
@@ -155,7 +164,7 @@
             <div class="modal-footer justify-content-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar
                 </button>
-                <form th:action="@{/profile/editprofile/remove}" method="post" id="delete-form">
+                <form th:action="@{'/editprofile/remove/' + ${EditProfileDtoForm.username}}" method="post" id="delete-form">
                     <button type="submit" class="btn btn-danger">Eliminar</button>
                 </form>
             </div>

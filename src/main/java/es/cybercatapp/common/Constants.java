@@ -13,8 +13,14 @@ public class Constants {
     public static final String COURSE_ENTITY = "Course";
     public static final String COURSE_TABLE = "Courses";
 
+    public static final String MODULE_ENTITY = "Module";
+    public static final String MODULE_TABLE = "Modules";
+
     public static final String INSCRIPTIONS_ENTITY = "Inscription";
     public static final String INSCRIPTIONS_TABLE = "Inscriptions";
+
+    public static final String MODULEUSER_ENTITY = "Moduleuser";
+    public static final String MODULEUSER_TABLE = "Moduleusers";
 
     public static final String EMAIL_FIELD = "email";
     public static final String USERNAME_FIELD = "username";

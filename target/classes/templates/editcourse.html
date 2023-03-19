@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<header th:replace="tools/package :: #package-include"></header>
+<header th:replace="tools/header :: #header-include"></header>
+<body>
+<div class="container mt-5 mb-3">
+    <div class="row d-flex align-items-center mb-2">
+        <div class="col d-flex justify-content-start">
+            <a href="/managecourses">
+                <button type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Atrás
+                </button>
+            </a>
+        </div>
+        <div class="col d-flex justify-content-end">
+            <button type="button" class="btn btn-info" data-bs-toggle="modal">Añadir modulo</button>
+        </div>
+    </div>
+
+
+    <div class="col-md-12 mb-4">
+        <div class="card p-3">
+            <div class="d-flex justify-content-between" style="cursor: pointer">
+                <h4 data-bs-toggle="collapse" data-bs-target="#collapseOne">Modulo 1</h4>
+                <div>
+                    <i id="edit-icon" class="bi bi-pencil-fill me-2" data-bs-toggle="modal" data-bs-target="#editModuleNameModal" style="cursor:pointer;"></i>
+                    <i id="delete-icon" class="bi bi-trash-fill" style="cursor:pointer; color: red;"></i>
+                </div>
+            </div>
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+                <div class="mt-2">
+                    <div class="card p-3 mt-3 text-dark" style="background-color: #dedede">
+                        <div class="mt-2">
+                            <h4><i class="bi bi-clipboard-minus" style="color: #173753"></i> Modulo 1</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<div class="modal" tabindex="-1" id="editModuleNameModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar nombre del módulo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="moduleNameInput" class="form-label">Nombre del módulo</label>
+                    <input type="text" class="form-control" id="moduleNameInput">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="updateModuleName()">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

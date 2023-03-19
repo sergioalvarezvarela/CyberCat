@@ -135,8 +135,8 @@ public class UserOperations {
         }
     }
 
-    @PostMapping("/profile/editprofile/remove")
-    public String doPostRemoveProfile(Principal principal, Locale locale,
+    @PostMapping("/editprofile/remove/{username}")
+    public String doPostRemoveProfile(@PathVariable String username, Principal principal, Locale locale,
                                       RedirectAttributes redirectAttributes) {
 
         userImpl.Remove(principal.getName());
@@ -145,7 +145,7 @@ public class UserOperations {
         return Constants.SEND_REDIRECT + "/logout";
     }
 
-    @PostMapping("/profile/editprofile/changepassword")
+    @PostMapping("/editprofile/changepassword")
     public String doPostChangePassword(Principal principal, @Valid @ModelAttribute("ChangePasswordDtoForm") ChangePasswordDtoForm changePasswordDtoForm,
                                        Locale locale, BindingResult result,
                                        Model model) {
@@ -177,7 +177,7 @@ public class UserOperations {
         return "editprofile";
     }
 
-    @PostMapping("/profile/editprofile/modify")
+    @PostMapping("/editprofile/modify")
     public String doPostModifyProfile(Principal principal, @Valid @ModelAttribute("EditProfileDtoForm") EditProfileDtoForm editProfileDtoForm,
                                       Locale locale, BindingResult result,
                                       Model model) {
@@ -201,7 +201,7 @@ public class UserOperations {
         return "editprofile";
     }
 
-    @PostMapping("/profile/editprofile/updatephoto")
+    @PostMapping("/editprofile/updatephoto")
     public String doPostUpdatePhoto(Principal principal, @Valid @ModelAttribute("UpdateImageProfileDtoForm") UpdateImageProfileDtoForm updateImageProfileDtoForm,
                                     Locale locale, BindingResult result,
                                     Model model) {

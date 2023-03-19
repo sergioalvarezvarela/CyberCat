@@ -60,6 +60,7 @@ public class CourseOperations {
                 byte[] image = courseImpl.getImage(course.getCourseId());
                 courseDtos.add(CoursesConversor.toCourseDtoForm(course, image, course.getCourse_photo()));
             }
+            model.addAttribute("username",principal.getName());
             model.addAttribute("CourseDtoForm", courseDtos);
             model.addAttribute("AddModifyCourseDtoForm", new AddModifyCourseDtoForm());
             model.addAttribute("category", Category.values());
@@ -135,6 +136,14 @@ public class CourseOperations {
             return serviceExceptions.serviceUnexpectedException(ex, model);
         }
         return Constants.SEND_REDIRECT + "/managecourses";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping(value = {"/editcourse"})
+    public String doGetCourseContent(Model model, Principal principal, Locale locale) {
+
+
+        return "editcourse";
     }
 }
 

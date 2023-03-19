@@ -2,9 +2,13 @@ package es.cybercatapp.model.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import com.fasterxml.jackson.databind.Module;
 import es.cybercatapp.common.Constants;
+import org.hibernate.annotations.Cascade;
 
 @Entity(name = Constants.USER_ENTITY)
 @Table(name = Constants.USER_TABLE)
@@ -37,8 +41,10 @@ public class Users implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "tipo", nullable = false)
-    private Roles  tipo;
+    private Roles tipo;
 
     @Column(name = "fecha_creacion", nullable = false)
     private LocalDateTime fecha_creacion;
@@ -46,13 +52,20 @@ public class Users implements Serializable {
     @Column(name = "imagen_perfil", nullable = true)
     private String imagen_perfil;
 
-    @ManyToMany
+
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "inscriptions",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
     private List<Courses> courses;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.REMOVE)
+    private Set<Module_User> moduleUsers = new HashSet<>();
+
 
     public Long getUserId() {
         return userId;
@@ -106,6 +119,10 @@ public class Users implements Serializable {
         return imagen_perfil;
     }
 
+    public void setImagen_perfil(String imagen_perfil) {
+        this.imagen_perfil = imagen_perfil;
+    }
+
     public List<Courses> getCourses() {
         return courses;
     }
@@ -114,8 +131,12 @@ public class Users implements Serializable {
         this.courses = courses;
     }
 
-    public void setImagen_perfil(String imagen_perfil) {
-        this.imagen_perfil = imagen_perfil;
+    public Set<Module_User> getModuleUsers() {
+        return moduleUsers;
+    }
+
+    public void setModuleUsers(Set<Module_User> moduleUsers) {
+        this.moduleUsers = moduleUsers;
     }
 
     @Override
@@ -129,6 +150,7 @@ public class Users implements Serializable {
                 ", fecha_creacion=" + fecha_creacion +
                 ", imagen_perfil='" + imagen_perfil + '\'' +
                 ", courses=" + courses +
+                ", moduleUsers=" + moduleUsers +
                 '}';
     }
 }
