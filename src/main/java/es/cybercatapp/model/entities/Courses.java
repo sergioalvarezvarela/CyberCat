@@ -5,6 +5,7 @@ import es.cybercatapp.common.Constants;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity(name = Constants.COURSE_ENTITY)
 @Table(name = Constants.COURSE_TABLE)
@@ -117,5 +118,32 @@ public class Courses implements Serializable {
 
     public void setCourse_price(float course_price) {
         this.course_price = course_price;
+    }
+
+    @Override
+    public String toString() {
+        return "Courses{" +
+                "courseId=" + courseId +
+                ", course_name='" + course_name + '\'' +
+                ", course_description='" + course_description + '\'' +
+                ", creation_date=" + creation_date +
+                ", course_photo='" + course_photo + '\'' +
+                ", course_category=" + course_category +
+                ", course_price=" + course_price +
+                ", user_owner=" + user_owner +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Courses courses = (Courses) o;
+        return Float.compare(courses.course_price, course_price) == 0 && Objects.equals(courseId, courses.courseId) && Objects.equals(course_name, courses.course_name) && Objects.equals(course_description, courses.course_description) && Objects.equals(creation_date, courses.creation_date) && Objects.equals(course_photo, courses.course_photo) && course_category == courses.course_category && Objects.equals(user_owner, courses.user_owner);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(courseId, course_name, course_description, creation_date, course_photo, course_category, course_price, user_owner);
     }
 }

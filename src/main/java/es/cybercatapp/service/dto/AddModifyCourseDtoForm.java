@@ -1,13 +1,12 @@
 package es.cybercatapp.service.dto;
 
-import es.cybercatapp.model.entities.Category;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class AddCourseDtoForm {
+public class AddModifyCourseDtoForm {
 
     @NotNull
     @Size(min = 5)
@@ -26,6 +25,7 @@ public class AddCourseDtoForm {
     @NotNull
     @Size(min = 10)
     private String description;
+
 
     public String getCourseName() {
         return courseName;

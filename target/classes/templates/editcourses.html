@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div id='editcourse'>
+    <div class="modal fade modal-login" id="editcourseModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCourseModalLabel">Editar datos de curso</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/managecourses/update}" method="post" id="editForm" class="row g-3"
+                          enctype="multipart/form-data">
+                        <div class="col-md-12">
+                            <label for="inputCourseEdit" class="form-label">Nombre del curso</label>
+                            <input type="text" class="form-control" th:field="*{AddModifyCourseDtoForm.courseName}"
+                                   id="inputCourseEdit" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputMoneyEdit" class="form-label">Precio</label>
+                            <input type="number" class="form-outline form-control" step="0.1" id="inputMoneyEdit"
+                                   th:field="*{AddModifyCourseDtoForm.price}" required min="1">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="categoryEdit" class="form-label">Categoria</label>
+                            <select id="categoryEdit" class="form-select" name="category"
+                                    th:field="*{AddModifyCourseDtoForm.category}" required>
+                                <option value="">Escoger...</option>
+                                <option th:each="category : ${category}"
+                                        th:value="${category}"
+                                        th:text="${category.getDescripcion()}"></option>
+                            </select>
+                        </div>
+                        <div class="col-12" >
+                            <div class="mb-3">
+                                <label for="formFileEdit" class="form-label">Foto para el curso</label>
+                                <input type="file" name="profileImage" id="formFileEdit" th:field="*{AddModifyCourseDtoForm.image}" style="display:none;"/>
+                                <label for="formFileEdit" class="btn mb-2" style="width: 100%; background-color: #c9c9c9;">Subir nueva fotografía</label>
+                                <label>Archivo seleccionado: <span id="currentImageName" class="form-text mt-2">Ninguno</span> </label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputDescriptionEdit" class="form-label">Descripcion del curso</label>
+                            <textarea class="form-control" id="inputDescriptionEdit" rows="3"
+                                      th:field="*{AddModifyCourseDtoForm.description}" required></textarea>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary">Guardar información</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>

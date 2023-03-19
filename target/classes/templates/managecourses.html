@@ -3,55 +3,72 @@
 <header th:replace="tools/package :: #package-include"></header>
 <header th:replace="tools/header :: #header-include"></header>
 <body>
-<div class="main-container"  th:style="${CourseDtoForm==null} ? 'margin-bottom: 90px;' : 'margin-bottom: 280px;'">
-<section style="background-color: white;">
+<div class="main-container" th:style="${CourseDtoForm==null} ? 'margin-bottom: 90px;' : 'margin-bottom: 280px;'">
+    <section style="background-color: white;">
 
-    <div class="container py-5">
-        <div th:replace="tools/Messages :: #messages-fragment"></div>
-        <div class="d-flex justify-content-end">
-            <a class="btn btn-info mb-3" style="margin-right: 95px" href="#addcourseModal" data-bs-toggle="modal">Añadir curso</a>
-        </div>
-        <div class="row justify-content-center mb-3" th:each="course : ${CourseDtoForm}">
-            <div class="col-md-12 col-xl-10">
-                <div class="card shadow-0 border rounded-3">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
-                                <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                                    <img th:src="'data:' + ${course.imageType} + ';base64,' + ${course.image}" alt="Profile image" style="width: 100%; height: 100%;"
-                                         class="w-100" />
-                                    <a href="#!">
-                                        <div class="hover-overlay">
-                                            <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-6 col-xl-6">
-                                <h5 th:text="${course.courseName}"></h5>
-                                <div class="d-flex flex-row">
-                                    <div class="text-danger mb-1 me-2">
-                                        <i class="bi bi-star-fill" style="color: gold"></i>
-                                        <i class="bi bi-star-fill" style="color: gold"></i>
-                                        <i class="bi bi-star-fill" style="color: gold"></i>
-                                        <i class="bi bi-star-fill" style="color: gold"></i>
-                                        <i class="bi bi-star-fill" style="color: gold"></i>
+        <div class="container py-5">
+            <div th:replace="tools/Messages :: #messages-fragment"></div>
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-info mb-3" style="margin-right: 95px" href="#addcourseModal" data-bs-toggle="modal">Añadir
+                    curso</a>
+            </div>
+            <div class="row justify-content-center mb-3" th:each="course : ${CourseDtoForm}">
+                <div class="col-md-12 col-xl-10">
+                    <div class="card shadow-0 border rounded-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                                    <div class="bg-image hover-zoom ripple rounded ripple-surface">
+                                        <img th:src="'data:' + ${course.imageType} + ';base64,' + ${course.image}"
+                                             alt="Profile image" style="width: 100%; height: 100%;"
+                                             class="w-100"/>
+                                        <a href="#!">
+                                            <div class="hover-overlay">
+                                                <div class="mask"
+                                                     style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                                            </div>
+                                        </a>
                                     </div>
-                                    <span>310 comentarios</span>
                                 </div>
-                                <div class="mt-1 mb-0 text-muted small">
-                                    <span class="text-primary"> • </span>
-                                    <span  th:text="${course.category}"></span>
+                                <div class="col-md-6 col-lg-6 col-xl-6">
+                                    <h5 th:text="${course.courseName}"></h5>
+                                    <div class="d-flex flex-row">
+                                        <div class="text-danger mb-1 me-2">
+                                            <i class="bi bi-star-fill" style="color: gold"></i>
+                                            <i class="bi bi-star-fill" style="color: gold"></i>
+                                            <i class="bi bi-star-fill" style="color: gold"></i>
+                                            <i class="bi bi-star-fill" style="color: gold"></i>
+                                            <i class="bi bi-star-fill" style="color: gold"></i>
+                                        </div>
+                                        <span>310 comentarios</span>
+                                    </div>
+                                    <div class="mt-1 mb-0 text-muted small">
+                                        <span class="text-primary"> • </span>
+                                        <span th:text="${course.category}"></span>
+                                    </div>
+                                    <p class="text-truncate mb-4 mb-md-0" th:text="${course.description}"></p>
                                 </div>
-                                <p class="text-truncate mb-4 mb-md-0" th:text="${course.description}"></p>
-                            </div>
-                            <div class="col-md-6 col-lg-3 col-xl-3 ">
-                                <div class="d-flex flex-row align-items-center mb-1">
-                                    <h4 class="mb-1 me-1" th:text="${course.price + ' €'}"></h4>
-                                </div>
-                                <div class="d-flex flex-column mt-4">
-                                    <button class="btn btn-primary btn-sm" type="button">Modificar</button>
-                                    <button data-bs-target="#removeModal" data-bs-toggle="modal" th:attr="data-course-id=${course.id}" class="btn btn-outline-danger btn-sm mt-2" type="button">Eliminar</button>
+                                <div class="col-md-6 col-lg-3 col-xl-3 ">
+                                    <div class="d-flex flex-row align-items-center mb-1">
+                                        <h4 class="mb-1 me-1" th:text="${course.price + ' €'}"></h4>
+                                    </div>
+                                    <div class="d-flex flex-column mt-4">
+                                        <button class="btn btn-primary btn-sm" href="#editcourseModal"
+                                                data-bs-toggle="modal" type="button"
+                                                th:data-course-id="${course.id}"
+                                                th:data-course-name="${course.courseName}"
+                                                th:data-course-price="${course.price}"
+                                                th:data-course-category="${course.category}"
+                                                th:data-course-description="${course.description}"
+                                                th:data-course-image="${course.imageType}"
+                                        >Editar información</button>
+                                        <button class="btn btn-warning btn-sm mt-2" type="button">Modificar contenido
+                                        </button>
+                                        <button data-bs-target="#removeModal" data-bs-toggle="modal"
+                                                th:attr="data-course-id=${course.id}"
+                                                class="btn btn-outline-danger btn-sm mt-2" type="button">Eliminar curso
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -59,49 +76,80 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<div class="modal" id="removeModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">¿Estás seguro?</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row iconx-size">
-                    <i class="bi bi-x-circle"
-                       style="color: red; display: flex; justify-content: center; align-items: center"></i>
+    <div class="modal" id="removeModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">¿Estás seguro?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="row mt-3">
-                    <p>¿Estás seguro de que deseas eliminar el curso? Este proceso es definitivo. </p>
+                <div class="modal-body">
+                    <div class="row iconx-size">
+                        <i class="bi bi-x-circle"
+                           style="color: red; display: flex; justify-content: center; align-items: center"></i>
+                    </div>
+                    <div class="row mt-3">
+                        <p>¿Estás seguro de que deseas eliminar el curso? Este proceso es definitivo. </p>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar
-                </button>
-                <form th:action="@{/managecourses/remove}" method="post" id="delete-form">
-                    <button type="submit" class="btn btn-danger">Eliminar</button>
-                </form>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar
+                    </button>
+                    <form th:action="@{/managecourses/remove}" method="post" id="delete-form">
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div th:replace="addcourse :: #addcourseModal"></div>
-
+    <div th:replace="addcourse :: #addcourseModal"></div>
+    <div th:replace="editcourses :: #editcourseModal"></div>
 </div>
 <footer th:replace="tools/footer :: #footer-include"></footer>
 </body>
 <script>
     const removeModal = document.getElementById('removeModal');
     const deleteForm = document.getElementById('delete-form');
-
     removeModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
         const courseId = button.getAttribute('data-course-id');
         deleteForm.action = `/managecourses/remove/${courseId}`;
     });
+
+    const editModal = document.getElementById('editcourseModal');
+    const editForm = document.getElementById('editForm');
+    const inputCourseEdit = document.getElementById('inputCourseEdit');
+    const inputMoneyEdit = document.getElementById('inputMoneyEdit');
+    const categoryEdit = document.getElementById('categoryEdit');
+    const inputDescriptionEdit = document.getElementById('inputDescriptionEdit');
+    const currentImageName = document.getElementById('currentImageName');
+
+
+    editModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const courseId = button.getAttribute('data-course-id');
+        const courseName = button.getAttribute('data-course-name');
+        const coursePrice = button.getAttribute('data-course-price');
+        const courseCategory = button.getAttribute('data-course-category');
+        const courseDescription = button.getAttribute('data-course-description');
+        const courseImage = button.getAttribute('data-course-image');
+
+        inputCourseEdit.value = courseName;
+        inputMoneyEdit.value = coursePrice;
+        categoryEdit.value = courseCategory;
+        inputDescriptionEdit.value = courseDescription;
+        currentImageName.textContent = courseImage;
+
+        if (currentImageName.textContent.trim() === "") {
+            currentImageName.textContent = "Ninguno";
+        }
+
+        editForm.action = `/managecourses/update/${courseId}`;
+    });
+
+
 </script>
 
 </html>

@@ -4,6 +4,7 @@ import es.cybercatapp.common.ConfigurationParameters;
 import es.cybercatapp.model.entities.Category;
 import es.cybercatapp.model.entities.Courses;
 import es.cybercatapp.model.entities.Users;
+import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.repositories.CourseRepository;
 import es.cybercatapp.model.repositories.UserRepository;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
+import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.List;
@@ -64,7 +66,7 @@ public class CourseImpl {
     }
 
     @Transactional
-    public List<Courses> findCoursesByOwner(String owner){
+    public List<Courses> findCoursesByOwner(String owner) {
         Users user = userRepository.findByUsername(owner);
         if (user == null) {
             throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", owner));
@@ -74,13 +76,42 @@ public class CourseImpl {
 
 
     @Transactional
-    public void Remove(long id) throws InstanceNotFoundException {
+    public void update(long id, String coursename, float price, String category,
+                       String image, byte[] imageContents, String description, String userowner) throws InstanceNotFoundException {
         Courses course = courseRepository.findById(id);
-        if (course== null) {
-            throw new InstanceNotFoundException(id,"Course","Course not found");
+        Users user = userRepository.findByUsername(userowner);
+        if (course == null) {
+            throw new InstanceNotFoundException(id, "Course", "Course not found");
+        } else {
+            Courses newcourse = new Courses(coursename, description, course.getCreation_date(), course.getCourse_photo(), user, Category.valueOf(category), price);
+            newcourse.setCourseId(course.getCourseId());
+            if (image != null && image.trim().length() > 0 && imageContents != null) {
+                try {
+                    deleteCourseImage(id, user.getImagen_perfil());
+                } catch (Exception ex) {
+                    logger.error(ex.getMessage(), ex);
+                }
+                saveCourseImage(id, image, imageContents);
+                newcourse.setCourse_photo(image);
+                course.setCourse_photo(image);
+            }
+            if (!course.equals(newcourse)) {
+                courseRepository.update(newcourse);
+            }
         }
-        courseRepository.remove(course);
     }
+
+    @Transactional
+    public void remove(long id) throws InstanceNotFoundException {
+        Courses course = courseRepository.findById(id);
+        if (course == null) {
+            throw new InstanceNotFoundException(id, "Course", "Course not found");
+        } else {
+            courseRepository.remove(course);
+        }
+
+    }
+
     private void saveCourseImage(Long id, String image, byte[] imageContents) {
         if (image != null && image.trim().length() > 0 && imageContents != null) {
             File userDir = new File(resourcesDir, id.toString());
@@ -93,11 +124,12 @@ public class CourseImpl {
             }
         }
     }
+
     @Transactional
     public byte[] getImage(Long id) throws InstanceNotFoundException {
         Courses courses = courseRepository.findById(id);
         try {
-            return getImageCourse(id,courses.getCourse_photo());
+            return getImageCourse(id, courses.getCourse_photo());
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
             return null;
@@ -115,5 +147,12 @@ public class CourseImpl {
         return null;
     }
 
+    private void deleteCourseImage(Long id, String image) throws IOException {
+        if (image != null && image.trim().length() > 0) {
+            File userDir = new File(resourcesDir, id.toString());
+            File profilePicture = new File(userDir, image);
+            Files.delete(profilePicture.toPath());
+        }
+    }
 
 }
