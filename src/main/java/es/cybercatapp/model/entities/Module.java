@@ -22,9 +22,8 @@ public class Module implements Serializable {
 
     }
 
-    public Module(Long moduleId, String module_name, LocalDate module_date, Courses courses ) {
-        this.moduleId = moduleId;
-        this.module_name = module_name;
+    public Module(String module_name, LocalDate module_date, Courses courses ) {
+                this.module_name = module_name;
         this.module_date = module_date;
         this.courses = courses;
     }

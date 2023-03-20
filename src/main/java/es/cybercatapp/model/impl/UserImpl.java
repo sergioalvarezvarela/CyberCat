@@ -2,11 +2,14 @@ package es.cybercatapp.model.impl;
 
 import es.cybercatapp.common.ConfigurationParameters;
 import es.cybercatapp.common.Constants;
+import es.cybercatapp.model.entities.Courses;
+import es.cybercatapp.model.entities.Inscriptions;
 import es.cybercatapp.model.entities.Roles;
 import es.cybercatapp.model.entities.Users;
 import es.cybercatapp.model.exceptions.AuthenticationException;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
+import es.cybercatapp.model.repositories.CourseRepository;
 import es.cybercatapp.model.repositories.UserRepository;
 import es.cybercatapp.model.utils.ExceptionGenerationUtils;
 import org.apache.commons.io.IOUtils;
@@ -46,7 +49,8 @@ public class UserImpl implements UserDetailsService {
     @Autowired
     ExceptionGenerationUtils exceptionGenerationUtils;
 
-
+    @Autowired
+    private CourseRepository courseRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -111,9 +115,15 @@ public class UserImpl implements UserDetailsService {
         Users user = findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
+        } else {
+            List<Courses> coursesbyUserOwner = courseRepository.findCoursesByUserOwner(user.getUserId());
+            for (Courses courses : coursesbyUserOwner) {
+            courseRepository.remove(courses);
         }
         userRepository.remove(user);
-    }
+    }}
+
+
 
     @Transactional
     public void changePassword(String username,String oldPass, String password) throws AuthenticationException {

@@ -3,7 +3,6 @@ package es.cybercatapp.service.Controllers;
 import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Category;
 import es.cybercatapp.model.entities.Courses;
-import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.CourseImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
@@ -138,13 +137,6 @@ public class CourseOperations {
         return Constants.SEND_REDIRECT + "/managecourses";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping(value = {"/editcourse"})
-    public String doGetCourseContent(Model model, Principal principal, Locale locale) {
-
-
-        return "editcourse";
-    }
 }
 
 

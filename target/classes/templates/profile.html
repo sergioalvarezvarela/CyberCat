@@ -60,7 +60,7 @@
                         <hr>
                         <div class="d-flex flex-column flex-md-row">
                             <div class="col-md-4 col-sm-4 mb-2">
-                            <a class="btn btn-info" target="_self" th:href="@{/editprofile}">Editar perfil</a>
+                            <a class="btn btn-info" target="_self" th:href="@{/profile/{username}/editprofile(username=${ProfileDtoForm.username})}">Editar perfil</a>
                             </div>
                             <div th:if="${isAdmin}" class="col-md-4 col-sm-4">
                                 <a class="btn btn-info" target="_self" th:href="@{/managecourses}">Administrar cursos</a>

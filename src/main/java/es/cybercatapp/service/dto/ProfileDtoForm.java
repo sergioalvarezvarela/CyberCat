@@ -1,7 +1,5 @@
 package es.cybercatapp.service.dto;
 
-import org.springframework.http.ResponseEntity;
-
 public class ProfileDtoForm {
 
     private String username;

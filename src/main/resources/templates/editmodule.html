@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<header th:replace="tools/package :: #package-include"></header>
+<header th:replace="tools/header :: #header-include"></header>
+<body>
+<div class="container mt-5 mb-3">
+    <div th:replace="tools/Messages :: #messages-fragment"></div>
+    <div class="row d-flex align-items-center mb-2">
+        <div class="col d-flex justify-content-start">
+            <a href="/managecourses">
+                <button type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Atrás
+                </button>
+            </a>
+        </div>
+        <div class="col d-flex justify-content-end">
+            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addModule">Añadir
+                modulo
+            </button>
+        </div>
+    </div>
+
+
+    <div class="col-md-12 mb-4" th:each="module : ${ModuleDtoList}">
+        <div class="card p-3">
+            <div class="d-flex justify-content-between" style="cursor: pointer">
+                <h4 data-bs-toggle="collapse" data-bs-target="#collapseOne" th:text="${module.moduleName}"></h4>
+                <div>
+                    <i id="add-icon" class="bi bi-plus-circle  me-2" data-bs-toggle="modal"
+                       data-bs-target="#addContentModal" style="cursor:pointer; color: dodgerblue"></i>
+                    <i id="edit-icon" class="bi bi-pencil-fill me-2" data-bs-toggle="modal"
+                       data-bs-target="#editModuleNameModal" style="cursor:pointer;"></i>
+                    <i id="delete-icon" class="bi bi-trash-fill" data-bs-toggle="modal" data-bs-target="#removeModule"
+                       style="cursor:pointer; color: red;"></i>
+                </div>
+            </div>
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+                <div class="mt-2">
+                    <div class="card p-3 mt-3 text-dark" style="background-color: #dedede">
+                        <div class="d-flex justify-content-between mt-2" style="cursor: pointer; color: #173753">
+                            <h4 data-bs-toggle="collapse" data-bs-target="#collapseOne">Modulo 1</h4>
+                            <div>
+                                <i id="edit-icon2" class="bi bi-pencil-fill me-2" data-bs-toggle="modal"
+                                   data-bs-target="#editExName" style="cursor:pointer;"></i>
+                                <i id="delete-icon2" class="bi bi-trash-fill" data-bs-toggle="modal"
+                                   data-bs-target="#removeContent" style="cursor:pointer; color: red;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<div class="modal" tabindex="-1" id="addModule">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form th:action="@{/managecourses/{id}/editcourses/addmodule(id=${courseId})}" method="post">
+                <div class="modal-header">
+                    <h4 class="modal-title">Añadir módulo</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="moduleNameInput" class="form-label">Nombre del módulo</label>
+                        <input type="text" class="form-control" id="moduleNameInput"
+                               th:field="*{ModuleDtoForm.moduleName}" minlength="5" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal" tabindex="-1" id="editModuleNameModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Editar nombre del módulo</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="moduleNameInput1" class="form-label">Nombre del módulo</label>
+                    <input type="text" class="form-control" id="moduleNameInput1" minlength="5" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="updateModuleName()">
+                    Guardar cambios
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="addContentModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Añadir contenido</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="addContentInput" class="form-label">Nombre del contenido</label>
+                    <input type="text" class="form-control" id="addContentInput" minlength="5" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="updateModuleName()">
+                    Guardar cambios
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="editExName">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Editar nombre de contenido </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="exNameInput" class="form-label">Nombre del contenido</label>
+                    <input type="text" class="form-control" id="exNameInput" minlength="5" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="updateModuleName()">
+                    Guardar cambios
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="removeModule" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">¿Estás seguro?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row iconx-size">
+                    <i class="bi bi-x-circle"
+                       style="color: red; display: flex; justify-content: center; align-items: center"></i>
+                </div>
+                <div class="row mt-3">
+                    <p>¿Estás seguro de que deseas eliminar el módulo? Este proceso es definitivo. </p>
+                </div>
+
+
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar
+                </button>
+                <form th:action="@{/managecourses/{id}/editcourses/removemodule(id=${courseId})}" method="post"
+                      id="deletemodule-form">
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</html>

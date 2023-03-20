@@ -117,8 +117,11 @@ public class UserOperations {
     }
 
 
-    @GetMapping("/editprofile")
-    public String doGetEditProfile(Model model, Principal principal, Locale locale) {
+
+
+    @GetMapping("/profile/{username}/editprofile")
+    @PreAuthorize("#username == authentication.principal.username")
+    public String doGetEditProfile(@PathVariable String username, Model model, Principal principal, Locale locale) {
         try {
 
 
@@ -186,19 +189,19 @@ public class UserOperations {
         if (result.hasErrors()) {
             serviceExceptions.serviceInvalidFormError(result,
                     "modifyprofile.invalid.parameters", model, locale);
-            return "editprofile";
+            return "redirect:/profile/" + editProfileDtoForm.getUsername() + "/editprofile";
         }
 
         try {
             userImpl.modifyProfile(principal.getName(), editProfileDtoForm.getUsername(), editProfileDtoForm.getEmail());
         } catch (DuplicatedResourceException ex) {
             serviceExceptions.serviceDuplicatedResourceException(ex, model);
-            return "editprofile";
+            return "redirect:/profile/" + editProfileDtoForm.getUsername() + "/editprofile";
         }
 
         model.addAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                 "modifyprofile.success", new Object[]{principal.getName()}, locale));
-        return "editprofile";
+         return "redirect:/profile/" + editProfileDtoForm.getUsername() + "/editprofile";
     }
 
     @PostMapping("/editprofile/updatephoto")

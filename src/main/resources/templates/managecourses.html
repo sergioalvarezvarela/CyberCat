@@ -72,7 +72,7 @@
                                                 th:data-course-description="${course.description}"
                                                 th:data-course-image="${course.imageType}"
                                         >Editar información</button>
-                                        <a class="btn btn-warning btn-sm mt-2" href="/editcourse" role="button">Modificar contenido</a>
+                                        <a class="btn btn-warning btn-sm mt-2" th:href="@{/managecourses/{id}/editcourses(id=${course.id})}" role="button">Modificar contenido</a>
                                         <button data-bs-target="#removeModal" data-bs-toggle="modal"
                                                 th:attr="data-course-id=${course.id}"
                                                 class="btn btn-outline-danger btn-sm mt-2" type="button">Eliminar curso

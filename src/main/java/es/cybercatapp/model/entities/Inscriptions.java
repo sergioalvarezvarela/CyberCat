@@ -58,4 +58,5 @@ public class Inscriptions implements Serializable {
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }
+
 }

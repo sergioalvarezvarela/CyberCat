@@ -22,7 +22,7 @@
                     <img class="img-account-profile rounded-circle mb-2"
                     th:src="'data:' + ${EditProfileDtoForm.imageType} + ';base64,' + ${EditProfileDtoForm.image}" alt="Profile image"
                          style="max-height: 100%; max-width: 100%">
-                    <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                    <div class="small font-italic text-muted mb-4">Imagen de perfil, no más de 5MB</div>
                     <form th:action="@{/editprofile/updatephoto}" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-6 col-sm-6">

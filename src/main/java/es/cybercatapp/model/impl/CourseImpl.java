@@ -81,7 +81,7 @@ public class CourseImpl {
         Courses course = courseRepository.findById(id);
         Users user = userRepository.findByUsername(userowner);
         if (course == null) {
-            throw new InstanceNotFoundException(id, "Course", "Course not found");
+            throw new InstanceNotFoundException(id, Courses.class.toString(), "Course not found");
         } else {
             Courses newcourse = new Courses(coursename, description, course.getCreation_date(), course.getCourse_photo(), user, Category.valueOf(category), price);
             newcourse.setCourseId(course.getCourseId());
@@ -105,7 +105,7 @@ public class CourseImpl {
     public void remove(long id) throws InstanceNotFoundException {
         Courses course = courseRepository.findById(id);
         if (course == null) {
-            throw new InstanceNotFoundException(id, "Course", "Course not found");
+            throw new InstanceNotFoundException(id, Courses.class.toString(), "Course not found");
         } else {
             courseRepository.remove(course);
         }
