@@ -3,6 +3,7 @@ package es.cybercatapp.service.Controllers;
 import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Category;
 import es.cybercatapp.model.entities.Courses;
+import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.CourseImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
@@ -135,6 +136,9 @@ public class CourseOperations {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         } catch (IOException ex) {
             return serviceExceptions.serviceUnexpectedException(ex, model);
+        } catch (DuplicatedResourceException ex) {
+            serviceRedirectExceptions.serviceDuplicatedResourceException(ex,redirectAttributes);
+            return Constants.SEND_REDIRECT + "/managecourses";
         }
         return Constants.SEND_REDIRECT + "/managecourses";
     }

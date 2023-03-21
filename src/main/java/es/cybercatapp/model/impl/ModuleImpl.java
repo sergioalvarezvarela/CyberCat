@@ -4,6 +4,7 @@ package es.cybercatapp.model.impl;
 import es.cybercatapp.common.ConfigurationParameters;
 import es.cybercatapp.model.entities.Courses;
 import es.cybercatapp.model.entities.Module;
+import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.repositories.CourseRepository;
 import es.cybercatapp.model.repositories.ModuleRepository;
@@ -56,8 +57,8 @@ public class ModuleImpl {
     public List<Module> findModulesByCourse(Long courseId) throws InstanceNotFoundException {
         try {
             courseRepository.findById(courseId);
-        } catch ( InstanceNotFoundException ex){
-            throw  new InstanceNotFoundException(courseId, Module.class.toString(),"Course not found");
+        } catch (InstanceNotFoundException ex) {
+            throw new InstanceNotFoundException(courseId, Module.class.toString(), "Course not found");
         }
         return moduleRepository.findModulesByCurses(courseId);
     }
@@ -71,6 +72,26 @@ public class ModuleImpl {
 
         } catch (InstanceNotFoundException ex) {
             throw new InstanceNotFoundException(moduleId, Module.class.toString(), "Module not found");
+        }
+    }
+
+    @Transactional
+    public void update(Long moduleId, String modulename) throws InstanceNotFoundException, DuplicatedResourceException {
+
+        try {
+            Module module = moduleRepository.findById(moduleId);
+            if (modulename.equals(module.getModule_name())) {
+                throw exceptionGenerationUtils.toDuplicatedResourceException("Module", moduleId.toString(),
+                        "updatemodule.duplicated.exception");
+            } else {
+                module.setModule_name(modulename);
+                moduleRepository.update(module);
+            }
+
+        } catch (InstanceNotFoundException ex) {
+            throw new InstanceNotFoundException(moduleId, Module.class.toString(), "Module not found");
+
+
         }
     }
 }

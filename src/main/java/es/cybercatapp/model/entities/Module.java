@@ -7,10 +7,7 @@ import org.hibernate.annotations.Cascade;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity(name = Constants.MODULE_ENTITY)
 @Table(name = Constants.MODULE_TABLE)
@@ -83,5 +80,18 @@ public class Module implements Serializable {
 
     public void setModuleUsers(List<Module_User> moduleUsers) {
         this.moduleUsers = moduleUsers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Module module = (Module) o;
+        return Objects.equals(moduleId, module.moduleId) && Objects.equals(module_name, module.module_name) && Objects.equals(module_date, module.module_date) && Objects.equals(courses, module.courses) && Objects.equals(moduleUsers, module.moduleUsers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(moduleId, module_name, module_date, courses, moduleUsers);
     }
 }

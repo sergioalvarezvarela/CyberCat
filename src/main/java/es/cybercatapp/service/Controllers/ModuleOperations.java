@@ -2,6 +2,7 @@ package es.cybercatapp.service.Controllers;
 
 import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Module;
+import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.ModuleImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
@@ -104,6 +105,29 @@ public class ModuleOperations {
         }
         redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                 "removemodule.success", new Object[]{moduleid}, locale));
+        return "redirect:/managecourses/" + courseid + "/editcourses";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(value = {"/managecourses/{courseid}/editcourses/updatemodule/{moduleid}"})
+    public String doPostUpdateModule(@PathVariable("courseid") String courseid, @PathVariable("moduleid") String moduleid, @Valid @ModelAttribute("ModuleDtoForm") ModuleDtoForm moduleDtoForm,
+                                     Locale locale, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            serviceRedirectExceptions.serviceInvalidFormError(result, "updatemodule.invalid.parameters", moduleDtoForm.getId().toString(), locale, redirectAttributes);
+            return "redirect:/managecourses/" + courseid + "/editcourses";
+        }
+
+        try{
+            moduleImpl.update(Long.valueOf(moduleid),moduleDtoForm.getModuleName());
+        } catch (InstanceNotFoundException ex) {
+            return serviceExceptions.serviceInstanceNotFoundException(ex,model,locale);
+        } catch (DuplicatedResourceException ex) {
+            serviceRedirectExceptions.serviceDuplicatedResourceException(ex,redirectAttributes);
+            return "redirect:/managecourses/" + courseid + "/editcourses";
+        }
+        redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
+                "editmodule.success", new Object[]{moduleid}, locale));
         return "redirect:/managecourses/" + courseid + "/editcourses";
     }
 }

@@ -1,6 +1,7 @@
 package es.cybercatapp.model.impl;
 
 import es.cybercatapp.common.ConfigurationParameters;
+import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Category;
 import es.cybercatapp.model.entities.Courses;
 import es.cybercatapp.model.entities.Users;
@@ -77,7 +78,7 @@ public class CourseImpl {
 
     @Transactional
     public void update(long id, String coursename, float price, String category,
-                       String image, byte[] imageContents, String description, String userowner) throws InstanceNotFoundException {
+                       String image, byte[] imageContents, String description, String userowner) throws InstanceNotFoundException, DuplicatedResourceException {
         Courses course = courseRepository.findById(id);
         Users user = userRepository.findByUsername(userowner);
         if (course == null) {
@@ -97,6 +98,9 @@ public class CourseImpl {
             }
             if (!course.equals(newcourse)) {
                 courseRepository.update(newcourse);
+            } else {
+                throw exceptionGenerationUtils.toDuplicatedResourceException("Course", course.getCourseId().toString(),
+                        "updatecourse.duplicated.exception");
             }
         }
     }
