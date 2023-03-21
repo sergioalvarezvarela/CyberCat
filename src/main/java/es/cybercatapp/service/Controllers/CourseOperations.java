@@ -6,6 +6,7 @@ import es.cybercatapp.model.entities.Courses;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.CourseImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
+import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
 import es.cybercatapp.service.conversor.CoursesConversor;
 import es.cybercatapp.service.dto.AddModifyCourseDtoForm;
 import es.cybercatapp.service.dto.CourseDtoForm;
@@ -45,6 +46,9 @@ public class CourseOperations {
     @Autowired
     private CourseImpl courseImpl;
 
+    @Autowired
+    ServiceRedirectExceptions serviceRedirectExceptions;
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = {"/managecourses"})
     public String doGetCourseManagement(Model model, Principal principal, Locale locale) {
@@ -59,12 +63,12 @@ public class CourseOperations {
                 byte[] image = courseImpl.getImage(course.getCourseId());
                 courseDtos.add(CoursesConversor.toCourseDtoForm(course, image, course.getCourse_photo()));
             }
-            model.addAttribute("username",principal.getName());
+            model.addAttribute("username", principal.getName());
             model.addAttribute("CourseDtoForm", courseDtos);
             model.addAttribute("AddModifyCourseDtoForm", new AddModifyCourseDtoForm());
             model.addAttribute("category", Category.values());
         } catch (InstanceNotFoundException ex) {
-            serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
 
         return "managecourses";
@@ -78,9 +82,8 @@ public class CourseOperations {
                                   HttpSession session, Model model) {
 
         if (result.hasErrors()) {
-            model.addAttribute(Constants.ERROR_MESSAGE, messageSource.getMessage(
-                    "addcourse.invalid.parameters", null, locale));
-            return "managecourses";
+            serviceRedirectExceptions.serviceInvalidFormError(result, "addcourse.invalid.parameters", addModifyCourseDtoForm.getCourseName(), locale, redirectAttributes);
+            return Constants.SEND_REDIRECT + "/managecourses";
         }
         Courses course;
         try {
@@ -119,9 +122,8 @@ public class CourseOperations {
                                          RedirectAttributes redirectAttributes, Locale locale, Model model, Principal principal) {
 
         if (result.hasErrors()) {
-            model.addAttribute(Constants.ERROR_MESSAGE, messageSource.getMessage(
-                    "updatecourse.invalid.parameters", null, locale));
-            return "managecourses";
+            serviceRedirectExceptions.serviceInvalidFormError(result, "updatecourse.invalid.parameters", id, locale, redirectAttributes);
+            return Constants.SEND_REDIRECT + "/managecourses";
         }
         try {
             courseImpl.update(Long.parseLong(id), addModifyCourseDtoForm.getCourseName(), addModifyCourseDtoForm.getPrice(), addModifyCourseDtoForm.getCategory(),

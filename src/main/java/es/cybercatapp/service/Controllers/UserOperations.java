@@ -6,6 +6,7 @@ import es.cybercatapp.model.exceptions.AuthenticationException;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.UserImpl;
+import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
 import es.cybercatapp.service.utils.AdminChecker;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.conversor.UserConversor;
@@ -42,6 +43,9 @@ public class UserOperations {
     private MessageSource messageSource;
     @Autowired
     ServiceExceptions serviceExceptions;
+
+    @Autowired
+    ServiceRedirectExceptions serviceRedirectExceptions;
 
 
     @Autowired
@@ -131,11 +135,11 @@ public class UserOperations {
             model.addAttribute("EditProfileDtoForm", editProfileDtoForm);
             model.addAttribute("ChangePasswordDtoForm", new ChangePasswordDtoForm());
             model.addAttribute("UpdateImageProfileDtoForm", new UpdateImageProfileDtoForm());
-
             return "editprofile";
         } catch (InstanceNotFoundException ex) {
-            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+           return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
+
     }
 
     @PostMapping("/editprofile/remove/{username}")
@@ -151,7 +155,7 @@ public class UserOperations {
     @PostMapping("/editprofile/changepassword")
     public String doPostChangePassword(Principal principal, @Valid @ModelAttribute("ChangePasswordDtoForm") ChangePasswordDtoForm changePasswordDtoForm,
                                        Locale locale, BindingResult result,
-                                       Model model) {
+                                       Model model, RedirectAttributes redirectAttributes) {
         try {
             Users user = userImpl.findByUsername(principal.getName());
             byte[] image = userImpl.getImage(user.getUserId());
@@ -161,23 +165,22 @@ public class UserOperations {
 
 
             if (result.hasErrors()) {
-                serviceExceptions.serviceInvalidFormError(result,
-                        "changepassword.invalid.parameters", model, locale);
-                return "editprofile";
+                serviceRedirectExceptions.serviceInvalidFormError(result,
+                        "changepassword.invalid.parameters",principal.getName(),locale,redirectAttributes);
+                return "redirect:/profile/" + principal.getName() + "/editprofile";
             }
 
 
             userImpl.changePassword(principal.getName(), changePasswordDtoForm.getOldPass(), changePasswordDtoForm.getNewPassword());
         } catch (AuthenticationException e) {
-            serviceExceptions.serviceAuthenticationException(e, model);
-            return "editprofile";
+            serviceRedirectExceptions.serviceAuthenticationException(e, redirectAttributes);
+            return "redirect:/profile/" + principal.getName() + "/editprofile";
         } catch (InstanceNotFoundException ex) {
-            serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
-            return "editprofile";
+            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
-        model.addAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
+        redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                 "changepassword.success", new Object[]{principal.getName()}, locale));
-        return "editprofile";
+        return "redirect:/profile/" + principal.getName() + "/editprofile";
     }
 
     @PostMapping("/editprofile/modify")
@@ -186,16 +189,16 @@ public class UserOperations {
                                       Model model) {
         model.addAttribute("UpdateImageProfileDtoForm", new UpdateImageProfileDtoForm());
         model.addAttribute("ChangePasswordDtoForm", new ChangePasswordDtoForm());
+
         if (result.hasErrors()) {
-            serviceExceptions.serviceInvalidFormError(result,
-                    "modifyprofile.invalid.parameters", model, locale);
+            serviceRedirectExceptions.serviceInvalidFormError(result,"modifyprofile.invalid.parameters",principal.getName(),locale,redirectAttributes);
             return "redirect:/profile/" + editProfileDtoForm.getUsername() + "/editprofile";
         }
 
         try {
             userImpl.modifyProfile(principal.getName(), editProfileDtoForm.getUsername(), editProfileDtoForm.getEmail());
         } catch (DuplicatedResourceException ex) {
-            serviceExceptions.serviceDuplicatedResourceException(ex, model);
+            serviceRedirectExceptions.serviceDuplicatedResourceException(ex,redirectAttributes);
             return "redirect:/profile/" + editProfileDtoForm.getUsername() + "/editprofile";
         }
         redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
@@ -206,12 +209,11 @@ public class UserOperations {
     @PostMapping("/editprofile/updatephoto")
     public String doPostUpdatePhoto(Principal principal, @Valid @ModelAttribute("UpdateImageProfileDtoForm") UpdateImageProfileDtoForm updateImageProfileDtoForm,
                                     Locale locale, BindingResult result,
-                                    Model model) {
+                                    Model model, RedirectAttributes redirectAttributes) {
         model.addAttribute("ChangePasswordDtoForm", new ChangePasswordDtoForm());
         if (result.hasErrors()) {
-            serviceExceptions.serviceInvalidFormError(result,
-                    "modifyprofile.invalid.parameters", model, locale);
-            return "editprofile";
+            serviceRedirectExceptions.serviceInvalidFormError(result,"updatephoto.invalid.parameters",principal.getName(),locale,redirectAttributes);
+            return "redirect:/profile/" + principal.getName() + "/editprofile";
         }
         try {
             userImpl.updateProfileImage(principal.getName(), updateImageProfileDtoForm.getImageFile() != null ? updateImageProfileDtoForm.getImageFile().getOriginalFilename() : null,
@@ -225,9 +227,9 @@ public class UserOperations {
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
-        model.addAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
+        redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                 "photoprofile.success", new Object[]{principal.getName()}, locale));
-        return "editprofile";
+        return "redirect:/profile/" + principal.getName() + "/editprofile";
     }
 
 

@@ -5,6 +5,7 @@ import es.cybercatapp.model.entities.Module;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.ModuleImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
+import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
 import es.cybercatapp.service.dto.ModuleDtoForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,9 @@ public class ModuleOperations {
     private MessageSource messageSource;
     @Autowired
     ServiceExceptions serviceExceptions;
+
+    @Autowired
+    ServiceRedirectExceptions serviceRedirectExceptions;
 
     @Autowired
     private ModuleImpl moduleImpl;
@@ -70,8 +74,7 @@ public class ModuleOperations {
                                  Locale locale, BindingResult result, RedirectAttributes redirectAttributes, Model model, HttpSession session) {
 
         if (result.hasErrors()) {
-            serviceExceptions.serviceInvalidFormError(result,
-                    "addmodule.invalid.parameters", model, locale);
+            serviceRedirectExceptions.serviceInvalidFormError(result, "addmodule.invalid.parameters", moduleDtoForm.getId().toString(), locale, redirectAttributes);
             return "redirect:/managecourses/" + id + "/editcourses";
         }
 
@@ -83,7 +86,7 @@ public class ModuleOperations {
             }
             session.setAttribute(Constants.USER_SESSION, module);
             redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
-                    "addmodule.success", new Object[]{module.getModule_name()}, locale));
+                    "addmodule.success", new Object[]{module.getModuleId()}, locale));
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex,model,locale);
         }
@@ -92,13 +95,15 @@ public class ModuleOperations {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = {"/managecourses/{courseid}/editcourses/removemodule/{moduleid}"})
-    public String doPostRemoveModule(@PathVariable("courseid") String courseid, @PathVariable("moduleid") String moduleid, Model model, Locale locale) {
+    public String doPostRemoveModule(@PathVariable("courseid") String courseid, @PathVariable("moduleid") String moduleid, Model model, Locale locale, RedirectAttributes redirectAttributes) {
 
         try{
             moduleImpl.remove(Long.valueOf(moduleid));
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex,model,locale);
         }
-        return "redirect:/managecourses/" + courseid + "/editcourses/removemodule/" + moduleid;
+        redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
+                "removemodule.success", new Object[]{moduleid}, locale));
+        return "redirect:/managecourses/" + courseid + "/editcourses";
     }
 }
