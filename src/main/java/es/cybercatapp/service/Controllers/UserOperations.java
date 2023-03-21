@@ -182,7 +182,7 @@ public class UserOperations {
 
     @PostMapping("/editprofile/modify")
     public String doPostModifyProfile(Principal principal, @Valid @ModelAttribute("EditProfileDtoForm") EditProfileDtoForm editProfileDtoForm,
-                                      Locale locale, BindingResult result,
+                                      Locale locale, BindingResult result, RedirectAttributes redirectAttributes,
                                       Model model) {
         model.addAttribute("UpdateImageProfileDtoForm", new UpdateImageProfileDtoForm());
         model.addAttribute("ChangePasswordDtoForm", new ChangePasswordDtoForm());
@@ -198,8 +198,7 @@ public class UserOperations {
             serviceExceptions.serviceDuplicatedResourceException(ex, model);
             return "redirect:/profile/" + editProfileDtoForm.getUsername() + "/editprofile";
         }
-
-        model.addAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
+        redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                 "modifyprofile.success", new Object[]{principal.getName()}, locale));
          return "redirect:/profile/" + editProfileDtoForm.getUsername() + "/editprofile";
     }

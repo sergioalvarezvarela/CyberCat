@@ -17,12 +17,16 @@ C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\Control
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\Exceptions\ServiceExceptions.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\utils\AdminChecker.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\dto\AddModifyCourseDtoForm.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\repositories\ModuleRepository.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\exceptions\InstanceNotFoundException.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\dto\ModuleDtoForm.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\dto\EditProfileDtoForm.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\repositories\AbstractRepository.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\Controllers\ModuleOperations.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\conversor\UserConversor.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\dto\ChangePasswordDtoForm.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\Courses.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\impl\ModuleImpl.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\dto\UpdateImageProfileDtoForm.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\Module.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\common\Constants.java

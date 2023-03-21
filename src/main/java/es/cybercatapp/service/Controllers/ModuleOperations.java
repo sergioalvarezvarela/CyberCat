@@ -1,7 +1,6 @@
 package es.cybercatapp.service.Controllers;
 
 import es.cybercatapp.common.Constants;
-import es.cybercatapp.model.entities.Courses;
 import es.cybercatapp.model.entities.Module;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.ModuleImpl;
@@ -92,14 +91,14 @@ public class ModuleOperations {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(value = {"/managecourses/{id}/editcourses/removemodule"})
-    public String doPostRemoveModule(@PathVariable("id") String id, @ModelAttribute("ModuleDtoForm") ModuleDtoForm moduleDtoForm, Model model, Locale locale) {
+    @PostMapping(value = {"/managecourses/{courseid}/editcourses/removemodule/{moduleid}"})
+    public String doPostRemoveModule(@PathVariable("courseid") String courseid, @PathVariable("moduleid") String moduleid, Model model, Locale locale) {
 
         try{
-            moduleImpl.remove(moduleDtoForm.getId());
+            moduleImpl.remove(Long.valueOf(moduleid));
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex,model,locale);
         }
-        return "editcourses";
+        return "redirect:/managecourses/" + courseid + "/editcourses/removemodule/" + moduleid;
     }
 }

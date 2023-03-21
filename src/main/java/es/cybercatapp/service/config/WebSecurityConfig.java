@@ -47,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .and()
-                .rememberMe().rememberMeParameter("remember-me")
+                .rememberMe().rememberMeParameter("rememberMe")
                 .tokenValiditySeconds(86400)
                 .key("uniqueAndSecret")
                 .and()

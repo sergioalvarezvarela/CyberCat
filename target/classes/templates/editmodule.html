@@ -30,7 +30,7 @@
                        data-bs-target="#addContentModal" style="cursor:pointer; color: dodgerblue"></i>
                     <i id="edit-icon" class="bi bi-pencil-fill me-2" data-bs-toggle="modal"
                        data-bs-target="#editModuleNameModal" style="cursor:pointer;"></i>
-                    <i id="delete-icon" class="bi bi-trash-fill" data-bs-toggle="modal" data-bs-target="#removeModule"
+                    <i id="delete-icon" class="bi bi-trash-fill" data-bs-toggle="modal" th:attr="data-course-id=${module.id}" data-bs-target="#removeModule"
                        style="cursor:pointer; color: red;"></i>
                 </div>
             </div>
@@ -167,7 +167,7 @@
             <div class="modal-footer justify-content-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar
                 </button>
-                <form th:action="@{/managecourses/{id}/editcourses/removemodule(id=${courseId})}" method="post"
+                <form th:action="@{/managecourses/{cid}/editcourses/removemodule/{mid}(cid=${courseId})(mid=${module.id})}" method="post"
                       id="deletemodule-form">
                     <button type="submit" class="btn btn-danger">Eliminar</button>
                 </form>
