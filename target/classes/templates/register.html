@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <header th:replace="tools/package :: #package-include"></header>
 
-<body class="register-background-color container d-flex justify-content-center align-items-center mt-4">
+<body class="register-background-color container d-flex justify-content-center align-items-center mt-4" style="height: 100vh">
     <div class="row">
         <div class="col-md-12 mx-auto">
             <div class="row mb-4 justify-content-center">
 
-                <div class="col ml-3">
+                <div class="col-8">
                     <a href="/">
-                        <img src="/images/logo2.png"   alt="Error al cargar la imagen" class="logo_tamano">
+                        <img src="/images/logo2.png"   alt="Error al cargar la imagen" class="logo_tamano" style="height: 100%; width: 100%">
                     </a>
                 </div>
             </div>
@@ -68,10 +68,14 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                <input type="password" name="password1" class=" password1 form-control form-control-lg"
-                                       id="password1" placeholder="Introduce contraseña"
-                                       th:field="*{RegisterDtoForm.password}">
-                                <span class="bi bi-eye-fill show-password-icon show-password" id="eyeid"></span>
+                                <div class="input-group mb-3">
+                                    <input type="password" class="password1 form-control form-control-lg" id="password1"
+                                           th:field="*{RegisterDtoForm.password}"  aria-label="password" placeholder="Introduce contraseña"
+                                           aria-describedby="basic-addon2" required>
+                                    <span class="input-group-text" id="basic-addon2" style="background-color: #f7f7f7"><i
+                                            class="bi bi-eye-fill show-password-icon-index show-password" id="eyeid"
+                                            style="font-size: 1.3em"></i></span>
+                                </div>
                                 <p class="hide_alert text-danger" id="alert_pass1">El campo Contraseña es
                                     obligatorio</p>
                                 <p class="hide_alert text-danger" id="alert_pass3">La contraseña debe contener al menos
@@ -131,7 +135,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 col-sm-6">
+                    <div class="col-md-12 col-sm-12">
                         <br>
                         <input type="submit" onclick="comprobarErrores()" id="register" value="Regístrate"
                                class=" register-button-color btn btn-primary register-custom-btn"

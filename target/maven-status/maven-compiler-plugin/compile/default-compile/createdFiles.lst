@@ -21,7 +21,6 @@ es\cybercatapp\service\Controllers\UserOperations.class
 es\cybercatapp\model\entities\Module.class
 es\cybercatapp\model\impl\CourseImpl.class
 es\cybercatapp\model\repositories\ModuleRepository.class
-es\cybercatapp\model\entities\Module_User.class
 es\cybercatapp\service\dto\ProfileDtoForm.class
 es\cybercatapp\model\repositories\AbstractRepository.class
 es\cybercatapp\Application.class

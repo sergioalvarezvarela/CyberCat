@@ -61,7 +61,7 @@ public class CourseImpl {
         if (user == null) {
             throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", userowner));
         }
-        Courses courses = courseRepository.create(new Courses(coursename, description, LocalDate.now(), image, user, Category.valueOf(category), price));
+        Courses courses = courseRepository.create(new Courses(coursename, description, LocalDate.now(), image,Category.valueOf(category),price, user ));
         saveCourseImage(courses.getCourseId(), image, imageContents);
         return courses;
     }
@@ -84,7 +84,7 @@ public class CourseImpl {
         if (course == null) {
             throw new InstanceNotFoundException(id, Courses.class.toString(), "Course not found");
         } else {
-            Courses newcourse = new Courses(coursename, description, course.getCreation_date(), course.getCourse_photo(), user, Category.valueOf(category), price);
+            Courses newcourse = new Courses(coursename, description, course.getCreation_date(), course.getCourse_photo(),Category.valueOf(category), price, user );
             newcourse.setCourseId(course.getCourseId());
             if (image != null && image.trim().length() > 0 && imageContents != null) {
                 try {

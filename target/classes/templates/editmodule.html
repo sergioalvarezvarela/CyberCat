@@ -3,7 +3,7 @@
 <header th:replace="tools/package :: #package-include"></header>
 <header th:replace="tools/header :: #header-include"></header>
 <body>
-<div class="container mt-5 mb-3">
+<div class="container main-content mt-5 mb-3">
     <div th:replace="tools/Messages :: #messages-fragment"></div>
     <div class="row d-flex align-items-center mb-2">
         <div class="col d-flex justify-content-start">
@@ -41,6 +41,7 @@
                         <div class="d-flex justify-content-between mt-2" style="cursor: pointer; color: #173753">
                             <h4 data-bs-toggle="collapse" data-bs-target="#collapseOne">Modulo 1</h4>
                             <div>
+                                <i id="manage-icon" class="bi bi-nut me-2" style="cursor:pointer; color: dodgerblue"></i>
                                 <i id="edit-icon2" class="bi bi-pencil-fill me-2" data-bs-toggle="modal"
                                    data-bs-target="#editExName" style="cursor:pointer;"></i>
                                 <i id="delete-icon2" class="bi bi-trash-fill" data-bs-toggle="modal"

@@ -2,11 +2,11 @@ package es.cybercatapp.model.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.fasterxml.jackson.databind.Module;
 import es.cybercatapp.common.Constants;
 import org.hibernate.annotations.Cascade;
 
@@ -49,23 +49,32 @@ public class Users implements Serializable {
     @Column(name = "fecha_creacion", nullable = false)
     private LocalDateTime fecha_creacion;
 
-    @Column(name = "imagen_perfil", nullable = true)
+    @Column(name = "imagen_perfil")
     private String imagen_perfil;
 
+    @OneToMany(mappedBy = "user_owner")
+    private Set<Courses> courses;
 
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "inscriptions",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id")
+    @OneToMany(
+            mappedBy = "users",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
-    private List<Courses> courses;
+    private List<Inscriptions> inscriptions = new ArrayList<>();
 
+    @OneToMany(
+            mappedBy = "users",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Module_User> module_users = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Cascade(org.hibernate.annotations.CascadeType.REMOVE)
-    private Set<Module_User> moduleUsers = new HashSet<>();
+    @OneToMany(
+            mappedBy = "users",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Content_User> content_users = new ArrayList<>();
 
 
     public Long getUserId() {
@@ -124,34 +133,37 @@ public class Users implements Serializable {
         this.imagen_perfil = imagen_perfil;
     }
 
-    public List<Courses> getCourses() {
+    public Set<Courses> getCourses() {
         return courses;
     }
 
-    public void setCourses(List<Courses> courses) {
+    public void setCourses(Set<Courses> courses) {
         this.courses = courses;
     }
 
-    public Set<Module_User> getModuleUsers() {
-        return moduleUsers;
+    public List<Inscriptions> getInscriptions() {
+        return inscriptions;
     }
 
-    public void setModuleUsers(Set<Module_User> moduleUsers) {
-        this.moduleUsers = moduleUsers;
+    public void setInscriptions(List<Inscriptions> inscriptions) {
+        this.inscriptions = inscriptions;
     }
 
-    @Override
-    public String toString() {
-        return "Users{" +
-                "userId=" + userId +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", tipo=" + tipo +
-                ", fecha_creacion=" + fecha_creacion +
-                ", imagen_perfil='" + imagen_perfil + '\'' +
-                ", courses=" + courses +
-                ", moduleUsers=" + moduleUsers +
-                '}';
+    public List<Module_User> getModule_users() {
+        return module_users;
     }
+
+    public void setModule_users(List<Module_User> module_users) {
+        this.module_users = module_users;
+    }
+
+    public List<Content_User> getContent_users() {
+        return content_users;
+    }
+
+    public void setContent_users(List<Content_User> content_users) {
+        this.content_users = content_users;
+    }
+
+
 }

@@ -5,37 +5,41 @@ import es.cybercatapp.common.Constants;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity(name = Constants.INSCRIPTIONS_ENTITY)
-@Table(name = Constants.INSCRIPTIONS_TABLE)
-public class Inscriptions {
+@Entity(name = Constants.CONTENTUSER_ENTITY)
+@Table(name = Constants.CONTENTUSER_TABLE)
+public class Content_User {
+
     @EmbeddedId
-    private InscriptionsId id;
+    private Content_UserId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("user_id")
     private Users users;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("course_id")
-    private Courses courses;
+    @MapsId("content_id")
+    private Content content;
+
 
     @Column(name = "completed", nullable = false)
     private boolean completed;
 
-    public Inscriptions(){}
-
-    public Inscriptions (Users users, Courses courses, boolean completed){
+    public Content_User(Users users, Content content, boolean completed) {
         this.users = users;
-        this.courses = courses;
+        this.content = content;
         this.completed = completed;
-        this.id = new InscriptionsId(users.getUserId(),courses.getCourseId());
+        this.id = new Content_UserId(users.getUserId(), content.getId());
     }
 
-    public InscriptionsId getId() {
+    public Content_User() {
+
+    }
+
+    public Content_UserId getId() {
         return id;
     }
 
-    public void setId(InscriptionsId id) {
+    public void setId(Content_UserId id) {
         this.id = id;
     }
 
@@ -47,12 +51,12 @@ public class Inscriptions {
         this.users = users;
     }
 
-    public Courses getCourses() {
-        return courses;
+    public Content getContent() {
+        return content;
     }
 
-    public void setCourses(Courses courses) {
-        this.courses = courses;
+    public void setContent(Content content) {
+        this.content = content;
     }
 
     public boolean isCompleted() {
@@ -67,21 +71,21 @@ public class Inscriptions {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Inscriptions that = (Inscriptions) o;
-        return completed == that.completed && Objects.equals(id, that.id) && Objects.equals(users, that.users) && Objects.equals(courses, that.courses);
+        Content_User that = (Content_User) o;
+        return completed == that.completed && Objects.equals(id, that.id) && Objects.equals(users, that.users) && Objects.equals(content, that.content);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, users, courses, completed);
+        return Objects.hash(id, users, content, completed);
     }
 
     @Override
     public String toString() {
-        return "Inscriptions{" +
+        return "Content_User{" +
                 "id=" + id +
                 ", users=" + users +
-                ", courses=" + courses +
+                ", content=" + content +
                 ", completed=" + completed +
                 '}';
     }

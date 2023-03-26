@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public class ModuleRepository extends AbstractRepository<Module>{
-    private static final String FIND_MODULES_BY_COURSE_QUERY = "SELECT c FROM Module c WHERE c.courses.id = :courseId";
+    private static final String FIND_MODULES_BY_COURSE_QUERY = "SELECT c FROM Module c WHERE c.course.id = :courseId";
 
     public List<Module> findModulesByCurses(Long courseId) {
         TypedQuery<Module> query = entityManager.createQuery(FIND_MODULES_BY_COURSE_QUERY, Module.class);

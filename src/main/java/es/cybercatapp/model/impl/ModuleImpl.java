@@ -4,6 +4,7 @@ package es.cybercatapp.model.impl;
 import es.cybercatapp.common.ConfigurationParameters;
 import es.cybercatapp.model.entities.Courses;
 import es.cybercatapp.model.entities.Module;
+import es.cybercatapp.model.entities.ModuleId;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.repositories.CourseRepository;
@@ -28,9 +29,6 @@ public class ModuleImpl {
     ConfigurationParameters configurationParameters;
 
     @Autowired
-    private MessageSource messageSource;
-
-    @Autowired
     ExceptionGenerationUtils exceptionGenerationUtils;
 
     @Autowired
@@ -44,8 +42,11 @@ public class ModuleImpl {
 
         try {
             Courses courses = courseRepository.findById(courseId);
-            Module module = new Module(modulename, LocalDate.now(), courses);
-            moduleRepository.create(module);
+            Module module = new Module(modulename,  LocalDate.now(), courses);
+            ModuleId MO= new ModuleId(null,courseId);
+            module = moduleRepository.create(module);
+            courses.getModules().add(module);
+            courseRepository.update(courses);
             return module;
 
         } catch (InstanceNotFoundException ex) {
@@ -80,11 +81,11 @@ public class ModuleImpl {
 
         try {
             Module module = moduleRepository.findById(moduleId);
-            if (modulename.equals(module.getModule_name())) {
+            if (modulename.equals(module.getModuleName())) {
                 throw exceptionGenerationUtils.toDuplicatedResourceException("Module", moduleId.toString(),
                         "updatemodule.duplicated.exception");
             } else {
-                module.setModule_name(modulename);
+                module.setModuleName(modulename);
                 moduleRepository.update(module);
             }
 

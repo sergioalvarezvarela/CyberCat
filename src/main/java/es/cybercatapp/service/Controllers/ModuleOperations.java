@@ -56,7 +56,7 @@ public class ModuleOperations {
             List<ModuleDtoForm> moduleDto = new ArrayList<>();
 
             for (Module module : modules) {
-                moduleDto.add(new ModuleDtoForm(module.getModuleId(),module.getModule_name()));
+                moduleDto.add(new ModuleDtoForm(module.getId().getModuleId(), module.getModuleName()));
             }
             model.addAttribute("ModuleDtoList", moduleDto);
 
@@ -83,11 +83,11 @@ public class ModuleOperations {
         try {
             module = moduleImpl.create(moduleDtoForm.getModuleName(), Long.valueOf(id));
             if (logger.isDebugEnabled()) {
-                logger.debug(MessageFormat.format("Modulo {0} con id {1} creado", module.getModule_name(), module.getModuleId()));
+                logger.debug(MessageFormat.format("Modulo {0} con id {1} creado", module.getModuleName(), module.getId()));
             }
             session.setAttribute(Constants.USER_SESSION, module);
             redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
-                    "addmodule.success", new Object[]{module.getModuleId()}, locale));
+                    "addmodule.success", new Object[]{module.getId()}, locale));
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex,model,locale);
         }

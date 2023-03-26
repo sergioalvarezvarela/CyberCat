@@ -1,3 +1,4 @@
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\Content_User.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\exceptions\AuthenticationException.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\Application.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\impl\UserImpl.java
@@ -13,6 +14,7 @@ C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\utils\Exc
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\Module_User.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\Controllers\CourseOperations.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\Roles.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\StringContent.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\Controllers\UserOperations.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\Exceptions\ServiceExceptions.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\utils\AdminChecker.java
@@ -20,6 +22,7 @@ C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\dto\Add
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\repositories\ModuleRepository.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\exceptions\InstanceNotFoundException.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\dto\ModuleDtoForm.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\Content.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\dto\EditProfileDtoForm.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\repositories\AbstractRepository.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\Controllers\ModuleOperations.java
@@ -38,3 +41,4 @@ C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\dto\Reg
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\repositories\UserRepository.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\config\WebSecurityConfig.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\conversor\CoursesConversor.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\Exceptions\ServiceRedirectExceptions.java
