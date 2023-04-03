@@ -40,23 +40,31 @@
                     <input type="hidden" id="hiddenModuleName" th:value="${module.moduleName}"/>
                     <i id="add-icon" class="bi bi-plus-circle  me-2" data-bs-toggle="modal"
                        data-bs-target="#addContentModal" style="cursor:pointer; color: dodgerblue"></i>
-                    <i id="edit-icon" class="bi bi-pencil-fill me-2" data-bs-toggle="modal" th:attr="data-module-edit=${module.moduleName}"
+                    <i id="edit-icon" class="bi bi-pencil-fill me-2" data-bs-toggle="modal"
+                       th:attr="data-module-edit=${module.moduleName}"
                        data-bs-target="#editModuleNameModal" style="cursor:pointer;"></i>
-                    <i id="delete-icon" class="bi bi-trash-fill" data-bs-toggle="modal" th:attr="data-module-rem=${module.moduleName}" data-bs-target="#removeModule"
+                    <i id="delete-icon" class="bi bi-trash-fill" data-bs-toggle="modal"
+                       th:attr="data-module-rem=${module.moduleName}" data-bs-target="#removeModule"
                        style="cursor:pointer; color: red;"></i>
 
                 </div>
             </div>
-            <div th:id="'collapse-' + ${module.id}" class="collapse" aria-labelledby="headingOne">
-                <div class="mt-2">
-                    <div class="card p-3 mt-3 text-dark" style="background-color: #dedede">
-                        <div class="d-flex justify-content-between mt-2" style="cursor: pointer; color: #173753">
-                            <h4 data-bs-toggle="collapse" data-bs-target="#collapseOne">Contenido 1</h4>
-                            <div>
-                                <i id="edit-icon2" class="bi bi-pencil-fill me-2" data-bs-toggle="modal"
-                                   data-bs-target="#editExName" style="cursor:pointer;"></i>
-                                <i id="delete-icon2" class="bi bi-trash-fill" data-bs-toggle="modal"
-                                   data-bs-target="#removeContent" style="cursor:pointer; color: red;"></i>
+
+                <div th:id="'collapse-' + ${module.id}" class="collapse " aria-labelledby="headingOne">
+                    <div id="listContent" class="list-group col-md-12 mb-4 content-list">
+                    <div class="mt-2">
+                        <div th:each="content : ${module.contentList}">
+                            <div class="card p-3 mt-3 text-dark" style="background-color: #dedede" draggable="true">
+                                <div class="d-flex justify-content-between mt-2"
+                                     style="cursor: pointer; color: #173753">
+                                    <h4 th:text="${content.contentName}"></h4>
+                                    <div>
+                                        <i id="edit-icon2" class="bi bi-pencil-fill me-2" data-bs-toggle="modal"
+                                           data-bs-target="#editExName" style="cursor:pointer;"></i>
+                                        <i id="delete-icon2" class="bi bi-trash-fill" data-bs-toggle="modal"
+                                           data-bs-target="#removeContent" style="cursor:pointer; color: red;"></i>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -78,6 +86,18 @@
         });
 
 
+    });
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const contentLists = document.querySelectorAll('.collapse .content-list');
+        contentLists.forEach((listContent) => {
+            new Sortable(listContent, {
+                animation: 150,
+                swapThreshold: 0.5,
+                ghostClass: 'sortable-ghost',
+                onEnd: showButton,
+            });
+        });
     });
 
     function showButton() {
@@ -170,15 +190,17 @@
 <div class="modal" tabindex="-1" id="editModuleNameModal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form th:action="@{/managecourses/{cid}/editcourses/updatemodule(cid=${courseId})}" id="editmoduleform" method="post">
+            <form th:action="@{/managecourses/{cid}/editcourses/updatemodule(cid=${courseId})}" id="editmoduleform"
+                  method="post">
                 <div class="modal-header">
                     <h4 class="modal-title">Editar nombre del módulo</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="moduleNameInput1" class="form-label">Nombre del módulo</label>
-                        <input type="text" class="form-control" id="moduleNameInput1" minlength="5" th:field="*{ModuleDtoForm.moduleName}" required>
+                        <label for="editModuleNameInput" class="form-label">Nombre del módulo</label>
+                        <input type="text" class="form-control" id="editModuleNameInput" minlength="5"
+                               th:field="*{ModuleDtoForm.moduleName}" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -202,14 +224,15 @@
     removeModuleModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
         var moduleName = button.getAttribute('data-module-rem');
-        alert(moduleName);
-        var moduleUrl = encodeURIComponent(moduleName.replace(/ /g, '_'));
+        var moduleUrl = encodeURIComponent(moduleName);
         deleteModuleForm.action = `/managecourses/${courseId}/editcourses/removemodule/${moduleUrl}`;
     });
     editModuleModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
         var moduleName = button.getAttribute('data-module-edit');
-        var moduleUrl = encodeURIComponent(moduleName.replace(/ /g, '_'));
+        var moduleUrl = encodeURIComponent(moduleName);
+        var moduleNameInput = document.getElementById("editModuleNameInput");
+        moduleNameInput.value = moduleName;
         editModuleForm.action = `/managecourses/${courseId}/editcourses/updatemodule/${moduleUrl}`;
     });
 </script>

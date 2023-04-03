@@ -2,9 +2,11 @@ package es.cybercatapp.service.Controllers;
 
 import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Category;
+import es.cybercatapp.model.entities.Content;
 import es.cybercatapp.model.entities.Courses;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
+import es.cybercatapp.model.impl.ContentImpl;
 import es.cybercatapp.model.impl.CourseImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
@@ -47,6 +49,9 @@ public class CourseOperations {
     @Autowired
     private CourseImpl courseImpl;
 
+
+
+
     @Autowired
     ServiceRedirectExceptions serviceRedirectExceptions;
 
@@ -55,7 +60,6 @@ public class CourseOperations {
     public String doGetCourseManagement(Model model, Principal principal, Locale locale) {
 
         try {
-
 
             List<Courses> courses = courseImpl.findCoursesByOwner(principal.getName());
             List<CourseDtoForm> courseDtos = new ArrayList<>();

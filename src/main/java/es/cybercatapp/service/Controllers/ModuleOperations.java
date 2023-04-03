@@ -1,14 +1,18 @@
 package es.cybercatapp.service.Controllers;
 
+import com.google.protobuf.Empty;
 import es.cybercatapp.common.Constants;
+import es.cybercatapp.model.entities.Content;
 import es.cybercatapp.model.entities.Courses;
 import es.cybercatapp.model.entities.Module;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
+import es.cybercatapp.model.impl.ContentImpl;
 import es.cybercatapp.model.impl.CourseImpl;
 import es.cybercatapp.model.impl.ModuleImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
+import es.cybercatapp.service.dto.ContentDtoForm;
 import es.cybercatapp.service.dto.ListModuleDtoForm;
 import es.cybercatapp.service.dto.ModuleDtoForm;
 import org.slf4j.Logger;
@@ -61,10 +65,19 @@ public class ModuleOperations {
             List<Module> modules = course.getModules();
             List<ModuleDtoForm> moduleDto = new ArrayList<>();
 
+
+
             for (Module module : modules) {
                 String moduleId = module.getId().getModuleName();
                 moduleId = moduleId.replaceAll("\\s+", "");
-                moduleDto.add(new ModuleDtoForm(moduleId, module.getId().getModuleName(), module.getModulePosition()));
+                List<ContentDtoForm> contentDto = new ArrayList<>();
+                for (Content contents : module.getContents()) {
+                    String contentId = contents.getContentId().getContentName();
+                    contentId = contentId.replaceAll("\\s+", "");
+                    contentDto.add(new ContentDtoForm(contentId,contents.getContentId().getContentName(),module.getId().getModuleName(), 0));
+                }
+                moduleDto.add(new ModuleDtoForm(moduleId, module.getId().getModuleName(), module.getModulePosition(),contentDto));
+
             }
             model.addAttribute("ModuleDtoList", moduleDto);
 
@@ -107,9 +120,9 @@ public class ModuleOperations {
     @PostMapping(value = {"/managecourses/{courseid}/editcourses/removemodule/{moduleName}"})
     public String doPostRemoveModule(@PathVariable("courseid") String courseid, @PathVariable("moduleName") String moduleName, Model model, Locale locale, RedirectAttributes redirectAttributes) {
 
-        moduleName = moduleName.replace("_"," ");
+        moduleName = moduleName.replace("%20", " ");
         try {
-            moduleImpl.remove(Long.valueOf(courseid),moduleName);
+            moduleImpl.remove(Long.valueOf(courseid), moduleName);
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
@@ -128,10 +141,10 @@ public class ModuleOperations {
             return "redirect:/managecourses/" + courseid + "/editcourses";
         }
 
-        moduleName = moduleName.replace("_"," ");
+        moduleName = moduleName.replace("%20", " ");
 
         try {
-            moduleImpl.update(Long.valueOf(courseid),moduleName, moduleDtoForm.getModuleName());
+            moduleImpl.update(Long.valueOf(courseid), moduleName, moduleDtoForm.getModuleName());
         } catch (DuplicatedResourceException ex) {
             serviceRedirectExceptions.serviceDuplicatedResourceException(ex, redirectAttributes);
             return "redirect:/managecourses/" + courseid + "/editcourses";

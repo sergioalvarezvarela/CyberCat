@@ -46,4 +46,6 @@ public class ModuleRepository extends AbstractRepository<Module> {
             logger.error(e.getMessage(), e);
         }
     }
+
+
 }
