@@ -17,7 +17,7 @@ public class ExceptionGenerationUtils {
     @Autowired
     private MessageSource messageSource;
 
-    public InstanceNotFoundException toInstanceNotFoundException(Long id, String type, String messageKey)
+    public InstanceNotFoundException toInstanceNotFoundException(String id, String type, String messageKey)
             throws InstanceNotFoundException {
         Locale locale = LocaleContextHolder.getLocale();
         String message = messageSource.getMessage(messageKey, new Object[]{type, id}, locale);

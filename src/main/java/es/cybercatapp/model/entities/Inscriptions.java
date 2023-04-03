@@ -7,16 +7,16 @@ import java.util.Objects;
 
 @Entity(name = Constants.INSCRIPTIONS_ENTITY)
 @Table(name = Constants.INSCRIPTIONS_TABLE)
-public class Inscriptions {
+public class Inscriptions  {
+
     @EmbeddedId
     private InscriptionsId id;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("user_id")
+    @MapsId("userId")
     private Users users;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("course_id")
+    @MapsId("courseId")
     private Courses courses;
 
     @Column(name = "completed", nullable = false)
@@ -31,13 +31,6 @@ public class Inscriptions {
         this.id = new InscriptionsId(users.getUserId(),courses.getCourseId());
     }
 
-    public InscriptionsId getId() {
-        return id;
-    }
-
-    public void setId(InscriptionsId id) {
-        this.id = id;
-    }
 
     public Users getUsers() {
         return users;
@@ -68,19 +61,18 @@ public class Inscriptions {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Inscriptions that = (Inscriptions) o;
-        return completed == that.completed && Objects.equals(id, that.id) && Objects.equals(users, that.users) && Objects.equals(courses, that.courses);
+        return completed == that.completed && users.equals(that.users) && courses.equals(that.courses);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, users, courses, completed);
+        return Objects.hash(users, courses, completed);
     }
 
     @Override
     public String toString() {
         return "Inscriptions{" +
-                "id=" + id +
-                ", users=" + users +
+                "users=" + users +
                 ", courses=" + courses +
                 ", completed=" + completed +
                 '}';

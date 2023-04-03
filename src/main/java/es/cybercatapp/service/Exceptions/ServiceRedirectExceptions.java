@@ -31,22 +31,12 @@ public class ServiceRedirectExceptions {
                 message, new Object[]{name}, locale));
     }
 
-    public void serviceInstanceNotFoundException(InstanceNotFoundException e,
-                                                 RedirectAttributes redirectAttributes) {
-        logger.error(e.getMessage(),e);
-        redirectAttributes.addFlashAttribute(Constants.ERROR_MESSAGE,e.getMessage());
-    }
-
     public void serviceDuplicatedResourceException(DuplicatedResourceException e ,
                                                    RedirectAttributes redirectAttributes) {
         logger.error(e.getMessage(),e);
         redirectAttributes.addFlashAttribute(Constants.ERROR_MESSAGE,e.getMessage());
     }
-    public void serviceUnexpectedException(Exception e,
-                                           RedirectAttributes redirectAttributes) {
-        logger.error(e.getMessage(),e);
-        redirectAttributes.addFlashAttribute(Constants.ERROR_MESSAGE,e.getMessage());
-    }
+
     public void serviceAuthenticationException(AuthenticationException e,
                                                RedirectAttributes redirectAttributes) {
         logger.error(e.getMessage(),e);

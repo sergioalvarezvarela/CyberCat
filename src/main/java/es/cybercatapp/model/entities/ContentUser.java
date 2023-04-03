@@ -7,39 +7,39 @@ import java.util.Objects;
 
 @Entity(name = Constants.CONTENTUSER_ENTITY)
 @Table(name = Constants.CONTENTUSER_TABLE)
-public class Content_User {
+public class ContentUser {
 
     @EmbeddedId
-    private Content_UserId id;
+    private ContentUserId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("user_id")
+    @MapsId("userId")
     private Users users;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("content_id")
+    @MapsId("contentId")
     private Content content;
 
 
     @Column(name = "completed", nullable = false)
     private boolean completed;
 
-    public Content_User(Users users, Content content, boolean completed) {
+    public ContentUser(ContentUserId id, Users users, Content content, boolean completed) {
+        this.id = id;
         this.users = users;
         this.content = content;
         this.completed = completed;
-        this.id = new Content_UserId(users.getUserId(), content.getId());
     }
 
-    public Content_User() {
+    public ContentUser() {
 
     }
 
-    public Content_UserId getId() {
+    public ContentUserId getId() {
         return id;
     }
 
-    public void setId(Content_UserId id) {
+    public void setId(ContentUserId id) {
         this.id = id;
     }
 
@@ -71,8 +71,8 @@ public class Content_User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Content_User that = (Content_User) o;
-        return completed == that.completed && Objects.equals(id, that.id) && Objects.equals(users, that.users) && Objects.equals(content, that.content);
+        ContentUser that = (ContentUser) o;
+        return completed == that.completed && id.equals(that.id) && users.equals(that.users) && content.equals(that.content);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class Content_User {
 
     @Override
     public String toString() {
-        return "Content_User{" +
+        return "ContentUser{" +
                 "id=" + id +
                 ", users=" + users +
                 ", content=" + content +

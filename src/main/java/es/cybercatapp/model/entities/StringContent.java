@@ -20,11 +20,6 @@ public class StringContent extends Content {
 
     }
 
-    public StringContent(String enunciado, Boolean markdown) {
-        this.enunciado = enunciado;
-        this.markdown = markdown;
-    }
-
     public StringContent(String contentName, Module module, String enunciado, Boolean markdown) {
         super(contentName, module);
         this.enunciado = enunciado;

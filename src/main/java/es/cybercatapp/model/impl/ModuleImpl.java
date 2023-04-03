@@ -13,7 +13,6 @@ import es.cybercatapp.model.utils.ExceptionGenerationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,57 +41,43 @@ public class ModuleImpl {
 
         try {
             Courses courses = courseRepository.findById(courseId);
-            Module module = new Module(modulename,  LocalDate.now(), courses);
-            ModuleId MO= new ModuleId(null,courseId);
+            Module module = new Module(modulename, LocalDate.now(), courses.getModules().size() + 1, courses);
+            module.getId().setModuleName(modulename);
+            module.getId().setCourseId(courseId);
             module = moduleRepository.create(module);
             courses.getModules().add(module);
             courseRepository.update(courses);
             return module;
 
         } catch (InstanceNotFoundException ex) {
-            throw new InstanceNotFoundException(courseId, Courses.class.toString(), "Course not found");
+            throw new InstanceNotFoundException(courseId.toString(), Courses.class.toString(), "Course not found");
         }
     }
 
-    @Transactional
-    public List<Module> findModulesByCourse(Long courseId) throws InstanceNotFoundException {
-        try {
-            courseRepository.findById(courseId);
-        } catch (InstanceNotFoundException ex) {
-            throw new InstanceNotFoundException(courseId, Module.class.toString(), "Course not found");
-        }
-        return moduleRepository.findModulesByCurses(courseId);
-    }
 
     @Transactional
-    public void remove(Long moduleId) throws InstanceNotFoundException {
-
+    public void remove(Long courseId, String moduleName) throws InstanceNotFoundException {
+        ModuleId moduleId = new ModuleId(moduleName, courseId);
         try {
-            Module module = moduleRepository.findById(moduleId);
+
+            Module module = moduleRepository.findByModuleId(moduleId);
             moduleRepository.remove(module);
 
         } catch (InstanceNotFoundException ex) {
-            throw new InstanceNotFoundException(moduleId, Module.class.toString(), "Module not found");
+            throw new InstanceNotFoundException(moduleId.toString(), Module.class.toString(), "Module not found");
         }
     }
 
     @Transactional
-    public void update(Long moduleId, String modulename) throws InstanceNotFoundException, DuplicatedResourceException {
+    public void update(Long courseId, String moduleName, String newModuleName) throws DuplicatedResourceException {
 
-        try {
-            Module module = moduleRepository.findById(moduleId);
-            if (modulename.equals(module.getModuleName())) {
-                throw exceptionGenerationUtils.toDuplicatedResourceException("Module", moduleId.toString(),
-                        "updatemodule.duplicated.exception");
-            } else {
-                module.setModuleName(modulename);
-                moduleRepository.update(module);
-            }
-
-        } catch (InstanceNotFoundException ex) {
-            throw new InstanceNotFoundException(moduleId, Module.class.toString(), "Module not found");
-
-
+        ModuleId moduleId = new ModuleId(moduleName, courseId);
+        if (newModuleName.equals(moduleName)) {
+            throw exceptionGenerationUtils.toDuplicatedResourceException("Module", moduleId.toString(),
+                    "updatemodule.duplicated.exception");
+        } else {
+            moduleRepository.updateModuleName(courseId, newModuleName, moduleName);
         }
+
     }
 }

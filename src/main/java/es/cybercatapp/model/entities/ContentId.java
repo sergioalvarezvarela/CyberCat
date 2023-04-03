@@ -1,67 +1,55 @@
 package es.cybercatapp.model.entities;
 
 import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Embeddable
 public class ContentId implements Serializable {
 
     private static final long serialVersionUID = 8451935930613997798L;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long contentId;
 
-    private Long moduleId;
+    private String contentName;
 
-    private Long courseId;
+    private ModuleId moduleId;
 
-    public ContentId (){
+    public ContentId() {
 
     }
 
-    public ContentId(Long contentId, Long moduleId, Long courseId) {
-        this.contentId = contentId;
+    public ContentId(String contentName, ModuleId moduleId) {
+        this.contentName = contentName;
         this.moduleId = moduleId;
-        this.courseId = courseId;
     }
 
-    public Long getContentId() {
-        return contentId;
+    public String getContentName() {
+        return contentName;
     }
 
-    public void setContentId(Long contentId) {
-        this.contentId = contentId;
+    public void setContentName(String contentName) {
+        this.contentName = contentName;
     }
 
-    public Long getModuleId() {
+    public ModuleId getModuleId() {
         return moduleId;
     }
 
-    public void setModuleId(Long moduleId) {
+    public void setModuleId(ModuleId moduleId) {
         this.moduleId = moduleId;
     }
 
-    public Long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContentId contentId = (ContentId) o;
+        return contentName.equals(contentId.contentName) && moduleId.equals(contentId.moduleId);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(contentName, moduleId);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
 }

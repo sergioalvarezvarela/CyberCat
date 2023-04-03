@@ -5,36 +5,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="edafb670-42bd-4d3d-9e94-68c4f756d43c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/ModuleId.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/common/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/common/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cybercat-app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/cybercat-app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Content.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Content.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/ContentId.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Content_User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/ContentUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Content_UserId.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Courses.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Courses.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Inscriptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/InscriptionsId.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Module.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Module_User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Module_User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Inscriptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Inscriptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/InscriptionsId.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Module.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Module.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/ModuleId.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Module_User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/ModuleUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Module_UserId.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/StringContent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/StringContent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/TestOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/TestOptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/TestOptionsId.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/entities/Users.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/exceptions/InstanceNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/exceptions/InstanceNotFoundException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/impl/CourseImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/impl/CourseImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/impl/ModuleImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/impl/ModuleImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/impl/UserImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/impl/UserImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/repositories/AbstractRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/repositories/AbstractRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/repositories/ModuleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/repositories/ModuleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/utils/ExceptionGenerationUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/utils/ExceptionGenerationUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Controllers/ModuleOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Controllers/ModuleOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Exceptions/ServiceRedirectExceptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Exceptions/ServiceRedirectExceptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/dto/ModuleDtoForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/dto/ModuleDtoForm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/messages.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/messages.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/estilo.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/estilo.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/tables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/tables.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/Index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/Index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/coursecontent.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/coursecontent.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/editmodule.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/editmodule.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/editprofile.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/editprofile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/managecourses.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/managecourses.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/tools/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/tools/footer.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/tools/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/tools/header.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/editmodule.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/editmodule.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-14.0.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-15.0.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-16.0.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-17.0.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-18.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/tools/package.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/tools/package.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/estilo.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/estilo.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-19.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-20.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-21.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-22.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-23.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-24.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-25.0.gz" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,6 +161,11 @@
       <workItem from="1679476911468" duration="5157000" />
       <workItem from="1679514914867" duration="3424000" />
       <workItem from="1679573261848" duration="69329000" />
+      <workItem from="1679841328144" duration="7240000" />
+      <workItem from="1679993589782" duration="4890000" />
+      <workItem from="1680082840417" duration="6539000" />
+      <workItem from="1680119450156" duration="3501000" />
+      <workItem from="1680167316151" duration="111420000" />
     </task>
     <servers />
   </component>
@@ -165,15 +184,19 @@
     </option>
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/es/cybercatapp/model/impl/ModuleImpl.java</url>
-          <line>46</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="es.cybercatapp.model.entities.Module" memberName="contents" />
+        <PinnedItemInfo parentTag="es.cybercatapp.model.entities.Module" memberName="course" />
+      </pinned-members>
+    </pin-to-top-manager>
+    <watches-manager>
+      <configuration name="SpringBootApplicationConfigurationType">
+        <watch expression="module.id.courseId" />
+        <watch expression="module.id.courseId" />
+        <watch expression="modules.get(0).id.moduleName" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

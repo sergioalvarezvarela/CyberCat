@@ -138,5 +138,10 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.3.25" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-test:5.3.25" level="project" />
     <orderEntry type="library" name="bs-custom-file-input" level="application" />
+    <orderEntry type="library" name="@popperjs/core" level="application" />
+    <orderEntry type="library" name="jquery-ui" level="application" />
+    <orderEntry type="library" name="Sortable" level="application" />
+    <orderEntry type="library" name="sortablejs" level="application" />
+    <orderEntry type="library" name="draggable" level="application" />
   </component>
 </module>

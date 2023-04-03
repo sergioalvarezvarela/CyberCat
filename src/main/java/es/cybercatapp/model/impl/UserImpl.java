@@ -81,17 +81,6 @@ public class UserImpl implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
-    private static List<SimpleGrantedAuthority> getRoles(Roles tipo) {
-        String rolesAsString = tipo.toString();
-        List<SimpleGrantedAuthority> roles = new ArrayList<>();
-        if (rolesAsString != null && !rolesAsString.isEmpty()) {
-            String[] arrayOfRoles = rolesAsString.split(",");
-            for (String role : arrayOfRoles) {
-                roles.add(new SimpleGrantedAuthority(role));
-            }
-        }
-        return roles;
-    }
 
     @Transactional
     public Users create(String username, String email, String password,

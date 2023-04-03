@@ -66,6 +66,7 @@ public class Courses implements Serializable {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @OrderBy("modulePosition")
     private List<Module> modules = new ArrayList<>();
 
 

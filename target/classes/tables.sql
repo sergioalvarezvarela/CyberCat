@@ -22,7 +22,7 @@ foreign key FK8qnnp812q1jd38fx7mxrhpw;
 
 alter table moduleusers
 drop
-foreign key FKo5ylr79se5faa4vkwwthrker;
+foreign key FK10exki5c4nlg1fwmiw9phldb;
 
 alter table moduleusers
 drop
@@ -30,11 +30,11 @@ foreign key FKe5i03tgg1vgt3kejm1g5r2mh;
 
 alter table testquestion
 drop
-foreign key FK_rps3n2qdgy834bmtqddd87pv;
+foreign key FK_5v7rn7y10e97p4x2dnw4hnwm;
 
 alter table teststring
 drop
-foreign key FK_3npqgssa3lnmng0v50f4v8ld;
+foreign key FK_jrdwsrdu9a0vnrv8oauv5f7u;
 
 drop table if exists contentusers;
 
@@ -57,10 +57,10 @@ drop table if exists users;
 create table contentusers (
                               completed bit not null,
                               users_user_id bigint not null,
-                              content_content_id bigint not null,
+                              content_content_name varchar(255) not null,
                               content_course_id bigint not null,
-                              content_module_id bigint not null,
-                              primary key (content_content_id, content_course_id, content_module_id, users_user_id)
+                              content_module_name varchar(255) not null,
+                              primary key (content_content_name, content_course_id, content_module_name, users_user_id)
 ) engine=InnoD;
 
 create table courses (
@@ -84,46 +84,43 @@ create table inscriptions (
 
 create table modules (
                          course_id bigint not null,
-                         module_id bigint not null,
-                         module_date date not null,
                          module_name varchar(255) not null,
-                         primary key (course_id, module_id)
+                         module_date date not null,
+                         module_position integer not null,
+                         primary key (course_id, module_name)
 ) engine=InnoD;
 
 create table moduleusers (
                              completed bit not null,
                              module_course_id bigint not null,
-                             module_module_id bigint not null,
+                             module_module_name varchar(255) not null,
                              users_user_id bigint not null,
-                             primary key (module_course_id, module_module_id, users_user_id)
+                             primary key (module_course_id, module_module_name, users_user_id)
 ) engine=InnoD;
 
 create table testoptions (
-                             content_id bigint not null,
+                             content_name varchar(255) not null,
                              course_id bigint not null,
-                             module_id bigint not null,
-                             options_id bigint not null,
+                             module_name varchar(255) not null,
                              option_string varchar(255) not null,
-                             primary key (content_id, course_id, module_id, options_id)
+                             primary key (content_name, course_id, module_name, option_string)
 ) engine=InnoD;
 
 create table testquestion (
-                              content_id bigint not null,
+                              content_name varchar(255) not null,
                               course_id bigint not null,
-                              module_id bigint not null,
-                              contentname varchar(255) not null,
+                              module_name varchar(255) not null,
                               question varchar(255) not null,
-                              primary key (content_id, course_id, module_id)
+                              primary key (content_name, course_id, module_name)
 ) engine=InnoD;
 
 create table teststring (
-                            content_id bigint not null,
+                            content_name varchar(255) not null,
                             course_id bigint not null,
-                            module_id bigint not null,
-                            contentname varchar(255) not null,
+                            module_name varchar(255) not null,
                             enunciado varchar(255) not null,
                             markdown bit not null,
-                            primary key (content_id, course_id, module_id)
+                            primary key (content_name, course_id, module_name)
 ) engine=InnoD;
 
 create table users (
@@ -169,9 +166,9 @@ alter table modules
             references courses (course_id);
 
 alter table moduleusers
-    add constraint FKo5ylr79se5faa4vkwwthrkerp
-        foreign key (module_course_id, module_module_id)
-            references modules (course_id, module_id);
+    add constraint FK10exki5c4nlg1fwmiw9phldbo
+        foreign key (module_course_id, module_module_name)
+            references modules (course_id, module_name);
 
 alter table moduleusers
     add constraint FKe5i03tgg1vgt3kejm1g5r2mhn
@@ -179,11 +176,11 @@ alter table moduleusers
             references users (user_id);
 
 alter table testquestion
-    add constraint FK_rps3n2qdgy834bmtqddd87pvj
-        foreign key (course_id, module_id)
-            references modules (course_id, module_id);
+    add constraint FK_5v7rn7y10e97p4x2dnw4hnwmy
+        foreign key (course_id, module_name)
+            references modules (course_id, module_name);
 
 alter table teststring
-    add constraint FK_3npqgssa3lnmng0v50f4v8ldd
-        foreign key (course_id, module_id)
-            references modules (course_id, module_id);
+    add constraint FK_jrdwsrdu9a0vnrv8oauv5f7uy
+        foreign key (course_id, module_name)
+            references modules (course_id, module_name);

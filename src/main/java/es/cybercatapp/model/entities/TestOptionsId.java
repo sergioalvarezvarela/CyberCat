@@ -1,78 +1,57 @@
 package es.cybercatapp.model.entities;
 
 import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Embeddable
 public class TestOptionsId implements Serializable {
+    private static final long serialVersionUID = -7481531117313549552L;
+    private String optionString;
+    private ContentId contentId;
 
-    private static final long serialVersionUID = -2469118158475945472L;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long optionsId;
-
-    private Long contentId;
-
-    private Long moduleId;
-
-    private Long courseId;
-
-    public TestOptionsId (){
-
-    }
-
-    public TestOptionsId(Long optionsId, Long contentId, Long moduleId, Long courseId) {
-        this.optionsId = optionsId;
+    public TestOptionsId(String optionString, ContentId contentId) {
+        this.optionString = optionString;
         this.contentId = contentId;
-        this.moduleId = moduleId;
-        this.courseId = courseId;
     }
 
-    public Long getOptionsId() {
-        return optionsId;
+    public TestOptionsId() {
     }
 
-    public void setOptionsId(Long optionsId) {
-        this.optionsId = optionsId;
+    public String getOptionString() {
+        return optionString;
     }
 
-    public Long getContentId() {
+    public void setOptionString(String optionString) {
+        this.optionString = optionString;
+    }
+
+    public ContentId getContentId() {
         return contentId;
     }
 
-    public void setContentId(Long contentId) {
+    public void setContentId(ContentId contentId) {
         this.contentId = contentId;
     }
 
-    public Long getModuleId() {
-        return moduleId;
-    }
-
-    public void setModuleId(Long moduleId) {
-        this.moduleId = moduleId;
-    }
-
-    public Long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TestOptionsId that = (TestOptionsId) o;
+        return optionString.equals(that.optionString) && contentId.equals(that.contentId);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+        return Objects.hash(optionString, contentId);
     }
 
     @Override
     public String toString() {
-        return super.toString();
+        return "TestOptionsId{" +
+                "optionString='" + optionString + '\'' +
+                ", contentId=" + contentId +
+                '}';
     }
 }

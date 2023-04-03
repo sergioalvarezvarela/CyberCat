@@ -3,45 +3,56 @@
 <header th:replace="tools/package :: #package-include"></header>
 <header th:replace="tools/header :: #header-include"></header>
 <body>
-<div class="container main-content mt-5 mb-3">
+
+<div class="container mt-5 mb-3">
     <div th:replace="tools/Messages :: #messages-fragment"></div>
     <div class="row d-flex align-items-center mb-2">
-        <div class="col d-flex justify-content-start">
+        <div class="col d-flex justify-content-start mb-2">
             <a href="/managecourses">
                 <button type="button" class="btn btn-primary">
                     <i class="bi bi-arrow-left"></i> Atrás
                 </button>
             </a>
         </div>
-        <div class="col d-flex justify-content-end">
-            <input type="hidden" id="thymeleaf-courseId" th:value="${courseId}" />
-            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addModule">Añadir
-                modulo
-            </button>
-        </div>
+        <form th:action="@{/managecourses/{id}/editcourses/updatepositions(id=${courseId})}"
+              onclick="return updateModuleNamesAndSubmit()" method="post">
+            <div id="hiddenModuleNames"></div>
+            <div class="col d-flex justify-content-end">
+                <button id="btnSave" type="submit" class="btn btn-info hide_alert" style="margin-right: 10px">Guardar
+                    cambios
+                </button>
+                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addModule">Añadir
+                    modulo
+                </button>
+            </div>
+        </form>
     </div>
 
+    <input type="hidden" id="hiddenCourseId" th:value="${courseId}"/>
+    <div id="listModules" class="list-group col-md-12 mb-4">
 
-    <div class="col-md-12 mb-4" th:each="module : ${ModuleDtoList}">
-        <div class="card p-3">
+        <div class="card p-3 mb-3" th:each="module : ${ModuleDtoList}" draggable="true"
+             th:attr="data-id=${module.id}, data-name=${module.moduleName}">
             <div class="d-flex justify-content-between" style="cursor: pointer">
-                <h4 th:data-bs-target="'#collapse-' + ${module.id}" data-bs-toggle="collapse" th:text="${module.moduleName}"></h4>
+                <h4 data-bs-toggle="collapse" th:attr="data-bs-target='#collapse-' + ${module.id}"
+                    th:text="${module.moduleName}"></h4>
                 <div>
+                    <input type="hidden" id="hiddenModuleName" th:value="${module.moduleName}"/>
                     <i id="add-icon" class="bi bi-plus-circle  me-2" data-bs-toggle="modal"
                        data-bs-target="#addContentModal" style="cursor:pointer; color: dodgerblue"></i>
-                    <i id="edit-icon" class="bi bi-pencil-fill me-2" data-bs-toggle="modal" th:attr="data-module-edit=${module.id}"
+                    <i id="edit-icon" class="bi bi-pencil-fill me-2" data-bs-toggle="modal" th:attr="data-module-edit=${module.moduleName}"
                        data-bs-target="#editModuleNameModal" style="cursor:pointer;"></i>
-                    <i id="delete-icon" class="bi bi-trash-fill" data-bs-toggle="modal" th:attr="data-module-rem=${module.id}" data-bs-target="#removeModule"
+                    <i id="delete-icon" class="bi bi-trash-fill" data-bs-toggle="modal" th:attr="data-module-rem=${module.moduleName}" data-bs-target="#removeModule"
                        style="cursor:pointer; color: red;"></i>
+
                 </div>
             </div>
-            <div th:id="'collapse-' + ${module.id}" class="collapse" th:attr="aria-labelledby='heading-' + ${module.id}">
+            <div th:id="'collapse-' + ${module.id}" class="collapse" aria-labelledby="headingOne">
                 <div class="mt-2">
                     <div class="card p-3 mt-3 text-dark" style="background-color: #dedede">
                         <div class="d-flex justify-content-between mt-2" style="cursor: pointer; color: #173753">
-                            <h4 data-bs-toggle="collapse" data-bs-target="#collapseOne">Modulo 1</h4>
+                            <h4 data-bs-toggle="collapse" data-bs-target="#collapseOne">Contenido 1</h4>
                             <div>
-                                <i id="manage-icon" class="bi bi-nut me-2" style="cursor:pointer; color: dodgerblue"></i>
                                 <i id="edit-icon2" class="bi bi-pencil-fill me-2" data-bs-toggle="modal"
                                    data-bs-target="#editExName" style="cursor:pointer;"></i>
                                 <i id="delete-icon2" class="bi bi-trash-fill" data-bs-toggle="modal"
@@ -55,6 +66,53 @@
     </div>
 </div>
 </body>
+
+<script>
+    const listModules = document.getElementById('listModules');
+    document.addEventListener('DOMContentLoaded', (event) => {
+        new Sortable(listModules, {
+            animation: 150,
+            swapThreshold: 0.5,
+            ghostClass: 'sortable-ghost',
+            onEnd: showButton,
+        });
+
+
+    });
+
+    function showButton() {
+        var butsave = document.getElementById("btnSave");
+        butsave.className = "btn btn-info show_alert";
+    }
+
+    function checkModules() {
+        const moduleItems = Array.from(listModules.childNodes).filter(node => node.nodeType === Node.ELEMENT_NODE);
+        const moduleList = [];
+
+        moduleItems.forEach((item) => {
+            const moduleName = item.getAttribute('data-name');
+            moduleList.push(moduleName);
+        });
+
+        return moduleList;
+    }
+
+    function updateModuleNamesAndSubmit() {
+        const moduleList = checkModules();
+        const hiddenModuleNamesDiv = document.getElementById('hiddenModuleNames');
+        hiddenModuleNamesDiv.innerHTML = ''; // Limpiar campos ocultos anteriores
+        moduleList.forEach((moduleName, index) => {
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = `moduleNames[${index}]`;
+            hiddenInput.value = moduleName;
+            hiddenModuleNamesDiv.appendChild(hiddenInput);
+        });
+        return true;
+    }
+
+
+</script>
 
 <div class="modal" tabindex="-1" id="addModule">
     <div class="modal-dialog">
@@ -73,83 +131,12 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary" >Guardar cambios</button>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<div class="modal" tabindex="-1" id="editModuleNameModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form th:action="@{/managecourses/{cid}/editcourses/updatemodule(cid=${courseId})}" id="editmoduleform" method="post">
-            <div class="modal-header">
-                <h4 class="modal-title">Editar nombre del módulo</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="moduleNameInput1" class="form-label">Nombre del módulo</label>
-                    <input type="text" class="form-control" id="moduleNameInput1" minlength="5" th:field="*{ModuleDtoForm.moduleName}" required>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
-                    Guardar cambios
-                </button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal" tabindex="-1" id="addContentModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Añadir contenido</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="addContentInput" class="form-label">Nombre del contenido</label>
-                    <input type="text" class="form-control" id="addContentInput" minlength="5" required>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="updateModuleName()">
-                    Guardar cambios
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal" tabindex="-1" id="editExName">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Editar nombre de contenido </h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="exNameInput" class="form-label">Nombre del contenido</label>
-                    <input type="text" class="form-control" id="exNameInput" minlength="5" required>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="updateModuleName()">
-                    Guardar cambios
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="modal" id="removeModule" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -171,7 +158,7 @@
             <div class="modal-footer justify-content-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar
                 </button>
-                <form th:action="@{/managecourses/{cid}/editcourses/removemodule(cid=${courseId})}" method="post"
+                <form th:action="@{/managecourses/{id}/editcourses/removemodule(id=${courseId})}" method="post"
                       id="deletemodule-form">
                     <button type="submit" class="btn btn-danger">Eliminar</button>
                 </form>
@@ -180,25 +167,50 @@
     </div>
 </div>
 
+<div class="modal" tabindex="-1" id="editModuleNameModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form th:action="@{/managecourses/{cid}/editcourses/updatemodule(cid=${courseId})}" id="editmoduleform" method="post">
+                <div class="modal-header">
+                    <h4 class="modal-title">Editar nombre del módulo</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="moduleNameInput1" class="form-label">Nombre del módulo</label>
+                        <input type="text" class="form-control" id="moduleNameInput1" minlength="5" th:field="*{ModuleDtoForm.moduleName}" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
+                        Guardar cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
+    const removeModuleModal = document.getElementById('removeModule');
+    const deleteModuleForm = document.getElementById('deletemodule-form');
+    const editModuleModal = document.getElementById('editModuleNameModal');
+    const editModuleForm = document.getElementById('editmoduleform');
+    const courseId = document.getElementById('hiddenCourseId').value;
 
-        const removeModuleModal = document.getElementById('removeModule');
-        const deleteModuleForm = document.getElementById('deletemodule-form');
-        const courseId = document.getElementById('thymeleaf-courseId').value;
-        removeModuleModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget;
-            var moduleId = button.getAttribute('data-module-rem');
-            deleteModuleForm.action = `/managecourses/${courseId}/editcourses/removemodule/${moduleId}`;
-        });
-
-        const editModuleModal = document.getElementById('editModuleNameModal');
-        const editModuleForm = document.getElementById('editmoduleform');
-        editModuleModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget;
-            var moduleId = button.getAttribute('data-module-edit');
-            editModuleForm.action = `/managecourses/${courseId}/editcourses/updatemodule/${moduleId}`;
-        });
-
+    removeModuleModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var moduleName = button.getAttribute('data-module-rem');
+        alert(moduleName);
+        var moduleUrl = encodeURIComponent(moduleName.replace(/ /g, '_'));
+        deleteModuleForm.action = `/managecourses/${courseId}/editcourses/removemodule/${moduleUrl}`;
+    });
+    editModuleModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var moduleName = button.getAttribute('data-module-edit');
+        var moduleUrl = encodeURIComponent(moduleName.replace(/ /g, '_'));
+        editModuleForm.action = `/managecourses/${courseId}/editcourses/updatemodule/${moduleUrl}`;
+    });
 </script>
-
 </html>

@@ -5,20 +5,20 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class InscriptionsId implements Serializable {
+public class ModuleUserId implements Serializable {
 
-    private static final long serialVersionUID = 3553952070127293884L;
+    private static final long serialVersionUID = 5045976325752371300L;
 
     private Long userId;
 
-    private Long courseId;
+    private ModuleId moduleId;
 
-    public InscriptionsId(Long userId, Long courseId) {
+    public ModuleUserId(Long userId, ModuleId moduleId) {
         this.userId = userId;
-        this.courseId = courseId;
+        this.moduleId = moduleId;
     }
 
-    public InscriptionsId() {
+    public ModuleUserId() {
     }
 
     public Long getUserId() {
@@ -29,32 +29,32 @@ public class InscriptionsId implements Serializable {
         this.userId = userId;
     }
 
-    public Long getCourseId() {
-        return courseId;
+    public ModuleId getModuleId() {
+        return moduleId;
     }
 
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
+    public void setModuleId(ModuleId moduleId) {
+        this.moduleId = moduleId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        InscriptionsId that = (InscriptionsId) o;
-        return userId.equals(that.userId) && courseId.equals(that.courseId);
+        ModuleUserId that = (ModuleUserId) o;
+        return userId.equals(that.userId) && moduleId.equals(that.moduleId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, courseId);
+        return Objects.hash(userId, moduleId);
     }
 
     @Override
     public String toString() {
-        return "InscriptionsId{" +
+        return "ModuleUserId{" +
                 "userId=" + userId +
-                ", courseId=" + courseId +
+                ", moduleId=" + moduleId +
                 '}';
     }
 }

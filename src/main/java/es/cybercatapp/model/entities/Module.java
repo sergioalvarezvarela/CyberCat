@@ -6,17 +6,12 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity(name = Constants.MODULE_ENTITY)
 @Table(name = Constants.MODULE_TABLE)
-public class Module {
-
+public class Module  {
     @EmbeddedId
     private ModuleId id;
-
-    @Column(nullable = false)
-    private String moduleName;
 
     @Column(name = "moduleDate", nullable = false)
     private LocalDate moduleDate;
@@ -26,6 +21,9 @@ public class Module {
     @JoinColumn(name = "course_id", insertable = false, updatable = false)
     private Courses course;
 
+    @Column(name = "modulePosition", nullable = false)
+    private int modulePosition;
+
     @OneToMany(
             mappedBy = "module",
             cascade = CascadeType.ALL,
@@ -33,14 +31,17 @@ public class Module {
     )
     private List<Content> contents = new ArrayList<>();
 
-    public Module(){}
 
-    public Module(String moduleName, LocalDate moduleDate, Courses course)   {
-        this.moduleName = moduleName;
+    public Module(String moduleName, LocalDate moduleDate,int modulePosition, Courses course)   {
         this.moduleDate = moduleDate;
-        this.id= new ModuleId(null,course.getCourseId());
+        this.course = course;
+        this.modulePosition = modulePosition;
+        this.id= new ModuleId(moduleName,course.getCourseId());
     }
 
+    public Module() {
+
+    }
 
     public ModuleId getId() {
         return id;
@@ -51,20 +52,22 @@ public class Module {
     }
 
 
-    public String getModuleName() {
-        return moduleName;
-    }
-
-    public void setModuleName(String moduleName) {
-        this.moduleName = moduleName;
-    }
-
     public LocalDate getModuleDate() {
         return moduleDate;
     }
 
     public void setModuleDate(LocalDate moduleDate) {
         this.moduleDate = moduleDate;
+    }
+
+
+
+    public List<Content> getContents() {
+        return contents;
+    }
+
+    public void setContents(List<Content> contents) {
+        this.contents = contents;
     }
 
     public Courses getCourse() {
@@ -75,36 +78,26 @@ public class Module {
         this.course = course;
     }
 
-    public List<Content> getContents() {
-        return contents;
+    public int getModulePosition() {
+        return modulePosition;
     }
 
-    public void setContents(List<Content> contents) {
-        this.contents = contents;
+    public void setModulePosition(int modulePosition) {
+        this.modulePosition = modulePosition;
     }
 
-
-    @Override
+    /* @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Module module = (Module) o;
-        return Objects.equals(id, module.id) && Objects.equals(moduleName, module.moduleName) && Objects.equals(moduleDate, module.moduleDate) && Objects.equals(course, module.course) && Objects.equals(contents, module.contents);
+        return moduleName.equals(module.moduleName) && moduleDate.equals(module.moduleDate) && course.equals(module.course) && Objects.equals(contents, module.contents);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, moduleName, moduleDate, course, contents);
-    }
+        return Objects.hash(moduleName, moduleDate, course, contents);
+    }*/
 
-    @Override
-    public String toString() {
-        return "Module{" +
-                "id=" + id +
-                ", moduleName='" + moduleName + '\'' +
-                ", moduleDate=" + moduleDate +
-                ", course=" + course +
-                ", contents=" + contents +
-                '}';
-    }
+
 }

@@ -61,7 +61,7 @@ public class CourseImpl {
         if (user == null) {
             throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", userowner));
         }
-        Courses courses = courseRepository.create(new Courses(coursename, description, LocalDate.now(), image,Category.valueOf(category),price, user ));
+        Courses courses = courseRepository.create(new Courses(coursename, description, LocalDate.now(), image, Category.valueOf(category), price, user));
         saveCourseImage(courses.getCourseId(), image, imageContents);
         return courses;
     }
@@ -75,6 +75,16 @@ public class CourseImpl {
         return courseRepository.findCoursesByUserOwner(user.getUserId());
     }
 
+    @Transactional
+    public Courses findCoursesById(long id) throws InstanceNotFoundException {
+        return courseRepository.findById(id);
+    }
+
+    @Transactional
+    public void updatePositions(Courses courses) {
+        courseRepository.update(courses);
+    }
+
 
     @Transactional
     public void update(long id, String coursename, float price, String category,
@@ -82,10 +92,11 @@ public class CourseImpl {
         Courses course = courseRepository.findById(id);
         Users user = userRepository.findByUsername(userowner);
         if (course == null) {
-            throw new InstanceNotFoundException(id, Courses.class.toString(), "Course not found");
+            throw new InstanceNotFoundException(String.valueOf(id), Courses.class.toString(), "Course not found");
         } else {
-            Courses newcourse = new Courses(coursename, description, course.getCreation_date(), course.getCourse_photo(),Category.valueOf(category), price, user );
+            Courses newcourse = new Courses(coursename, description, course.getCreation_date(), course.getCourse_photo(), Category.valueOf(category), price, user);
             newcourse.setCourseId(course.getCourseId());
+            newcourse.setModules(course.getModules());
             if (image != null && image.trim().length() > 0 && imageContents != null) {
                 try {
                     deleteCourseImage(id, user.getImagen_perfil());
@@ -109,7 +120,7 @@ public class CourseImpl {
     public void remove(long id) throws InstanceNotFoundException {
         Courses course = courseRepository.findById(id);
         if (course == null) {
-            throw new InstanceNotFoundException(id, Courses.class.toString(), "Course not found");
+            throw new InstanceNotFoundException(String.valueOf(id), Courses.class.toString(), "Course not found");
         } else {
             courseRepository.remove(course);
         }

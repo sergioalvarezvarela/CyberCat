@@ -59,7 +59,7 @@ public abstract class AbstractRepository<T> {
             return t;
         } catch(NoResultException e) {
             logger.error(e.getMessage(), e);
-            throw exceptionGenerationUtils.toInstanceNotFoundException(id, genericType.getSimpleName(), 
+            throw exceptionGenerationUtils.toInstanceNotFoundException(id.toString(), genericType.getSimpleName(),
                     Constants.INSTANCE_NOT_FOUND_MESSAGE);
         }
     }

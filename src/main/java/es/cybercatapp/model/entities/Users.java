@@ -62,7 +62,7 @@ public class Users implements Serializable {
     )
     private List<Inscriptions> inscriptions = new ArrayList<>();
 
-    @OneToMany(
+  /*  @OneToMany(
             mappedBy = "users",
             cascade = CascadeType.ALL,
             orphanRemoval = true
@@ -74,7 +74,7 @@ public class Users implements Serializable {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<Content_User> content_users = new ArrayList<>();
+    private List<Content_User> content_users = new ArrayList<>();*/
 
 
     public Long getUserId() {
@@ -149,21 +149,9 @@ public class Users implements Serializable {
         this.inscriptions = inscriptions;
     }
 
-    public List<Module_User> getModule_users() {
-        return module_users;
-    }
 
-    public void setModule_users(List<Module_User> module_users) {
-        this.module_users = module_users;
-    }
 
-    public List<Content_User> getContent_users() {
-        return content_users;
-    }
 
-    public void setContent_users(List<Content_User> content_users) {
-        this.content_users = content_users;
-    }
 
 
 }

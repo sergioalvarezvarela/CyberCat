@@ -1,12 +1,7 @@
 package es.cybercatapp.model.entities;
 
 
-
-
 import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Transient;
 import java.io.Serializable;
 
 @Embeddable
@@ -14,9 +9,7 @@ public class ModuleId implements Serializable {
 
     private static final long serialVersionUID = -1794466129760681860L;
 
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long moduleId;
+    private String moduleName;
     private Long courseId;
 
 
@@ -24,17 +17,17 @@ public class ModuleId implements Serializable {
 
     }
 
-    public ModuleId( Long moduleId, Long courseId) {
-        this.moduleId = moduleId;
+    public ModuleId( String moduleName, Long courseId) {
+        this.moduleName = moduleName;
         this.courseId = courseId;
     }
 
-    public Long getModuleId() {
-        return moduleId;
+    public String getModuleName() {
+        return moduleName;
     }
 
-    public void setModuleId(Long moduleId) {
-        this.moduleId = moduleId;
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
     }
 
     public Long getCourseId() {
