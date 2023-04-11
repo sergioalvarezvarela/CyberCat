@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<body id="edit-content-include">
+
+<div th:id="'collapse-' + ${module.id}" class="collapse" aria-labelledby="headingOne">
+    <div id="listContent" class="list-group col-md-12" th:id="'listContent-' + ${module.id}">
+        <div th:each="content : ${module.contentList}">
+            <div class="card p-3 mt-3 text-dark" style="background-color: #dedede"
+                 draggable="true" th:attr="data-id=${content.contentId}">
+                <div class="d-flex justify-content-between"
+                     style="cursor: pointer; color: #173753">
+                    <h4 th:text="${content.contentName}"></h4>
+                    <div>
+                        <i id="save-icon" class="bi bi-save me-2" style="cursor:pointer; color:dodgerblue"></i>
+                        <i id="edit-icon2" class="bi bi-pencil-fill me-2" style="cursor:pointer;"></i>
+                        <i id="delete-icon2" class="bi bi-trash-fill"
+                           style="cursor:pointer; color: red;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const moduleIds = [...document.querySelectorAll('[id^="listContent-"]')].map(element => element.id);
+
+        moduleIds.forEach(moduleId => {
+            new Sortable(document.getElementById(moduleId), {
+                animation: 150,
+                swapThreshold: 0.5,
+                ghostClass: 'sortable-ghost',
+            });
+        });
+    });
+</script>
+
+</body>
+
+
+
+</html>

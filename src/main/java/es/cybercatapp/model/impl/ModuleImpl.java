@@ -58,26 +58,30 @@ public class ModuleImpl {
     @Transactional
     public void remove(Long courseId, String moduleName) throws InstanceNotFoundException {
         ModuleId moduleId = new ModuleId(moduleName, courseId);
-        try {
 
-            Module module = moduleRepository.findByModuleId(moduleId);
-            moduleRepository.remove(module);
-
-        } catch (InstanceNotFoundException ex) {
+        Module module = moduleRepository.findByModuleId(moduleId);
+        if (module == null) {
             throw new InstanceNotFoundException(moduleId.toString(), Module.class.toString(), "Module not found");
         }
+        moduleRepository.remove(module);
+
+
     }
 
     @Transactional
-    public void update(Long courseId, String moduleName, String newModuleName) throws DuplicatedResourceException {
+    public void update(Long courseId, String moduleName, String newModuleName) throws
+            DuplicatedResourceException, InstanceNotFoundException {
 
         ModuleId moduleId = new ModuleId(moduleName, courseId);
-        if (newModuleName.equals(moduleName)) {
+        ModuleId newModuleId = new ModuleId(newModuleName, courseId);
+        if (moduleRepository.findByModuleId(newModuleId) != null) {
+
             throw exceptionGenerationUtils.toDuplicatedResourceException("Module", moduleId.toString(),
                     "updatemodule.duplicated.exception");
         } else {
             moduleRepository.updateModuleName(courseId, newModuleName, moduleName);
         }
+
 
     }
 }

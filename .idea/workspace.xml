@@ -6,13 +6,25 @@
   <component name="ChangeListManager">
     <list default="true" id="edafb670-42bd-4d3d-9e94-68c4f756d43c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/impl/ModuleImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/impl/ModuleImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/repositories/ModuleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/model/repositories/ModuleRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Controllers/CourseOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Controllers/CourseOperations.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Controllers/ModuleOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Controllers/ModuleOperations.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/dto/ModuleDtoForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/dto/ModuleDtoForm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Controllers/UserOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/es/cybercatapp/service/Controllers/UserOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/messages.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/messages.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/estilo.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/estilo.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/tables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/tables.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/editmodule.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/editmodule.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-27.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/messages.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/messages.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/estilo.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/estilo.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/tables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tables.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/editmodule.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/editmodule.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-28.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-29.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-30.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-03-31.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-04-01.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-04-02.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/work/server.log.2023-04-03.0.gz" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,8 +34,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Class" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -129,7 +141,8 @@
       <workItem from="1679993589782" duration="4890000" />
       <workItem from="1680082840417" duration="6539000" />
       <workItem from="1680119450156" duration="3501000" />
-      <workItem from="1680167316151" duration="136224000" />
+      <workItem from="1680167316151" duration="168550000" />
+      <workItem from="1681207606911" duration="2708000" />
     </task>
     <servers />
   </component>
@@ -154,6 +167,11 @@
           <url>file://$PROJECT_DIR$/src/main/java/es/cybercatapp/model/impl/ContentImpl.java</url>
           <line>40</line>
           <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/es/cybercatapp/model/impl/ModuleImpl.java</url>
+          <line>76</line>
+          <option name="timeStamp" value="32" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

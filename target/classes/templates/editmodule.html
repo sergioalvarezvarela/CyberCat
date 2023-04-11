@@ -37,9 +37,9 @@
                 <h4 data-bs-toggle="collapse" th:attr="data-bs-target='#collapse-' + ${module.id}"
                     th:text="${module.moduleName}"></h4>
                 <div>
-                    <input type="hidden" id="hiddenModuleName" th:value="${module.moduleName}"/>
                     <i id="add-icon" class="bi bi-plus-circle  me-2" data-bs-toggle="modal"
-                       data-bs-target="#addContentModal" style="cursor:pointer; color: dodgerblue"></i>
+                       data-bs-target="#addContentModal" th:attr="data-module-add=${module.moduleName}"
+                       style="cursor:pointer; color: dodgerblue"></i>
                     <i id="edit-icon" class="bi bi-pencil-fill me-2" data-bs-toggle="modal"
                        th:attr="data-module-edit=${module.moduleName}"
                        data-bs-target="#editModuleNameModal" style="cursor:pointer;"></i>
@@ -48,30 +48,13 @@
                        style="cursor:pointer; color: red;"></i>
 
                 </div>
-            </div>
 
-                <div th:id="'collapse-' + ${module.id}" class="collapse " aria-labelledby="headingOne">
-                    <div id="listContent" class="list-group col-md-12 mb-4 content-list">
-                    <div class="mt-2">
-                        <div th:each="content : ${module.contentList}">
-                            <div class="card p-3 mt-3 text-dark" style="background-color: #dedede" draggable="true">
-                                <div class="d-flex justify-content-between mt-2"
-                                     style="cursor: pointer; color: #173753">
-                                    <h4 th:text="${content.contentName}"></h4>
-                                    <div>
-                                        <i id="edit-icon2" class="bi bi-pencil-fill me-2" data-bs-toggle="modal"
-                                           data-bs-target="#editExName" style="cursor:pointer;"></i>
-                                        <i id="delete-icon2" class="bi bi-trash-fill" data-bs-toggle="modal"
-                                           data-bs-target="#removeContent" style="cursor:pointer; color: red;"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+            <div th:replace="editContent :: #edit-content-include"></div>
+
         </div>
     </div>
+
 </div>
 </body>
 
@@ -86,18 +69,6 @@
         });
 
 
-    });
-
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const contentLists = document.querySelectorAll('.collapse .content-list');
-        contentLists.forEach((listContent) => {
-            new Sortable(listContent, {
-                animation: 150,
-                swapThreshold: 0.5,
-                ghostClass: 'sortable-ghost',
-                onEnd: showButton,
-            });
-        });
     });
 
     function showButton() {
@@ -130,14 +101,11 @@
         });
         return true;
     }
-
-
 </script>
-
 <div class="modal" tabindex="-1" id="addModule">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form th:action="@{/managecourses/{id}/editcourses/addmodule(id=${courseId})}" method="post">
+            <form th:action="@{/managecourses/{id}/editcourses/addmodule(id=${courseId})}" method="post" novalidate>
                 <div class="modal-header">
                     <h4 class="modal-title">Añadir módulo</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -146,12 +114,13 @@
                     <div class="mb-3">
                         <label for="moduleNameInput" class="form-label">Nombre del módulo</label>
                         <input type="text" class="form-control" id="moduleNameInput"
-                               th:field="*{ModuleDtoForm.moduleName}" minlength="5" required>
+                               th:field="*{ModuleDtoForm.moduleName}">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    <button type="submit" class="btn btn-primary">Guardar cambios
+                    </button>
                 </div>
             </form>
         </div>
@@ -199,8 +168,40 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="editModuleNameInput" class="form-label">Nombre del módulo</label>
-                        <input type="text" class="form-control" id="editModuleNameInput" minlength="5"
-                               th:field="*{ModuleDtoForm.moduleName}" required>
+                        <input type="text" class="form-control" id="editModuleNameInput"
+                               th:field="*{ModuleDtoForm.moduleName}">
+                        <p class="hide_alert text-danger" id="alert_module">El campo Nombre de modulo es
+                            obligatorio</p>
+                        <br class="br1 hide_alert">
+                        <p class="hide_alert text-danger" id="alert_module2">El campo Nombre de modulo debe tener minimo
+                            5 caracteres</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="checkModuleValidity()">
+                        Guardar cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="addContentModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form th:action="@{/managecourses/{cid}/editcourses(cid=${courseId})}" id="addcontentform"
+                  method="post">
+                <div class="modal-header">
+                    <h4 class="modal-title">Añadir contenido</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="addContentInput" class="form-label">Nombre del contenido</label>
+                        <input type="text" class="form-control" id="addContentInput"
+                               th:field="*{ContentDtoForm.contentName}" minlength="5" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -219,6 +220,8 @@
     const deleteModuleForm = document.getElementById('deletemodule-form');
     const editModuleModal = document.getElementById('editModuleNameModal');
     const editModuleForm = document.getElementById('editmoduleform');
+    const addContentModal = document.getElementById('addContentModal');
+    const addContentForm = document.getElementById('addcontentform');
     const courseId = document.getElementById('hiddenCourseId').value;
 
     removeModuleModal.addEventListener('show.bs.modal', function (event) {
@@ -235,5 +238,28 @@
         moduleNameInput.value = moduleName;
         editModuleForm.action = `/managecourses/${courseId}/editcourses/updatemodule/${moduleUrl}`;
     });
+    addContentModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var moduleName = button.getAttribute('data-module-add');
+        var moduleUrl = encodeURIComponent(moduleName);
+        addContentForm.action = `/managecourses/${courseId}/editcourses/${moduleUrl}/addcontent`;
+    });
+
+    function checkModuleValidity() {
+        var moduleNameInput = document.getElementById("editModuleNameInput").value;
+        document.getElementById("alert_module").className = "hide_alert text-danger";
+        document.getElementById("alert_module2").className = "hide_alert text-danger";
+        document.getElementById("br1").className = "hide_alert";
+        if (moduleNameInput == null) {
+            document.getElementById("alert_module").className = "show_alert text-danger";
+
+        } else if (moduleNameInput.size < 5) {
+            document.getElementById("alert_module").className = "hide_alert text-danger";
+            document.getElementById("alert_module2").className = "show_alert text-danger";
+            document.getElementById("br1").className = "show_alert";
+
+        }
+
+    }
 </script>
 </html>

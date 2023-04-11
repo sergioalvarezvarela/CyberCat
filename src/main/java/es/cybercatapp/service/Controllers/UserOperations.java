@@ -154,7 +154,7 @@ public class UserOperations {
 
     @PostMapping("/editprofile/changepassword")
     public String doPostChangePassword(Principal principal, @Valid @ModelAttribute("ChangePasswordDtoForm") ChangePasswordDtoForm changePasswordDtoForm,
-                                       Locale locale, BindingResult result,
+                                        BindingResult result, Locale locale,
                                        Model model, RedirectAttributes redirectAttributes) {
         try {
             Users user = userImpl.findByUsername(principal.getName());
@@ -185,7 +185,7 @@ public class UserOperations {
 
     @PostMapping("/editprofile/modify")
     public String doPostModifyProfile(Principal principal, @Valid @ModelAttribute("EditProfileDtoForm") EditProfileDtoForm editProfileDtoForm,
-                                      Locale locale, BindingResult result, RedirectAttributes redirectAttributes,
+                                      BindingResult result, Locale locale,  RedirectAttributes redirectAttributes,
                                       Model model) {
         model.addAttribute("UpdateImageProfileDtoForm", new UpdateImageProfileDtoForm());
         model.addAttribute("ChangePasswordDtoForm", new ChangePasswordDtoForm());

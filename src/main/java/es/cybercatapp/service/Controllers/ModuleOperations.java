@@ -61,6 +61,7 @@ public class ModuleOperations {
     public String doGetCourseContent(@PathVariable("id") String id, Model model, Locale locale) {
         try {
             model.addAttribute("ModuleDtoForm", new ModuleDtoForm());
+            model.addAttribute("ContentDtoForm", new ContentDtoForm());
             Courses course = courseImpl.findCoursesById(Long.parseLong(id));
             List<Module> modules = course.getModules();
             List<ModuleDtoForm> moduleDto = new ArrayList<>();
@@ -93,7 +94,7 @@ public class ModuleOperations {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = {"/managecourses/{id}/editcourses/addmodule"})
     public String doPostAddModule(@PathVariable("id") String id, @Valid @ModelAttribute("ModuleDtoForm") ModuleDtoForm moduleDtoForm,
-                                  Locale locale, BindingResult result, RedirectAttributes redirectAttributes, Model model, HttpSession session) {
+                                   BindingResult result, Locale locale, RedirectAttributes redirectAttributes, Model model, HttpSession session) {
 
 
         if (result.hasErrors()) {
@@ -134,7 +135,7 @@ public class ModuleOperations {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = {"/managecourses/{courseid}/editcourses/updatemodule/{moduleName}"})
     public String doPostUpdateModule(@PathVariable("courseid") String courseid, @PathVariable("moduleName") String moduleName, @Valid @ModelAttribute("ModuleDtoForm") ModuleDtoForm moduleDtoForm,
-                                     Locale locale, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+                                     BindingResult result, Locale locale, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             serviceRedirectExceptions.serviceInvalidFormError(result, "updatemodule.invalid.parameters", moduleDtoForm.getModuleName(), locale, redirectAttributes);
@@ -148,6 +149,8 @@ public class ModuleOperations {
         } catch (DuplicatedResourceException ex) {
             serviceRedirectExceptions.serviceDuplicatedResourceException(ex, redirectAttributes);
             return "redirect:/managecourses/" + courseid + "/editcourses";
+        } catch (InstanceNotFoundException e) {
+            throw new RuntimeException(e);
         }
         redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                 "editmodule.success", new Object[]{moduleName}, locale));
@@ -156,7 +159,7 @@ public class ModuleOperations {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = {"/managecourses/{id}/editcourses/updatepositions"})
-    public String doPostUpdateModulePositions(@PathVariable("id") String id, @Valid @ModelAttribute("ListModuleDtoForm") ListModuleDtoForm listModuleDtoForm,
+    public String doPostUpdateModulePositions(@PathVariable("id") String id, @ModelAttribute("ListModuleDtoForm") ListModuleDtoForm listModuleDtoForm,
                                               Locale locale, Model model, RedirectAttributes redirectAttributes) {
         try {
             Courses courses = courseImpl.findCoursesById(Long.parseLong(id));
