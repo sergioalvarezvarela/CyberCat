@@ -5,7 +5,7 @@ import es.cybercatapp.common.Constants;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity(name = Constants.MODULEUSER_ENTITY)
+/*@Entity(name = Constants.MODULEUSER_ENTITY)
 @Table(name = Constants.MODULEUSER_TABLE)
 public class ModuleUser {
     @EmbeddedId
@@ -88,4 +88,4 @@ public class ModuleUser {
                 ", completed=" + completed +
                 '}';
     }
-}
+}*/

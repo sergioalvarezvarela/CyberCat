@@ -1,13 +1,11 @@
 package es.cybercatapp.service.dto;
 
-import es.cybercatapp.model.entities.Content;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
 public class ModuleDtoForm {
-    private String id;
+    private Long id;
 
     @NotNull
     @Size(min=5)
@@ -20,7 +18,7 @@ public class ModuleDtoForm {
     public ModuleDtoForm() {
     }
 
-    public ModuleDtoForm(String id, String moduleName, int modulePosition, List<ContentDtoForm> contentList) {
+    public ModuleDtoForm(Long id, String moduleName, int modulePosition, List<ContentDtoForm> contentList) {
         this.id = id;
         this.moduleName = moduleName;
         this.modulePosition= modulePosition;
@@ -43,11 +41,11 @@ public class ModuleDtoForm {
         this.moduleName = moduleName;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

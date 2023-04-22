@@ -2,9 +2,9 @@
 <html lang="en">
 <body id="edit-content-include">
 
-<div th:id="'collapse-' + ${module.id}" class="collapse" aria-labelledby="headingOne">
-    <div id="listContent" class="list-group col-md-12" th:id="'listContent-' + ${module.id}">
-        <div th:each="content : ${module.contentList}">
+<div th:id="'collapse-' + ${modules.id}" class="collapse" aria-labelledby="headingOne">
+    <div id="listContent" class="list-group col-md-12" th:id="'listContent-' + ${modules.id}">
+        <div th:each="content : ${modules.contentList}">
             <div class="card p-3 mt-3 text-dark" style="background-color: #dedede"
                  draggable="true" th:attr="data-id=${content.contentId}">
                 <div class="d-flex justify-content-between"

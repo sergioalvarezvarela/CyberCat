@@ -10,11 +10,12 @@ import java.text.MessageFormat;
 @Repository
 public class UserRepository extends AbstractRepository<Users>{
 
-    private static final String FIND_USER_BY_EMAIL_QUERY = "SELECT u FROM User u WHERE u.email = ''{0}''";
-    private static final String FIND_USER_BY_USERNAME_QUERY = "SELECT u FROM User u WHERE u.username = ''{0}''";
+    private static final String FIND_USER_BY_EMAIL_QUERY = "SELECT u FROM User u WHERE u.email = :email";
+    private static final String FIND_USER_BY_USERNAME_QUERY = "SELECT u FROM User u WHERE u.username = :username";
     public Users findByEmail(String email) {
         try {
-            Query query = entityManager.createQuery(MessageFormat.format(FIND_USER_BY_EMAIL_QUERY, email));
+            Query query = entityManager.createQuery(FIND_USER_BY_EMAIL_QUERY);
+            query.setParameter("email",email);
             return (Users) query.getSingleResult();
         } catch (NoResultException e) {
             logger.error(e.getMessage(), e);
@@ -24,7 +25,8 @@ public class UserRepository extends AbstractRepository<Users>{
 
     public Users findByUsername(String username) {
         try {
-            Query query = entityManager.createQuery(MessageFormat.format(FIND_USER_BY_USERNAME_QUERY, username));
+            Query query = entityManager.createQuery(FIND_USER_BY_USERNAME_QUERY);
+            query.setParameter("username",username);
             return (Users) query.getSingleResult();
         } catch (NoResultException e) {
             logger.error(e.getMessage(), e);

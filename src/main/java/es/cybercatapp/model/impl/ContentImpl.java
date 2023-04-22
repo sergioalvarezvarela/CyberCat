@@ -1,4 +1,4 @@
-package es.cybercatapp.model.impl;
+/*package es.cybercatapp.model.impl;
 
 import es.cybercatapp.common.ConfigurationParameters;
 import es.cybercatapp.model.entities.*;
@@ -50,4 +50,4 @@ public class ContentImpl {
         }
     }
 
-}
+}*/

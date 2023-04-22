@@ -7,7 +7,7 @@ public class ContentDtoForm {
 
     private String moduleName;
 
-    private String contentId;
+    private Long contentId;
 
     @NotNull
     @Size(min=5)
@@ -18,18 +18,18 @@ public class ContentDtoForm {
     public ContentDtoForm() {
     }
 
-    public ContentDtoForm(String contentId, String contentName, String moduleName, int contentPosition) {
+    public ContentDtoForm(Long contentId, String contentName, String moduleName, int contentPosition) {
         this.contentId= contentId;
         this.moduleName = moduleName;
         this.contentName = contentName;
         this.contentPosition = contentPosition;
     }
 
-    public String getContentId() {
+    public Long getContentId() {
         return contentId;
     }
 
-    public void setContentId(String contentId) {
+    public void setContentId(Long contentId) {
         this.contentId = contentId;
     }
 

@@ -1,13 +1,11 @@
 package es.cybercatapp.service.Controllers;
 
-import com.google.protobuf.Empty;
 import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Content;
 import es.cybercatapp.model.entities.Courses;
-import es.cybercatapp.model.entities.Module;
+import es.cybercatapp.model.entities.Modules;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
-import es.cybercatapp.model.impl.ContentImpl;
 import es.cybercatapp.model.impl.CourseImpl;
 import es.cybercatapp.model.impl.ModuleImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
@@ -29,12 +27,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.naming.Name;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 public class ModuleOperations {
@@ -63,21 +59,19 @@ public class ModuleOperations {
             model.addAttribute("ModuleDtoForm", new ModuleDtoForm());
             model.addAttribute("ContentDtoForm", new ContentDtoForm());
             Courses course = courseImpl.findCoursesById(Long.parseLong(id));
-            List<Module> modules = course.getModules();
+            List<Modules> modules = course.getModules();
             List<ModuleDtoForm> moduleDto = new ArrayList<>();
 
 
 
-            for (Module module : modules) {
-                String moduleId = module.getId().getModuleName();
-                moduleId = moduleId.replaceAll("\\s+", "");
+            for (Modules module : modules) {
+                Long moduleId = module.getModuleId();
                 List<ContentDtoForm> contentDto = new ArrayList<>();
-                for (Content contents : module.getContents()) {
-                    String contentId = contents.getContentId().getContentName();
-                    contentId = contentId.replaceAll("\\s+", "");
-                    contentDto.add(new ContentDtoForm(contentId,contents.getContentId().getContentName(),module.getId().getModuleName(), 0));
+               for (Content contents : module.getContents()) {
+                    Long contentId = contents.getContentId();
+                    contentDto.add(new ContentDtoForm(contentId,contents.getContentName(),module.getModuleName(), 0));
                 }
-                moduleDto.add(new ModuleDtoForm(moduleId, module.getId().getModuleName(), module.getModulePosition(),contentDto));
+                moduleDto.add(new ModuleDtoForm(moduleId, module.getModuleName(), module.getModulePosition(),contentDto));
 
             }
             model.addAttribute("ModuleDtoList", moduleDto);
@@ -102,15 +96,15 @@ public class ModuleOperations {
             return "redirect:/managecourses/" + id + "/editcourses";
         }
 
-        Module module;
+        Modules modules;
         try {
-            module = moduleImpl.create(moduleDtoForm.getModuleName(), Long.valueOf(id));
+            modules = moduleImpl.create(moduleDtoForm.getModuleName(), Long.valueOf(id));
             if (logger.isDebugEnabled()) {
-                logger.debug(MessageFormat.format("Modulo {0} con id {1} creado", module.getId().getModuleName(), module.getId()));
+                logger.debug(MessageFormat.format("Modulo {0} con id {1} creado", modules.getModuleName(), modules.getModuleId()));
             }
-            session.setAttribute(Constants.USER_SESSION, module);
+            session.setAttribute(Constants.USER_SESSION, modules);
             redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
-                    "addmodule.success", new Object[]{module.getId()}, locale));
+                    "addmodule.success", new Object[]{modules.getModuleId()}, locale));
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
@@ -123,7 +117,7 @@ public class ModuleOperations {
 
         moduleName = moduleName.replace("%20", " ");
         try {
-            moduleImpl.remove(Long.valueOf(courseid), moduleName);
+            moduleImpl.remove(Long.valueOf(moduleName));
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
@@ -145,7 +139,7 @@ public class ModuleOperations {
         moduleName = moduleName.replace("%20", " ");
 
         try {
-            moduleImpl.update(Long.valueOf(courseid), moduleName, moduleDtoForm.getModuleName());
+            moduleImpl.update(Long.valueOf(courseid),Long.valueOf(moduleName), moduleDtoForm.getModuleName());
         } catch (DuplicatedResourceException ex) {
             serviceRedirectExceptions.serviceDuplicatedResourceException(ex, redirectAttributes);
             return "redirect:/managecourses/" + courseid + "/editcourses";
@@ -164,10 +158,10 @@ public class ModuleOperations {
         try {
             Courses courses = courseImpl.findCoursesById(Long.parseLong(id));
 
-            List<String> moduleNames = listModuleDtoForm.getModuleNames();
-            List<Module> modules = courses.getModules();
+            List<Long> moduleIds = listModuleDtoForm.getModuleIds();
+            List<Modules> modules = courses.getModules();
 
-            modules.sort(Comparator.comparingInt(module -> moduleNames.indexOf(module.getId().getModuleName())));
+            modules.sort(Comparator.comparingInt(module -> moduleIds.indexOf(module.getModuleId())));
             for (int i = 0; i < modules.size(); i++) {
                 modules.get(i).setModulePosition(i + 1);
             }

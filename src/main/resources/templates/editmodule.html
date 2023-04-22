@@ -16,7 +16,7 @@
         </div>
         <form th:action="@{/managecourses/{id}/editcourses/updatepositions(id=${courseId})}"
               onclick="return updateModuleNamesAndSubmit()" method="post">
-            <div id="hiddenModuleNames"></div>
+            <div id="hiddenModuleIds"></div>
             <div class="col d-flex justify-content-end">
                 <button id="btnSave" type="submit" class="btn btn-info hide_alert" style="margin-right: 10px">Guardar
                     cambios
@@ -31,20 +31,20 @@
     <input type="hidden" id="hiddenCourseId" th:value="${courseId}"/>
     <div id="listModules" class="list-group col-md-12 mb-4">
 
-        <div class="card p-3 mb-3" th:each="module : ${ModuleDtoList}" draggable="true"
-             th:attr="data-id=${module.id}, data-name=${module.moduleName}">
+        <div class="card p-3 mb-3" th:each="modules : ${ModuleDtoList}" draggable="true"
+             th:attr="data-id=${modules.id}">
             <div class="d-flex justify-content-between" style="cursor: pointer">
-                <h4 data-bs-toggle="collapse" th:attr="data-bs-target='#collapse-' + ${module.id}"
-                    th:text="${module.moduleName}"></h4>
+                <h4 data-bs-toggle="collapse" th:attr="data-bs-target='#collapse-' + ${modules.id}"
+                    th:text="${modules.moduleName}"></h4>
                 <div>
                     <i id="add-icon" class="bi bi-plus-circle  me-2" data-bs-toggle="modal"
-                       data-bs-target="#addContentModal" th:attr="data-module-add=${module.moduleName}"
+                       data-bs-target="#addContentModal" th:attr="data-modules-add=${modules.moduleName}"
                        style="cursor:pointer; color: dodgerblue"></i>
                     <i id="edit-icon" class="bi bi-pencil-fill me-2" data-bs-toggle="modal"
-                       th:attr="data-module-edit=${module.moduleName}"
+                       th:attr="data-modules-edit-name=${modules.moduleName}, data-modules-edit-id=${modules.id}"
                        data-bs-target="#editModuleNameModal" style="cursor:pointer;"></i>
                     <i id="delete-icon" class="bi bi-trash-fill" data-bs-toggle="modal"
-                       th:attr="data-module-rem=${module.moduleName}" data-bs-target="#removeModule"
+                       th:attr="data-modules-rem=${modules.id}" data-bs-target="#removeModule"
                        style="cursor:pointer; color: red;"></i>
 
                 </div>
@@ -81,8 +81,8 @@
         const moduleList = [];
 
         moduleItems.forEach((item) => {
-            const moduleName = item.getAttribute('data-name');
-            moduleList.push(moduleName);
+            const moduleId = item.getAttribute('data-id');
+            moduleList.push(moduleId);
         });
 
         return moduleList;
@@ -90,14 +90,14 @@
 
     function updateModuleNamesAndSubmit() {
         const moduleList = checkModules();
-        const hiddenModuleNamesDiv = document.getElementById('hiddenModuleNames');
-        hiddenModuleNamesDiv.innerHTML = ''; // Limpiar campos ocultos anteriores
-        moduleList.forEach((moduleName, index) => {
+        const hiddenModuleIdsDiv = document.getElementById('hiddenModuleIds');
+        hiddenModuleIdsDiv.innerHTML = ''; // Limpiar campos ocultos anteriores
+        moduleList.forEach((moduleId, index) => {
             const hiddenInput = document.createElement('input');
             hiddenInput.type = 'hidden';
-            hiddenInput.name = `moduleNames[${index}]`;
-            hiddenInput.value = moduleName;
-            hiddenModuleNamesDiv.appendChild(hiddenInput);
+            hiddenInput.name = `moduleIds[${index}]`;
+            hiddenInput.value = moduleId;
+            hiddenModuleIdsDiv.appendChild(hiddenInput);
         });
         return true;
     }
@@ -226,21 +226,20 @@
 
     removeModuleModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
-        var moduleName = button.getAttribute('data-module-rem');
-        var moduleUrl = encodeURIComponent(moduleName);
-        deleteModuleForm.action = `/managecourses/${courseId}/editcourses/removemodule/${moduleUrl}`;
+        var moduleId = button.getAttribute('data-modules-rem');
+        deleteModuleForm.action = `/managecourses/${courseId}/editcourses/removemodule/${moduleId}`;
     });
     editModuleModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
-        var moduleName = button.getAttribute('data-module-edit');
-        var moduleUrl = encodeURIComponent(moduleName);
+        var moduleName = button.getAttribute('data-modules-edit-name');
+        var moduleId = button.getAttribute('data-modules-edit-id');
         var moduleNameInput = document.getElementById("editModuleNameInput");
         moduleNameInput.value = moduleName;
-        editModuleForm.action = `/managecourses/${courseId}/editcourses/updatemodule/${moduleUrl}`;
+        editModuleForm.action = `/managecourses/${courseId}/editcourses/updatemodule/${moduleId}`;
     });
     addContentModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
-        var moduleName = button.getAttribute('data-module-add');
+        var moduleName = button.getAttribute('data-modules-add');
         var moduleUrl = encodeURIComponent(moduleName);
         addContentForm.action = `/managecourses/${courseId}/editcourses/${moduleUrl}/addcontent`;
     });

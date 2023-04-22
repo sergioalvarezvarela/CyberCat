@@ -1,11 +1,9 @@
 package es.cybercatapp.model.entities;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import es.cybercatapp.common.Constants;
 import org.hibernate.annotations.Cascade;
@@ -22,7 +20,7 @@ public class Users implements Serializable {
     public Users(String username, String email, String password, Roles tipo, LocalDateTime fecha_creacion, String imagen_perfil) {
         this.username = username;
         this.email = email;
-        this.password= password;
+        this.password = password;
         this.tipo = tipo;
         this.fecha_creacion = fecha_creacion;
         this.imagen_perfil = imagen_perfil;
@@ -52,10 +50,12 @@ public class Users implements Serializable {
     @Column(name = "imagen_perfil")
     private String imagen_perfil;
 
-    @OneToMany(mappedBy = "user_owner")
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "user_owner")
     private Set<Courses> courses;
 
     @OneToMany(
+            fetch = FetchType.LAZY,
             mappedBy = "users",
             cascade = CascadeType.ALL,
             orphanRemoval = true
@@ -150,8 +150,29 @@ public class Users implements Serializable {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Users users = (Users) o;
+        return userId.equals(users.userId) && username.equals(users.username) && email.equals(users.email) && password.equals(users.password) && tipo == users.tipo && fecha_creacion.equals(users.fecha_creacion) && imagen_perfil.equals(users.imagen_perfil) && Objects.equals(courses, users.courses) && Objects.equals(inscriptions, users.inscriptions);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, username, email, password, tipo, fecha_creacion, imagen_perfil, courses, inscriptions);
+    }
 
-
-
+    @Override
+    public String toString() {
+        return "Users{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", tipo=" + tipo +
+                ", fecha_creacion=" + fecha_creacion +
+                ", imagen_perfil='" + imagen_perfil + '\'' +
+                '}';
+    }
 }

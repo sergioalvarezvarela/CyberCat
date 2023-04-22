@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+/*
 @Entity(name = Constants.TESTQUESTIONS_TABLE)
 @Table(name = Constants.TESTQUESTIONS_ENTITY)
 public class TestQuestions extends Content {
@@ -64,4 +64,4 @@ public class TestQuestions extends Content {
     }
 
 
-}
+}*/

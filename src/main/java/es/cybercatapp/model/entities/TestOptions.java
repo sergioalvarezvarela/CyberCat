@@ -1,5 +1,5 @@
 package es.cybercatapp.model.entities;
-
+/*
 import es.cybercatapp.common.Constants;
 
 import javax.persistence.*;
@@ -66,4 +66,4 @@ public class TestOptions  {
                 ", content=" + content +
                 '}';
     }
-}
+}*/

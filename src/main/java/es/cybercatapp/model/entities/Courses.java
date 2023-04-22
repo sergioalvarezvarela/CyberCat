@@ -50,24 +50,22 @@ public class Courses implements Serializable {
     @Column(name = "course_price", nullable = false)
     private float course_price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private Users user_owner;
 
     @OneToMany(
+            fetch = FetchType.LAZY,
             mappedBy = "courses",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     private List<Inscriptions> inscriptions = new ArrayList<>();
 
-    @OneToMany(
-            mappedBy = "course",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "courseId")
     @OrderBy("modulePosition")
-    private List<Module> modules = new ArrayList<>();
+    private List<Modules> modules;
 
 
     public Long getCourseId() {
@@ -135,11 +133,11 @@ public class Courses implements Serializable {
         this.course_price = course_price;
     }
 
-    public List<Module> getModules() {
+    public List<Modules> getModules() {
         return modules;
     }
 
-    public void setModules(List<Module> modules) {
+    public void setModules(List<Modules> modules) {
         this.modules = modules;
     }
 
@@ -175,8 +173,6 @@ public class Courses implements Serializable {
                 ", course_category=" + course_category +
                 ", course_price=" + course_price +
                 ", user_owner=" + user_owner +
-                ", inscriptions=" + inscriptions +
-                ", modules=" + modules +
                 '}';
     }
 }

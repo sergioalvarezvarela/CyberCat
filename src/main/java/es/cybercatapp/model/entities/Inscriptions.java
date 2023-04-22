@@ -11,11 +11,11 @@ public class Inscriptions  {
 
     @EmbeddedId
     private InscriptionsId id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("userId")
     private Users users;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("courseId")
     private Courses courses;
 
@@ -31,6 +31,14 @@ public class Inscriptions  {
         this.id = new InscriptionsId(users.getUserId(),courses.getCourseId());
     }
 
+
+    public InscriptionsId getId() {
+        return id;
+    }
+
+    public void setId(InscriptionsId id) {
+        this.id = id;
+    }
 
     public Users getUsers() {
         return users;

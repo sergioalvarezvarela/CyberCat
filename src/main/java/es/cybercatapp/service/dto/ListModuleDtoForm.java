@@ -4,13 +4,14 @@ import java.util.List;
 
 public class ListModuleDtoForm {
 
-    private List<String> moduleNames;
+    private List<Long> moduleIds;
 
-    public List<String> getModuleNames() {
-        return moduleNames;
+
+    public List<Long> getModuleIds() {
+        return moduleIds;
     }
 
-    public void setModuleNames(List<String> moduleNames) {
-        this.moduleNames = moduleNames;
+    public void setModuleIds(List<Long> moduleIds) {
+        this.moduleIds = moduleIds;
     }
 }

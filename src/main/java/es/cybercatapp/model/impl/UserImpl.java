@@ -107,15 +107,15 @@ public class UserImpl implements UserDetailsService {
         } else {
             List<Courses> coursesbyUserOwner = courseRepository.findCoursesByUserOwner(user.getUserId());
             for (Courses courses : coursesbyUserOwner) {
-            courseRepository.remove(courses);
+                courseRepository.remove(courses);
+            }
+            userRepository.remove(user);
         }
-        userRepository.remove(user);
-    }}
-
+    }
 
 
     @Transactional
-    public void changePassword(String username,String oldPass, String password) throws AuthenticationException {
+    public void changePassword(String username, String oldPass, String password) throws AuthenticationException {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Users user = findByUsername(username);
         if (user == null) {
@@ -124,7 +124,7 @@ public class UserImpl implements UserDetailsService {
         if (passwordEncoder.matches(oldPass, user.getPassword())) {
             user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt(SALT_ROUNDS)));
             userRepository.update(user);
-            modifyAuthentification(user.getUsername(),user.getPassword());
+            modifyAuthentification(user.getUsername(), user.getPassword());
         } else {
             throw exceptionGenerationUtils.toAuthenticationException("auth.password.dont.matches", user.getUsername());
         }
@@ -132,42 +132,34 @@ public class UserImpl implements UserDetailsService {
     }
 
 
-
     @Transactional
-    public void modifyProfile(String username,String newusername, String newemail) throws DuplicatedResourceException {
+    public void modifyProfile(String username, String newusername, String newemail) throws DuplicatedResourceException {
         Users user = findByUsername(username);
+        Users user1 = findByUsername(newusername);
+        Users user2 = userRepository.findByEmail(newemail);
         if (user == null) {
             throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
-        }else{
-            if(userRepository.findByUsername(newusername)!=null){
-                throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USERNAME_FIELD, newusername,
-                        "modifyusername.duplicated.exception");
-            }
-
-            if(userRepository.findByEmail(newemail)!=null){
-                throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USERNAME_FIELD, newemail,
-                        "modifyemail.duplicated.exception");
-            }
-
-        }
-
-        if ((!user.getUsername().equals(newusername))&&(!user.getEmail().equals(newemail))){
-            user.setUsername(newusername);
-            user.setEmail(newemail);
-            userRepository.update(user);
-            modifyAuthentification(user.getUsername(),user.getPassword());
         } else {
-            throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USER_SESSION,username,"user.duplicated.exception");
+            if (user1 != null && user2 != null) {
+                throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USERNAME_FIELD, newusername,
+                        "user.duplicated.exception");
+            } else {
+                user.setUsername(newusername);
+                user.setEmail(newemail);
+                userRepository.update(user);
+                modifyAuthentification(newusername, user.getPassword());
+            }
+
         }
 
     }
 
     @Transactional
-    public void updateProfileImage(String username,String image, byte [] imageContents) {
+    public void updateProfileImage(String username, String image, byte[] imageContents) {
         Users user = findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
-        }else{
+        } else {
             if (image != null && image.trim().length() > 0 && imageContents != null) {
                 try {
                     deleteProfileImage(user.getUserId(), image);
@@ -179,7 +171,6 @@ public class UserImpl implements UserDetailsService {
             }
 
         }
-
 
 
     }
@@ -228,7 +219,7 @@ public class UserImpl implements UserDetailsService {
         }
     }
 
-    private void modifyAuthentification(String username, String password){
+    private void modifyAuthentification(String username, String password) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) auth.getPrincipal();
         User updatedUser = new User(

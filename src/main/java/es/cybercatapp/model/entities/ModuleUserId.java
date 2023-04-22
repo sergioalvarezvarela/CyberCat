@@ -4,7 +4,7 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Embeddable
+/*@Embeddable
 public class ModuleUserId implements Serializable {
 
     private static final long serialVersionUID = 5045976325752371300L;
@@ -57,4 +57,4 @@ public class ModuleUserId implements Serializable {
                 ", moduleId=" + moduleId +
                 '}';
     }
-}
+}*/

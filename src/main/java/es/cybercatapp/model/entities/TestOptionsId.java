@@ -1,5 +1,5 @@
 package es.cybercatapp.model.entities;
-
+/*
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
@@ -54,4 +54,4 @@ public class TestOptionsId implements Serializable {
                 ", contentId=" + contentId +
                 '}';
     }
-}
+}*/
