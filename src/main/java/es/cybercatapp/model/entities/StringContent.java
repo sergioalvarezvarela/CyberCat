@@ -4,39 +4,31 @@ import es.cybercatapp.common.Constants;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
-import java.util.Objects;
 
 @Entity(name = Constants.TESTSTRING_TABLE)
 @Table(name = Constants.TESTSTRING_ENTITY)
 public class StringContent extends Content {
-    @Column(name = "enunciado", nullable = false)
-    private String enunciado;
+    @Lob
+    @Column(name = "html", nullable = false, length = Integer.MAX_VALUE)
+    private String html;
 
-    @Column(name = "markdown", nullable = false)
-    private Boolean markdown;
 
     public StringContent() {
 
     }
 
-    public StringContent(Long contentId, String contentName, int contentPosition, Modules module, String enunciado, Boolean markdown) {
-        super(contentId, contentName, contentPosition, module);
-        this.enunciado = enunciado;
-        this.markdown = markdown;
+    public StringContent(String contentName, int contentPosition, Modules module, String html) {
+        super(contentName, contentPosition, module);
+        this.html = html;
     }
 
-    public void setEnunciado(String enunciado) {
-        this.enunciado = enunciado;
+    public String getHtml() {
+        return html;
     }
 
-    public Boolean getMarkdown() {
-        return markdown;
+    public void setHtml(String html) {
+        this.html = html;
     }
-
-    public void setMarkdown(Boolean markdown) {
-        this.markdown = markdown;
-    }
-
-
 }

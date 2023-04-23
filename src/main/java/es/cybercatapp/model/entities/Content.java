@@ -28,8 +28,7 @@ public abstract class Content  {
 
     public Content(){}
 
-    public Content(Long contentId, String contentName, int contentPosition, Modules module) {
-        this.contentId = contentId;
+    public Content(String contentName, int contentPosition, Modules module) {
         this.contentName = contentName;
         this.contentPosition = contentPosition;
         this.module = module;
@@ -49,6 +48,22 @@ public abstract class Content  {
 
     public void setContentName(String contentName) {
         this.contentName = contentName;
+    }
+
+    public int getContentPosition() {
+        return contentPosition;
+    }
+
+    public void setContentPosition(int contentPosition) {
+        this.contentPosition = contentPosition;
+    }
+
+    public Modules getModule() {
+        return module;
+    }
+
+    public void setModule(Modules module) {
+        this.module = module;
     }
 
     @Override

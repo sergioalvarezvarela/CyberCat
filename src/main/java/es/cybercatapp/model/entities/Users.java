@@ -52,7 +52,7 @@ public class Users implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "user_owner")
-    private Set<Courses> courses;
+    private List<Courses> courses;
 
     @OneToMany(
             fetch = FetchType.LAZY,
@@ -133,11 +133,11 @@ public class Users implements Serializable {
         this.imagen_perfil = imagen_perfil;
     }
 
-    public Set<Courses> getCourses() {
+    public List<Courses> getCourses() {
         return courses;
     }
 
-    public void setCourses(Set<Courses> courses) {
+    public void setCourses(List<Courses> courses) {
         this.courses = courses;
     }
 

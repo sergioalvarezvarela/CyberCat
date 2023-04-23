@@ -82,6 +82,7 @@ public class UserImpl implements UserDetailsService {
     }
 
 
+
     @Transactional
     public Users create(String username, String email, String password,
                         String image, byte[] imageContents) throws DuplicatedResourceException {
@@ -101,11 +102,11 @@ public class UserImpl implements UserDetailsService {
 
     @Transactional
     public void Remove(String username) {
-        Users user = findByUsername(username);
+        Users user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
         } else {
-            List<Courses> coursesbyUserOwner = courseRepository.findCoursesByUserOwner(user.getUserId());
+            List<Courses> coursesbyUserOwner = user.getCourses();
             for (Courses courses : coursesbyUserOwner) {
                 courseRepository.remove(courses);
             }
@@ -117,7 +118,7 @@ public class UserImpl implements UserDetailsService {
     @Transactional
     public void changePassword(String username, String oldPass, String password) throws AuthenticationException {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        Users user = findByUsername(username);
+        Users user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
         }
@@ -134,8 +135,8 @@ public class UserImpl implements UserDetailsService {
 
     @Transactional
     public void modifyProfile(String username, String newusername, String newemail) throws DuplicatedResourceException {
-        Users user = findByUsername(username);
-        Users user1 = findByUsername(newusername);
+        Users user = userRepository.findByUsername(username);
+        Users user1 = userRepository.findByUsername(newusername);
         Users user2 = userRepository.findByEmail(newemail);
         if (user == null) {
             throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
@@ -156,7 +157,7 @@ public class UserImpl implements UserDetailsService {
 
     @Transactional
     public void updateProfileImage(String username, String image, byte[] imageContents) {
-        Users user = findByUsername(username);
+        Users user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
         } else {

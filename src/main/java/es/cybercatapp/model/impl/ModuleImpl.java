@@ -34,21 +34,33 @@ public class ModuleImpl {
     ModuleRepository moduleRepository;
 
     @Transactional
-    public Modules create(String modulename, Long courseId) throws InstanceNotFoundException {
+    public Modules create(String modulename, Long courseId) throws InstanceNotFoundException, DuplicatedResourceException {
 
         try {
-            Courses courses = courseRepository.findById(courseId);
-            Modules modules = new Modules(modulename, LocalDate.now(), courses, courses.getModules().size() + 1);
-            modules.setModuleName(modulename);
-            modules.setCourseId(courses);
-            modules = moduleRepository.create(modules);
-            courses.getModules().add(modules);
-            courseRepository.update(courses);
-            return modules;
+            Modules modules = moduleRepository.findModulesByModuleNameAndCourse(courseId, modulename);
+            if (modules != null) {
+
+                throw exceptionGenerationUtils.toDuplicatedResourceException("Module", modulename,
+                        "createmodule.duplicated.exception");
+            } else {
+                Courses courses = courseRepository.findById(courseId);
+                modules = new Modules(modulename, LocalDate.now(), courses, courses.getModules().size() + 1);
+                modules.setModuleName(modulename);
+                modules.setCourseId(courses);
+                modules = moduleRepository.create(modules);
+                courses.getModules().add(modules);
+                courseRepository.update(courses);
+                return modules;
+            }
 
         } catch (InstanceNotFoundException ex) {
             throw new InstanceNotFoundException(courseId.toString(), Courses.class.toString(), "Course not found");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Modules findModulesById(long id) throws InstanceNotFoundException {
+        return moduleRepository.findById(id);
     }
 
 
@@ -62,6 +74,11 @@ public class ModuleImpl {
         moduleRepository.remove(modules);
 
 
+    }
+
+    @Transactional
+    public void updatePositions(Modules modules) {
+        moduleRepository.update(modules);
     }
 
     @Transactional

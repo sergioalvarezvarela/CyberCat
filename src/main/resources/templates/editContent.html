@@ -5,15 +5,15 @@
 <div th:id="'collapse-' + ${modules.id}" class="collapse" aria-labelledby="headingOne">
     <div id="listContent" class="list-group col-md-12" th:id="'listContent-' + ${modules.id}">
         <div th:each="content : ${modules.contentList}">
+            <input type="hidden" id="hiddenModuleId" th:value="${modules.id}"/>
             <div class="card p-3 mt-3 text-dark" style="background-color: #dedede"
-                 draggable="true" th:attr="data-id=${content.contentId}">
+                 draggable="true" th:attr="data-content-id=${content.contentId}">
                 <div class="d-flex justify-content-between"
                      style="cursor: pointer; color: #173753">
                     <h4 th:text="${content.contentName}"></h4>
                     <div>
-                        <i id="save-icon" class="bi bi-save me-2" style="cursor:pointer; color:dodgerblue"></i>
                         <i id="edit-icon2" class="bi bi-pencil-fill me-2" style="cursor:pointer;"></i>
-                        <i id="delete-icon2" class="bi bi-trash-fill"
+                        <i id="delete-icon2" class="bi bi-trash-fill" data-bs-toggle="modal" th:attr="data-content-rem=${content.contentId}" data-bs-target="#removeContent"
                            style="cursor:pointer; color: red;"></i>
                     </div>
                 </div>
@@ -22,7 +22,42 @@
     </div>
 </div>
 
+<div class="modal" id="removeContent" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">¿Estás seguro?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row iconx-size">
+                    <i class="bi bi-x-circle"
+                       style="color: red; display: flex; justify-content: center; align-items: center"></i>
+                </div>
+                <div class="row mt-3">
+                    <p>¿Estás seguro de que deseas eliminar el contenido? Este proceso es definitivo. </p>
+                </div>
+
+
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar
+                </button>
+                <form th:action="@{/managecourses/{cId}/editcourses/{mId}/removecontent(cId=${courseId},mId=${moduleId})}" method="post"
+                      id="deletecontent-form">
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+
+    function showIcon() {
+        var butsave = document.getElementById("btnSaveContent");
+        butsave.className = "btn mb-1 show_alert";
+    }
     document.addEventListener('DOMContentLoaded', (event) => {
         const moduleIds = [...document.querySelectorAll('[id^="listContent-"]')].map(element => element.id);
 
@@ -31,12 +66,54 @@
                 animation: 150,
                 swapThreshold: 0.5,
                 ghostClass: 'sortable-ghost',
+                onEnd: showIcon,
             });
         });
     });
+
+    function checkContents() {
+        const moduleId = document.querySelector('[data-id]').getAttribute('data-id');
+        const moduleContentList = document.querySelector(`#listContent-${moduleId}`);
+        const contentItems = moduleContentList.querySelectorAll('[data-content-id]');
+        const contentList = [];
+
+        contentItems.forEach((item) => {
+            const contentId = item.getAttribute('data-content-id');
+            contentList.push(contentId);
+        });
+
+        return contentList;
+
+    }
+
+    function updateContentIdsAndSubmit() {
+        const contentList = checkContents();
+        const hiddenContentIdsDiv = document.getElementById('hiddenContentIds');
+        hiddenContentIdsDiv.innerHTML = '';
+        contentList.forEach((contentId, index) => {
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = `contentIds[${index}]`;
+            hiddenInput.value = contentId;
+            hiddenContentIdsDiv.appendChild(hiddenInput);
+        });
+        return true;
+    }
+    const removeContentModal = document.getElementById('removeContent');
+    const deleteContentForm = document.getElementById('deletecontent-form');
+
+    removeContentModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var contentId = button.getAttribute('data-content-rem');
+        var moduleId = button.getAttribute('data-module-id');
+        deleteContentForm.action = `/managecourses/${courseId}/editcourses/${moduleId}/removecontent/${contentId}`;
+    });
+
+
 </script>
 
 </body>
+
 
 
 

@@ -36,6 +36,7 @@ public class Modules implements Serializable {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @OrderBy ("contentPosition")
     private List<Content> contents = new ArrayList<>();
 
 

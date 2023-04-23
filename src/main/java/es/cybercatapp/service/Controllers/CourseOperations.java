@@ -3,9 +3,11 @@ package es.cybercatapp.service.Controllers;
 import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Category;
 import es.cybercatapp.model.entities.Courses;
+import es.cybercatapp.model.entities.Users;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.CourseImpl;
+import es.cybercatapp.model.impl.UserImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
 import es.cybercatapp.service.conversor.CoursesConversor;
@@ -47,6 +49,9 @@ public class CourseOperations {
     @Autowired
     private CourseImpl courseImpl;
 
+    @Autowired
+    private UserImpl userImpl;
+
 
 
 
@@ -59,7 +64,8 @@ public class CourseOperations {
 
         try {
 
-            List<Courses> courses = courseImpl.findCoursesByOwner(principal.getName());
+            Users user = userImpl.findByUsername(principal.getName());
+            List<Courses> courses = user.getCourses();
             List<CourseDtoForm> courseDtos = new ArrayList<>();
 
             for (Courses course : courses) {

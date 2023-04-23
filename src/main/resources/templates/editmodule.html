@@ -15,7 +15,7 @@
             </a>
         </div>
         <form th:action="@{/managecourses/{id}/editcourses/updatepositions(id=${courseId})}"
-              onclick="return updateModuleNamesAndSubmit()" method="post">
+              onclick="return updateModuleIdsAndSubmit()" method="post">
             <div id="hiddenModuleIds"></div>
             <div class="col d-flex justify-content-end">
                 <button id="btnSave" type="submit" class="btn btn-info hide_alert" style="margin-right: 10px">Guardar
@@ -37,17 +37,26 @@
                 <h4 data-bs-toggle="collapse" th:attr="data-bs-target='#collapse-' + ${modules.id}"
                     th:text="${modules.moduleName}"></h4>
                 <div>
-                    <i id="add-icon" class="bi bi-plus-circle  me-2" data-bs-toggle="modal"
-                       data-bs-target="#addContentModal" th:attr="data-modules-add=${modules.moduleName}"
-                       style="cursor:pointer; color: dodgerblue"></i>
-                    <i id="edit-icon" class="bi bi-pencil-fill me-2" data-bs-toggle="modal"
-                       th:attr="data-modules-edit-name=${modules.moduleName}, data-modules-edit-id=${modules.id}"
-                       data-bs-target="#editModuleNameModal" style="cursor:pointer;"></i>
-                    <i id="delete-icon" class="bi bi-trash-fill" data-bs-toggle="modal"
-                       th:attr="data-modules-rem=${modules.id}" data-bs-target="#removeModule"
-                       style="cursor:pointer; color: red;"></i>
+                    <form th:action="@{/managecourses/{courseId}/editcourses/{moduleId}/updatepositions(courseId=${courseId}, moduleId=${modules.id})}"
+                          onclick="return updateContentIdsAndSubmit()" method="post">
+                        <div id="hiddenContentIds"></div>
+                        <button id="btnSaveContent" type="submit" class="btn mb-1 hide_alert" onclick="checkContents()">
+                            <i class="bi bi-save" style="color: limegreen"></i>
+                        </button>
+
+                        <i id="add-icon" class="bi bi-plus-circle  me-2" data-bs-toggle="modal"
+                           data-bs-target="#addContentModal" th:attr="data-modules-add=${modules.id}"
+                           style="cursor:pointer; color: dodgerblue"></i>
+                        <i id="edit-icon" class="bi bi-pencil-fill me-2" data-bs-toggle="modal"
+                           th:attr="data-modules-edit-name=${modules.moduleName}, data-modules-edit-id=${modules.id}"
+                           data-bs-target="#editModuleNameModal" style="cursor:pointer;"></i>
+                        <i id="delete-icon" class="bi bi-trash-fill" data-bs-toggle="modal"
+                           th:attr="data-modules-rem=${modules.id}" data-bs-target="#removeModule"
+                           style="cursor:pointer; color: red;"></i>
+                    </form>
 
                 </div>
+
 
             </div>
             <div th:replace="editContent :: #edit-content-include"></div>
@@ -88,7 +97,7 @@
         return moduleList;
     }
 
-    function updateModuleNamesAndSubmit() {
+    function updateModuleIdsAndSubmit() {
         const moduleList = checkModules();
         const hiddenModuleIdsDiv = document.getElementById('hiddenModuleIds');
         hiddenModuleIdsDiv.innerHTML = ''; // Limpiar campos ocultos anteriores
@@ -101,6 +110,8 @@
         });
         return true;
     }
+
+
 </script>
 <div class="modal" tabindex="-1" id="addModule">
     <div class="modal-dialog">
@@ -179,7 +190,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="checkModuleValidity()">
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal"
+                            onclick="checkModuleValidity()">
                         Guardar cambios
                     </button>
                 </div>
@@ -201,7 +213,13 @@
                     <div class="mb-3">
                         <label for="addContentInput" class="form-label">Nombre del contenido</label>
                         <input type="text" class="form-control" id="addContentInput"
-                               th:field="*{ContentDtoForm.contentName}" minlength="5" required>
+                               th:field="*{AddContentDtoForm.contentName}" minlength="5" required>
+                        <br>
+                        <label for="contentType">Selecciona el tipo de contenido:</label>
+                        <select id="contentType" th:field="*{AddContentDtoForm.contentType}" name="contentType">
+                            <option value="teoric">Contenido teorico</option>
+                            <option value="orange">Test de selección</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -239,9 +257,8 @@
     });
     addContentModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
-        var moduleName = button.getAttribute('data-modules-add');
-        var moduleUrl = encodeURIComponent(moduleName);
-        addContentForm.action = `/managecourses/${courseId}/editcourses/${moduleUrl}/addcontent`;
+        var moduleId = button.getAttribute('data-modules-add');
+        addContentForm.action = `/managecourses/${courseId}/editcourses/${moduleId}/addcontent`;
     });
 
     function checkModuleValidity() {

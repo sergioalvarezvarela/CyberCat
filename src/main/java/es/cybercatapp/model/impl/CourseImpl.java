@@ -66,16 +66,8 @@ public class CourseImpl {
         return courses;
     }
 
-    @Transactional
-    public List<Courses> findCoursesByOwner(String owner) {
-        Users user = userRepository.findByUsername(owner);
-        if (user == null) {
-            throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", owner));
-        }
-        return courseRepository.findCoursesByUserOwner(user.getUserId());
-    }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Courses findCoursesById(long id) throws InstanceNotFoundException {
         return courseRepository.findById(id);
     }

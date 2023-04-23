@@ -1,3 +1,5 @@
+
+
 alter table courses
 drop
 foreign key FK51k53m6m5gi9n91fnlxkxgpm;
@@ -45,7 +47,7 @@ create table courses (
 create table hibernate_sequence (
     next_val bigint
 ) engine=InnoD;
-    
+
     insert into hibernate_sequence values ( 1 ;
 
 create table inscriptions (
@@ -69,8 +71,7 @@ create table teststring (
                             content_name varchar(255) not null,
                             content_position integer not null,
                             module_id bigint not null,
-                            enunciado varchar(255) not null,
-                            markdown bit not null,
+                            html longtext not null,
                             primary key (content_id)
 ) engine=InnoD;
 
@@ -114,4 +115,4 @@ alter table modules
 alter table teststring
     add constraint FK_3gh0y5qbtkg0jpiuj4lxo1fhc
         foreign key (module_id)
-            references modules (module_id)
+            references modules (module_id);
