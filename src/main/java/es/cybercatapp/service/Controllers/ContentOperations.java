@@ -115,7 +115,9 @@ public class ContentOperations {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = {"/managecourses/{courseId}/editcourses/{moduleId}/removecontent/{contentId}"})
-    public String doPostRemoveContent(@PathVariable("courseId") String courseid, @PathVariable("moduleId") String moduleId,@PathVariable("contentId") String contentId , Model model, Locale locale, RedirectAttributes redirectAttributes) {
+    public String doPostRemoveContent(@PathVariable("courseId") String courseid, @PathVariable("moduleId") String moduleId, @PathVariable("contentId") String contentId, @ModelAttribute("ListContentDtoForm") ListContentDtoForm listContentDtoForm, BindingResult result,
+                                      RedirectAttributes redirectAttributes, Locale locale,
+                                      Model model) {
 
         try {
             contentImpl.remove(Long.valueOf(contentId));
@@ -124,6 +126,28 @@ public class ContentOperations {
         }
         redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                 "removecontent.success", new Object[]{moduleId}, locale));
+        return "redirect:/managecourses/" + courseid + "/editcourses";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(value = {"/managecourses/{courseId}/editcourses/{moduleId}/updatecontent/{contentId}"})
+    public String doPostUpdateContent(@PathVariable("courseId") String courseid, @PathVariable("moduleId") String moduleId, @PathVariable("contentId") String contentId, @ModelAttribute("ContentDtoForm") ContentDtoForm contentDtoForm, BindingResult result,
+                                      RedirectAttributes redirectAttributes, Locale locale,
+                                      Model model) {
+        if (result.hasErrors()) {
+            serviceRedirectExceptions.serviceInvalidFormError(result, "updatecontent.invalid.parameters", contentId, locale, redirectAttributes);
+            return "redirect:/managecourses/" + courseid + "/editcourses";
+        }
+        try {
+            contentImpl.contentUpdate(Long.valueOf(moduleId), Long.valueOf(contentId), contentDtoForm.getContentName());
+        } catch (InstanceNotFoundException ex) {
+            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        } catch (DuplicatedResourceException ex) {
+            serviceRedirectExceptions.serviceDuplicatedResourceException(ex, redirectAttributes);
+            return "redirect:/managecourses/" + courseid + "/editcourses";
+        }
+        redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
+                "updatecontent.success", new Object[]{moduleId}, locale));
         return "redirect:/managecourses/" + courseid + "/editcourses";
     }
 }

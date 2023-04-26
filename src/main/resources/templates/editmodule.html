@@ -39,11 +39,10 @@
                 <div>
                     <form th:action="@{/managecourses/{courseId}/editcourses/{moduleId}/updatepositions(courseId=${courseId}, moduleId=${modules.id})}"
                           onclick="return updateContentIdsAndSubmit()" method="post">
-                        <div id="hiddenContentIds"></div>
-                        <button id="btnSaveContent" type="submit" class="btn mb-1 hide_alert" onclick="checkContents()">
+                        <div th:id="'hiddenContentIds-' + ${modules.id}"></div>
+                        <button th:id="'btnSaveContent-' + ${modules.id}" type="submit" class="btn mb-1 hide_alert" onclick="return updateContentIdsAndSubmit(this)">
                             <i class="bi bi-save" style="color: limegreen"></i>
                         </button>
-
                         <i id="add-icon" class="bi bi-plus-circle  me-2" data-bs-toggle="modal"
                            data-bs-target="#addContentModal" th:attr="data-modules-add=${modules.id}"
                            style="cursor:pointer; color: dodgerblue"></i>
@@ -181,11 +180,6 @@
                         <label for="editModuleNameInput" class="form-label">Nombre del módulo</label>
                         <input type="text" class="form-control" id="editModuleNameInput"
                                th:field="*{ModuleDtoForm.moduleName}">
-                        <p class="hide_alert text-danger" id="alert_module">El campo Nombre de modulo es
-                            obligatorio</p>
-                        <br class="br1 hide_alert">
-                        <p class="hide_alert text-danger" id="alert_module2">El campo Nombre de modulo debe tener minimo
-                            5 caracteres</p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -261,21 +255,5 @@
         addContentForm.action = `/managecourses/${courseId}/editcourses/${moduleId}/addcontent`;
     });
 
-    function checkModuleValidity() {
-        var moduleNameInput = document.getElementById("editModuleNameInput").value;
-        document.getElementById("alert_module").className = "hide_alert text-danger";
-        document.getElementById("alert_module2").className = "hide_alert text-danger";
-        document.getElementById("br1").className = "hide_alert";
-        if (moduleNameInput == null) {
-            document.getElementById("alert_module").className = "show_alert text-danger";
-
-        } else if (moduleNameInput.size < 5) {
-            document.getElementById("alert_module").className = "hide_alert text-danger";
-            document.getElementById("alert_module2").className = "show_alert text-danger";
-            document.getElementById("br1").className = "show_alert";
-
-        }
-
-    }
 </script>
 </html>

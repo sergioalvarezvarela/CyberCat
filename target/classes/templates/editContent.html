@@ -5,15 +5,14 @@
 <div th:id="'collapse-' + ${modules.id}" class="collapse" aria-labelledby="headingOne">
     <div id="listContent" class="list-group col-md-12" th:id="'listContent-' + ${modules.id}">
         <div th:each="content : ${modules.contentList}">
-            <input type="hidden" id="hiddenModuleId" th:value="${modules.id}"/>
             <div class="card p-3 mt-3 text-dark" style="background-color: #dedede"
                  draggable="true" th:attr="data-content-id=${content.contentId}">
                 <div class="d-flex justify-content-between"
                      style="cursor: pointer; color: #173753">
                     <h4 th:text="${content.contentName}"></h4>
                     <div>
-                        <i id="edit-icon2" class="bi bi-pencil-fill me-2" style="cursor:pointer;"></i>
-                        <i id="delete-icon2" class="bi bi-trash-fill" data-bs-toggle="modal" th:attr="data-content-rem=${content.contentId}" data-bs-target="#removeContent"
+                        <i id="edit-icon2" class="bi bi-pencil-fill me-2" data-bs-toggle="modal" data-bs-target="#editContentNameModal" th:attr="data-content-edit-name=${content.contentName},data-content-edit-id=${content.contentId}, data-moduleId=${modules.id}" style="cursor:pointer;" ></i>
+                        <i id="delete-icon2" class="bi bi-trash-fill" data-bs-toggle="modal" th:attr="data-content-rem=${content.contentId},data-moduleId=${modules.id}" data-bs-target="#removeContent"
                            style="cursor:pointer; color: red;"></i>
                     </div>
                 </div>
@@ -52,12 +51,35 @@
     </div>
 </div>
 
-<script>
+<div class="modal" tabindex="-1" id="editContentNameModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form th:action="@{/managecourses/{cId}/editcourses/{mId}/updatecontent(cId=${courseId},mId=${moduleId})}" id="editcontentform"
+                  method="post">
+                <div class="modal-header">
+                    <h4 class="modal-title">Editar nombre del contenido</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editContentNameInput" class="form-label">Nombre del contenido</label>
+                        <input type="text" class="form-control" id="editContentNameInput"
+                               th:field="*{ContentDtoForm.contentName}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal"
+                            onclick="checkModuleValidity()">
+                        Guardar cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-    function showIcon() {
-        var butsave = document.getElementById("btnSaveContent");
-        butsave.className = "btn mb-1 show_alert";
-    }
+<script>
     document.addEventListener('DOMContentLoaded', (event) => {
         const moduleIds = [...document.querySelectorAll('[id^="listContent-"]')].map(element => element.id);
 
@@ -66,13 +88,22 @@
                 animation: 150,
                 swapThreshold: 0.5,
                 ghostClass: 'sortable-ghost',
-                onEnd: showIcon,
+                onEnd: (evt) => showIcon(evt),
             });
         });
     });
 
-    function checkContents() {
-        const moduleId = document.querySelector('[data-id]').getAttribute('data-id');
+    function showIcon(event) {
+        const button = event.target;
+        const moduleCard = button.closest('.card');
+        const moduleId = moduleCard.getAttribute('data-id');
+        var butsave = document.getElementById(`btnSaveContent-${moduleId}`);
+        butsave.className = "btn mb-1 show_alert";
+    }
+
+    function checkContents(button) {
+        const moduleCard = button.closest('.card');
+        const moduleId = moduleCard.getAttribute('data-id');
         const moduleContentList = document.querySelector(`#listContent-${moduleId}`);
         const contentItems = moduleContentList.querySelectorAll('[data-content-id]');
         const contentList = [];
@@ -81,14 +112,14 @@
             const contentId = item.getAttribute('data-content-id');
             contentList.push(contentId);
         });
-
         return contentList;
-
     }
 
-    function updateContentIdsAndSubmit() {
-        const contentList = checkContents();
-        const hiddenContentIdsDiv = document.getElementById('hiddenContentIds');
+    function updateContentIdsAndSubmit(button) {
+        const contentList = checkContents(button);
+        const moduleCard = button.closest('.card');
+        const moduleId = moduleCard.getAttribute('data-id');
+        const hiddenContentIdsDiv = document.getElementById(`hiddenContentIds-${moduleId}`);
         hiddenContentIdsDiv.innerHTML = '';
         contentList.forEach((contentId, index) => {
             const hiddenInput = document.createElement('input');
@@ -101,15 +132,24 @@
     }
     const removeContentModal = document.getElementById('removeContent');
     const deleteContentForm = document.getElementById('deletecontent-form');
+    const editContentModal = document.getElementById('editContentNameModal');
+    const editContentForm = document.getElementById('editcontentform');
 
     removeContentModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
         var contentId = button.getAttribute('data-content-rem');
-        var moduleId = button.getAttribute('data-module-id');
+        var moduleId = button.getAttribute('data-moduleId');
         deleteContentForm.action = `/managecourses/${courseId}/editcourses/${moduleId}/removecontent/${contentId}`;
     });
-
-
+    editContentModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var contentName = button.getAttribute('data-content-edit-name');
+        var moduleId = button.getAttribute('data-moduleId');
+        var contentId = button.getAttribute('data-content-edit-id');
+        var contentNameInput = document.getElementById("editContentNameInput");
+        contentNameInput.value = contentName;
+        editContentForm.action = `/managecourses/${courseId}/editcourses/${moduleId}/updatecontent/${contentId}`;
+    });
 </script>
 
 </body>

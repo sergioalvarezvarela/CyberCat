@@ -67,6 +67,26 @@ public class ContentImpl {
 
 
     }
+    @Transactional
+    public void contentUpdate(Long moduleId, Long contentId,String newContentName) throws InstanceNotFoundException,DuplicatedResourceException {
+
+        Content content = contentRepository.findById(contentId);
+        Content content1 = contentRepository.findContentsByContentNameAndModule(moduleId,newContentName);
+        if (content == null) {
+            throw new InstanceNotFoundException(contentId.toString(), Content.class.toString(), "Content not found");
+        }
+        if (content1 != null){
+            throw exceptionGenerationUtils.toDuplicatedResourceException("Content", content1.getContentId().toString(),
+                    "updatecontent.duplicated.exception");
+        } else {
+            content.setContentName(newContentName);
+            contentRepository.update(content);
+        }
+
+
+
+    }
+
 
 
 }

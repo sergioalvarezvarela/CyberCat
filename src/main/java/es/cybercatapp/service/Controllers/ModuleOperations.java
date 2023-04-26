@@ -168,7 +168,7 @@ public class ModuleOperations {
                 modules.get(i).setModulePosition(i + 1);
             }
             courses.setModules(modules);
-            courseImpl.updatePositions(courses);
+            courseImpl.updatePositions( courses);
         } catch (InstanceNotFoundException ex) {
             serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
