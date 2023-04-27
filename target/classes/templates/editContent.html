@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <body id="edit-content-include">
 
 <div th:id="'collapse-' + ${modules.id}" class="collapse" aria-labelledby="headingOne">
@@ -11,6 +11,7 @@
                      style="cursor: pointer; color: #173753">
                     <h4 th:text="${content.contentName}"></h4>
                     <div>
+                        <a th:href="@{/managecourses/{courseId}/editcourses/{moduleId}/editcontent/{contentId}(courseId=${courseId}, moduleId=${modules.id}, contentId =${content.contentId})}"><i class="bi bi-gear me-2" style="color: dodgerblue;"></i></a>
                         <i id="edit-icon2" class="bi bi-pencil-fill me-2" data-bs-toggle="modal" data-bs-target="#editContentNameModal" th:attr="data-content-edit-name=${content.contentName},data-content-edit-id=${content.contentId}, data-moduleId=${modules.id}" style="cursor:pointer;" ></i>
                         <i id="delete-icon2" class="bi bi-trash-fill" data-bs-toggle="modal" th:attr="data-content-rem=${content.contentId},data-moduleId=${modules.id}" data-bs-target="#removeContent"
                            style="cursor:pointer; color: red;"></i>

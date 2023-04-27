@@ -87,6 +87,32 @@ public class ContentImpl {
 
     }
 
+    @Transactional
+    public void StringContentUpdate(String html, Long contentId) throws InstanceNotFoundException,DuplicatedResourceException {
+
+        StringContent content = (StringContent) contentRepository.findById(contentId);
+        if (content == null) {
+            throw new InstanceNotFoundException(contentId.toString(), Content.class.toString(), "Content not found");
+        }
+        if (content.getHtml().equals(html)){
+            throw exceptionGenerationUtils.toDuplicatedResourceException("Content", content.getContentId().toString(),
+                    "updateteoriccontent.duplicated.exception");
+        } else {
+            content.setHtml(html);
+            contentRepository.update(content);
+        }
+
+
+
+    }
+
+
+
+    @Transactional(readOnly = true)
+    public Content findByContentId(Long contentId) throws InstanceNotFoundException {
+        return contentRepository.findById(contentId);
+    }
+
 
 
 }

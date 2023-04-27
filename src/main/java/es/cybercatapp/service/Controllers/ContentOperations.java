@@ -11,23 +11,24 @@ import es.cybercatapp.model.impl.ContentImpl;
 import es.cybercatapp.model.impl.ModuleImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
-import es.cybercatapp.service.dto.AddContentDtoForm;
-import es.cybercatapp.service.dto.ContentDtoForm;
-import es.cybercatapp.service.dto.ListContentDtoForm;
+import es.cybercatapp.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.text.MessageFormat;
 import java.util.Comparator;
@@ -55,7 +56,7 @@ public class ContentOperations {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = {"/managecourses/{courseId}/editcourses/{moduleId}/addcontent"})
-    public String doPostAddContent(@PathVariable("courseId") String courseId, @PathVariable("moduleId") String moduleId, @ModelAttribute("AddContentDtoForm") AddContentDtoForm addContentDtoForm,
+    public String doPostAddContent(@PathVariable("courseId") String courseId, @PathVariable("moduleId") String moduleId, @Valid @ModelAttribute("AddContentDtoForm") AddContentDtoForm addContentDtoForm,
                                    BindingResult result,
                                    RedirectAttributes redirectAttributes, Locale locale,
                                    HttpSession session, Model model) {
@@ -131,7 +132,7 @@ public class ContentOperations {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = {"/managecourses/{courseId}/editcourses/{moduleId}/updatecontent/{contentId}"})
-    public String doPostUpdateContent(@PathVariable("courseId") String courseid, @PathVariable("moduleId") String moduleId, @PathVariable("contentId") String contentId, @ModelAttribute("ContentDtoForm") ContentDtoForm contentDtoForm, BindingResult result,
+    public String doPostUpdateContent(@PathVariable("courseId") String courseid, @PathVariable("moduleId") String moduleId, @PathVariable("contentId") String contentId, @Valid @ModelAttribute("ContentDtoForm") ContentDtoForm contentDtoForm, BindingResult result,
                                       RedirectAttributes redirectAttributes, Locale locale,
                                       Model model) {
         if (result.hasErrors()) {
@@ -150,4 +151,43 @@ public class ContentOperations {
                 "updatecontent.success", new Object[]{moduleId}, locale));
         return "redirect:/managecourses/" + courseid + "/editcourses";
     }
+
+    @GetMapping(value = {"/managecourses/{courseId}/editcourses/{moduleId}/editcontent/{contentId}"})
+    public String doGetEditContent(@PathVariable("courseId") String courseid, @PathVariable("moduleId") String moduleId, @PathVariable("contentId") String contentId, @ModelAttribute("ContentDtoForm") ContentDtoForm contentDtoForm, BindingResult result,
+                                   RedirectAttributes redirectAttributes, Locale locale,
+                                   Model model) {
+        try {
+            StringContent content = (StringContent) contentImpl.findByContentId(Long.parseLong(contentId));
+            model.addAttribute("TeoricDtoFormShow", new TeoricDtoForm(content.getContentId(), Long.parseLong(moduleId), Long.parseLong(courseid), content.getHtml()));
+            model.addAttribute("TeoricDtoForm", new TeoricDtoForm());
+        } catch (InstanceNotFoundException ex) {
+            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        }
+        return "teoricContent";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(value = {"/managecourses/{courseId}/editcourses/{moduleId}/editcontent/{contentId}/save"})
+    public String doPostEditContent(@PathVariable("courseId") String courseid, @PathVariable("moduleId") String moduleId, @PathVariable("contentId") String contentId, @Valid @ModelAttribute("TeoricDtoForm") TeoricDtoForm teoricDtoForm, BindingResult result,
+                                    RedirectAttributes redirectAttributes, Locale locale,
+                                    Model model) {
+
+        if (result.hasErrors()) {
+            serviceRedirectExceptions.serviceInvalidFormError(result, "editcontent.invalid.parameters", contentId, locale, redirectAttributes);
+            return "redirect:/managecourses/" + courseid + "/editcourses/" + moduleId + "/editcontent/" + contentId;
+        }
+
+        try {
+            contentImpl.StringContentUpdate(teoricDtoForm.getMarkdown(), Long.parseLong(contentId));
+        } catch (InstanceNotFoundException ex) {
+            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        } catch (DuplicatedResourceException ex) {
+            serviceRedirectExceptions.serviceDuplicatedResourceException(ex, redirectAttributes);
+            return "redirect:/managecourses/" + courseid + "/editcourses/" + moduleId + "/editcontent/" + contentId;
+        }
+        redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
+                "editcontent.success", new Object[]{moduleId}, locale));
+        return "redirect:/managecourses/" + courseid + "/editcourses/" + moduleId + "/editcontent/" + contentId;
+    }
+
 }

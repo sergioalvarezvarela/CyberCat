@@ -2,7 +2,9 @@ package es.cybercatapp.model.repositories;
 
 import es.cybercatapp.model.entities.Content;
 import es.cybercatapp.model.entities.Modules;
+import es.cybercatapp.model.entities.Users;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -25,6 +27,9 @@ public class ContentRepository extends AbstractRepository<Content> {
 
 
     }
+
+
+
 
 
 }

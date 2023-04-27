@@ -143,5 +143,6 @@
     <orderEntry type="library" name="Sortable" level="application" />
     <orderEntry type="library" name="sortablejs" level="application" />
     <orderEntry type="library" name="draggable" level="application" />
+    <orderEntry type="library" name="simplemde" level="application" />
   </component>
 </module>
