@@ -25,7 +25,7 @@
     </div>
 
     <label for="markdownContent"></label>
-    <textarea th:text="${TeoricDtoFormShow.markdown}" th:field="${TeoricDtoFormShow.markdown}" class="form-control" id="markdownContent" rows="3"></textarea>
+    <textarea th:text="${TeoricDtoFormShow.html}" th:field="${TeoricDtoFormShow.html}" class="form-control" id="markdownContent" rows="3"></textarea>
     </form>
 
 </div>
@@ -35,5 +35,12 @@
 
 
 <script>
-    var simplemde = new SimpleMDE({element: document.getElementById("markdownContent")});
+    document.addEventListener('focusin', (e) => {
+        if (e.target.closest(".tox-tinymce, .tox-tinymce-aux, .moxman-window, .tam-assetmanager-root") !== null) {
+            e.stopImmediatePropagation();
+        }
+    });
+    tinymce.init({
+        selector: 'textarea#markdownContent'
+    });
 </script>

@@ -178,7 +178,7 @@ public class ContentOperations {
         }
 
         try {
-            contentImpl.StringContentUpdate(teoricDtoForm.getMarkdown(), Long.parseLong(contentId));
+            contentImpl.StringContentUpdate(teoricDtoForm.getHtml(), Long.parseLong(contentId));
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         } catch (DuplicatedResourceException ex) {

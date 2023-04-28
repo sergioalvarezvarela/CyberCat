@@ -12,23 +12,23 @@ public class TeoricDtoForm {
     Long courseId;
     @NotNull
     @Size(min = 16)
-    String markdown;
+    String html;
 
-    public TeoricDtoForm(Long contentId, Long moduleId, Long courseId, String markdown) {
+    public TeoricDtoForm(Long contentId, Long moduleId, Long courseId, String html) {
         this.contentId = contentId;
         this.moduleId = moduleId;
         this.courseId = courseId;
-        this.markdown = markdown;
+        this.html = html;
     }
 
     public TeoricDtoForm(){}
 
-    public String getMarkdown() {
-        return markdown;
+    public String getHtml() {
+        return html;
     }
 
-    public void setMarkdown(String markdown) {
-        this.markdown = markdown;
+    public void setHtml(String html) {
+        this.html = html;
     }
 
     public Long getContentId() {
