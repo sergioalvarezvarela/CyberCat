@@ -1,5 +1,7 @@
 package es.cybercatapp.service.Controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Users;
 import es.cybercatapp.model.exceptions.AuthenticationException;
@@ -11,8 +13,6 @@ import es.cybercatapp.service.utils.AdminChecker;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.conversor.UserConversor;
 import es.cybercatapp.service.dto.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -131,7 +131,7 @@ public class UserOperations {
 
             Users user = userImpl.findByUsername(principal.getName());
             byte[] image = userImpl.getImage(user.getUserId());
-            EditProfileDtoForm editProfileDtoForm = UserConversor.toEditProfile(user, image, user.getImagen_perfil());
+            ProfileDtoForm editProfileDtoForm = UserConversor.toProfile(user, image, user.getImagen_perfil());
             model.addAttribute("EditProfileDtoForm", editProfileDtoForm);
             model.addAttribute("ChangePasswordDtoForm", new ChangePasswordDtoForm());
             model.addAttribute("UpdateImageProfileDtoForm", new UpdateImageProfileDtoForm());
@@ -159,7 +159,7 @@ public class UserOperations {
         try {
             Users user = userImpl.findByUsername(principal.getName());
             byte[] image = userImpl.getImage(user.getUserId());
-            EditProfileDtoForm editProfileDtoForm = UserConversor.toEditProfile(user, image, user.getImagen_perfil());
+            ProfileDtoForm editProfileDtoForm = UserConversor.toProfile(user, image, user.getImagen_perfil());
             model.addAttribute("EditProfileDtoForm", editProfileDtoForm);
             model.addAttribute("UpdateImageProfileDtoForm", new UpdateImageProfileDtoForm());
 
@@ -184,7 +184,7 @@ public class UserOperations {
     }
 
     @PostMapping("/editprofile/modify")
-    public String doPostModifyProfile(Principal principal, @Valid @ModelAttribute("EditProfileDtoForm") EditProfileDtoForm editProfileDtoForm,
+    public String doPostModifyProfile(Principal principal, @Valid @ModelAttribute("EditProfileDtoForm") ProfileDtoForm editProfileDtoForm,
                                       BindingResult result, Locale locale,  RedirectAttributes redirectAttributes,
                                       Model model) {
         model.addAttribute("UpdateImageProfileDtoForm", new UpdateImageProfileDtoForm());
@@ -220,7 +220,7 @@ public class UserOperations {
                     updateImageProfileDtoForm.getImageFile() != null ? updateImageProfileDtoForm.getImageFile().getBytes() : null);
             Users user = userImpl.findByUsername(principal.getName());
             byte[] image = userImpl.getImage(user.getUserId());
-            EditProfileDtoForm editProfileDtoForm = UserConversor.toEditProfile(user, image, user.getImagen_perfil());
+            ProfileDtoForm editProfileDtoForm = UserConversor.toProfile(user, image, user.getImagen_perfil());
             model.addAttribute("EditProfileDtoForm", editProfileDtoForm);
         } catch (IOException ex) {
             return serviceExceptions.serviceUnexpectedException(ex, model);

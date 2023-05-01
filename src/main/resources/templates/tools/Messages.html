@@ -7,7 +7,7 @@
             <div class="col">
                <div class="alert alert-danger">
                   <span th:utext="${errorMessage}"></span>
-               </div>               
+                  <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>               </div>
             </div>
          </div>
 
@@ -15,15 +15,16 @@
             <div class="col">
                <div class="alert alert-success">
                   <span th:utext="${successMessage}"></span>
-               </div>               
+                  <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>               </div>
             </div>
          </div>
 
-         <div th:if="${warningMessage != null}"  class="row w-100 mx-auto">
+         <div th:if="${warningMessage != null}" class="row w-100 mx-auto">
             <div class="col">
                <div class="alert alert-warning">
                   <span th:utext="${warningMessage}"></span>
-               </div>               
+                  <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+               </div>
             </div>
          </div>
          

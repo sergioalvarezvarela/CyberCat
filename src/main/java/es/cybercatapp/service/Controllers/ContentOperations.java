@@ -1,8 +1,9 @@
 package es.cybercatapp.service.Controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Content;
-import es.cybercatapp.model.entities.Courses;
 import es.cybercatapp.model.entities.Modules;
 import es.cybercatapp.model.entities.StringContent;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
@@ -11,11 +12,10 @@ import es.cybercatapp.model.impl.ContentImpl;
 import es.cybercatapp.model.impl.ModuleImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
-import es.cybercatapp.service.dto.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import es.cybercatapp.service.dto.ContentDtoForm;
+import es.cybercatapp.service.dto.ListContentDtoForm;
+import es.cybercatapp.service.dto.TeoricDtoForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -29,7 +29,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.security.Principal;
 import java.text.MessageFormat;
 import java.util.Comparator;
 import java.util.List;
@@ -56,7 +55,7 @@ public class ContentOperations {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = {"/managecourses/{courseId}/editcourses/{moduleId}/addcontent"})
-    public String doPostAddContent(@PathVariable("courseId") String courseId, @PathVariable("moduleId") String moduleId, @Valid @ModelAttribute("AddContentDtoForm") AddContentDtoForm addContentDtoForm,
+    public String doPostAddContent(@PathVariable("courseId") String courseId, @PathVariable("moduleId") String moduleId, @Valid @ModelAttribute("ContentDtoForm") ContentDtoForm addContentDtoForm,
                                    BindingResult result,
                                    RedirectAttributes redirectAttributes, Locale locale,
                                    HttpSession session, Model model) {
@@ -71,6 +70,10 @@ public class ContentOperations {
             if (addContentDtoForm.getContentType().equals("teoric")) {
                 String html = "Lorem Ipsum";
                 content = contentImpl.createTeoricContent(Long.valueOf(moduleId), addContentDtoForm.getContentName(), html);
+            }
+            if (addContentDtoForm.getContentType().equals("select")) {
+                String enunciado = "Enunciado de prueba";
+                content = contentImpl.createTestQuestionContent(Long.valueOf(moduleId), addContentDtoForm.getContentName(), enunciado);
             }
             if (logger.isDebugEnabled()) {
                 logger.debug(MessageFormat.format("Contenido {0} con id {1} creado", addContentDtoForm.getContentName(), content.getContentId()));
@@ -163,6 +166,7 @@ public class ContentOperations {
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
+
         return "teoricContent";
     }
 

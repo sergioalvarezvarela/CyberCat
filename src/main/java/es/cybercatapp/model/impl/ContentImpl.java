@@ -4,6 +4,7 @@ import es.cybercatapp.common.ConfigurationParameters;
 import es.cybercatapp.model.entities.Content;
 import es.cybercatapp.model.entities.Modules;
 import es.cybercatapp.model.entities.StringContent;
+import es.cybercatapp.model.entities.TestQuestions;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.repositories.ContentRepository;
@@ -55,6 +56,30 @@ public class ContentImpl {
             throw new InstanceNotFoundException(moduleId.toString(), Modules.class.toString(), "Module not found");
         }
     }
+
+    @Transactional
+    public TestQuestions createTestQuestionContent(Long moduleId, String contentName, String enunciado) throws InstanceNotFoundException, DuplicatedResourceException {
+        try {
+
+            Modules module = moduleRepository.findById(moduleId);
+            TestQuestions content = (TestQuestions) contentRepository.findContentsByContentNameAndModule(moduleId, contentName);
+            if (content != null) {
+
+                throw exceptionGenerationUtils.toDuplicatedResourceException("Content", contentName,
+                        "createcontent.duplicated.exception");
+            } else {
+                content = new TestQuestions(contentName, module.getContents().size() + 1, module, enunciado);
+                contentRepository.create(content);
+                module.getContents().add(content);
+                moduleRepository.update(module);
+                return content;
+            }
+
+        } catch (InstanceNotFoundException ex) {
+            throw new InstanceNotFoundException(moduleId.toString(), Modules.class.toString(), "Module not found");
+        }
+    }
+
 
     @Transactional
     public void remove(Long contentId) throws InstanceNotFoundException {

@@ -1,5 +1,7 @@
 package es.cybercatapp.service.Controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Content;
 import es.cybercatapp.model.entities.Courses;
@@ -13,9 +15,6 @@ import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
 import es.cybercatapp.service.dto.ContentDtoForm;
 import es.cybercatapp.service.dto.ListModuleDtoForm;
 import es.cybercatapp.service.dto.ModuleDtoForm;
-import es.cybercatapp.service.dto.AddContentDtoForm;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -59,7 +58,7 @@ public class ModuleOperations {
         try {
             model.addAttribute("ModuleDtoForm", new ModuleDtoForm());
             model.addAttribute("ContentDtoForm", new ContentDtoForm());
-            model.addAttribute("AddContentDtoForm", new AddContentDtoForm());
+            model.addAttribute("AddContentDtoForm", new ContentDtoForm());
             Courses course = courseImpl.findCoursesById(Long.parseLong(id));
             List<Modules> modules = course.getModules();
             List<ModuleDtoForm> moduleDto = new ArrayList<>();
@@ -70,7 +69,7 @@ public class ModuleOperations {
                 List<ContentDtoForm> contentDto = new ArrayList<>();
                 for (Content contents : module.getContents()) {
                     Long contentId = contents.getContentId();
-                    contentDto.add(new ContentDtoForm(contentId, contents.getContentName(), module.getModuleName(), 0));
+                    contentDto.add(new ContentDtoForm(contentId, contents.getContentName(), module.getModuleName(), 0, null));
                 }
                 moduleDto.add(new ModuleDtoForm(moduleId, module.getModuleName(), module.getModulePosition(), contentDto));
 
@@ -155,7 +154,7 @@ public class ModuleOperations {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = {"/managecourses/{id}/editcourses/updatepositions"})
-    public String doPostUpdateModulePositions(@PathVariable("id") String id, @ModelAttribute("ListModuleDtoForm") ListModuleDtoForm listModuleDtoForm,
+    public String doPostUpdateModulePositions(@PathVariable("id") String id, @ModelAttribute("ListModuleForm") ListModuleDtoForm listModuleDtoForm,
                                               Locale locale, Model model, RedirectAttributes redirectAttributes) {
         try {
             Courses courses = courseImpl.findCoursesById(Long.parseLong(id));

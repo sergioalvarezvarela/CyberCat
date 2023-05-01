@@ -1,9 +1,21 @@
 package es.cybercatapp.service.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 public class ProfileDtoForm {
 
+
+    @NotNull
+    @Size(min=6)
+    @Pattern(regexp = "^[a-zA-Z0-9]*$")
     private String username;
 
+
+    @NotNull
+    @Email
     private String email;
 
 

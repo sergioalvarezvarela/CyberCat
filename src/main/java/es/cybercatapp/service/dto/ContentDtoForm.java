@@ -15,14 +15,18 @@ public class ContentDtoForm {
 
     private int contentPosition;
 
+    private String contentType;
+
+
     public ContentDtoForm() {
     }
 
-    public ContentDtoForm(Long contentId, String contentName, String moduleName, int contentPosition) {
-        this.contentId= contentId;
+    public ContentDtoForm(Long contentId,String contentName, String moduleName, int contentPosition, String contentType) {
         this.moduleName = moduleName;
+        this.contentId = contentId;
         this.contentName = contentName;
         this.contentPosition = contentPosition;
+        this.contentType = contentType;
     }
 
     public Long getContentId() {
@@ -55,5 +59,13 @@ public class ContentDtoForm {
 
     public void setContentPosition(int contentPosition) {
         this.contentPosition = contentPosition;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 }

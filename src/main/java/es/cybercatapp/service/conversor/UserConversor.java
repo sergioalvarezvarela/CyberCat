@@ -1,7 +1,6 @@
 package es.cybercatapp.service.conversor;
 
 import es.cybercatapp.model.entities.Users;
-import es.cybercatapp.service.dto.EditProfileDtoForm;
 import es.cybercatapp.service.dto.ProfileDtoForm;
 import es.cybercatapp.service.utils.ImageUtils;
 
@@ -22,7 +21,4 @@ public class UserConversor {
         return (ProfileDtoForm) new ProfileDtoForm(users.getUsername(), users.getEmail(), formatDateTime(users.getFecha_creacion().toString(), "dd/MM/yyyy"), ImageUtils.toString64(image), path);
     }
 
-    public static EditProfileDtoForm toEditProfile(Users users, byte[] image, String path) {
-        return (EditProfileDtoForm) new EditProfileDtoForm(users.getUsername(), users.getEmail(), ImageUtils.toString64(image), path);
-    }
 }

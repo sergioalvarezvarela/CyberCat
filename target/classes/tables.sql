@@ -16,6 +16,10 @@ alter table modules
 drop
 foreign key FK8qnnp812q1jd38fx7mxrhpw;
 
+alter table testquestion
+drop
+foreign key FK_hjqegrth1xjjanoci4vqxqn4;
+
 alter table teststring
 drop
 foreign key FK_3gh0y5qbtkg0jpiuj4lxo1fh;
@@ -27,6 +31,10 @@ drop table if exists hibernate_sequence;
 drop table if exists inscriptions;
 
 drop table if exists modules;
+
+drop table if exists testoptions;
+
+drop table if exists testquestion;
 
 drop table if exists teststring;
 
@@ -47,7 +55,7 @@ create table courses (
 create table hibernate_sequence (
     next_val bigint
 ) engine=InnoD;
-
+    
     insert into hibernate_sequence values ( 1 ;
 
 create table inscriptions (
@@ -64,6 +72,23 @@ create table modules (
                          module_position integer not null,
                          course_id bigint not null,
                          primary key (module_id)
+) engine=InnoD;
+
+create table testoptions (
+                             test_option_id bigint not null,
+                             correct bit not null,
+                             string_option varchar(255) not null,
+                             content_id bigint not null,
+                             primary key (test_option_id)
+) engine=InnoD;
+
+create table testquestion (
+                              content_id bigint not null,
+                              content_name varchar(255) not null,
+                              content_position integer not null,
+                              module_id bigint not null,
+                              question varchar(255) not null,
+                              primary key (content_id)
 ) engine=InnoD;
 
 create table teststring (
@@ -111,6 +136,11 @@ alter table modules
     add constraint FK8qnnp812q1jd38fx7mxrhpw9
         foreign key (course_id)
             references courses (course_id);
+
+alter table testquestion
+    add constraint FK_hjqegrth1xjjanoci4vqxqn49
+        foreign key (module_id)
+            references modules (module_id);
 
 alter table teststring
     add constraint FK_3gh0y5qbtkg0jpiuj4lxo1fhc

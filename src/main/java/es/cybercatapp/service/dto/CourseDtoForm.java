@@ -1,5 +1,7 @@
 package es.cybercatapp.service.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -9,7 +11,6 @@ public class CourseDtoForm {
 
     @NotNull
     @Size(min = 5)
-
     private String courseName;
 
     @NotNull
@@ -27,6 +28,8 @@ public class CourseDtoForm {
 
     private String imageType;
 
+    private MultipartFile multipartFile;
+
     public CourseDtoForm(Long id, String courseName, float price, String category, String description, String image, String imageType){
         this.id = id;
         this.courseName = courseName;
@@ -36,6 +39,10 @@ public class CourseDtoForm {
         this.image = image;
         this.imageType = imageType;
     }
+
+
+
+    public CourseDtoForm(){}
 
     public Long getId() {
         return id;
@@ -91,5 +98,13 @@ public class CourseDtoForm {
 
     public void setImageType(String imageType) {
         this.imageType = imageType;
+    }
+
+    public MultipartFile getMultipartFile() {
+        return multipartFile;
+    }
+
+    public void setMultipartFile(MultipartFile multipartFile) {
+        this.multipartFile = multipartFile;
     }
 }

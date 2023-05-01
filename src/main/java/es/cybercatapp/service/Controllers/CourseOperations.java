@@ -1,5 +1,7 @@
 package es.cybercatapp.service.Controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Category;
 import es.cybercatapp.model.entities.Courses;
@@ -11,10 +13,7 @@ import es.cybercatapp.model.impl.UserImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
 import es.cybercatapp.service.conversor.CoursesConversor;
-import es.cybercatapp.service.dto.AddModifyCourseDtoForm;
 import es.cybercatapp.service.dto.CourseDtoForm;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -74,7 +73,7 @@ public class CourseOperations {
             }
             model.addAttribute("username", principal.getName());
             model.addAttribute("CourseDtoForm", courseDtos);
-            model.addAttribute("AddModifyCourseDtoForm", new AddModifyCourseDtoForm());
+            model.addAttribute("AddModifyCourseDtoForm", new CourseDtoForm());
             model.addAttribute("category", Category.values());
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
@@ -85,7 +84,7 @@ public class CourseOperations {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = {"/managecourses/addcourse"})
-    public String doPostAddCourse(@Valid @ModelAttribute("AddModifyCourseDtoForm") AddModifyCourseDtoForm addModifyCourseDtoForm,
+    public String doPostAddCourse(@Valid @ModelAttribute("AddModifyCourseDtoForm") CourseDtoForm addModifyCourseDtoForm,
                                   BindingResult result,
                                   RedirectAttributes redirectAttributes, Principal principal, Locale locale,
                                   HttpSession session, Model model) {
@@ -97,8 +96,8 @@ public class CourseOperations {
         Courses course;
         try {
             course = courseImpl.create(addModifyCourseDtoForm.getCourseName(), addModifyCourseDtoForm.getPrice(), addModifyCourseDtoForm.getCategory(),
-                    addModifyCourseDtoForm.getImage() != null ? addModifyCourseDtoForm.getImage().getOriginalFilename() : null,
-                    addModifyCourseDtoForm.getImage() != null ? addModifyCourseDtoForm.getImage().getBytes() : null, addModifyCourseDtoForm.getDescription(), principal.getName());
+                    addModifyCourseDtoForm.getMultipartFile() != null ? addModifyCourseDtoForm.getMultipartFile().getOriginalFilename(): null,
+                    addModifyCourseDtoForm.getMultipartFile() != null ? addModifyCourseDtoForm.getMultipartFile().getBytes() : null, addModifyCourseDtoForm.getDescription(), principal.getName());
             if (logger.isDebugEnabled()) {
                 logger.debug(MessageFormat.format("Course {0} with id {1} created", course.getCourse_name(), course.getCourseId()));
             }
@@ -126,7 +125,7 @@ public class CourseOperations {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/managecourses/update/{id}")
-    public String doPostUpdateCourseInfo(@PathVariable String id, @Valid @ModelAttribute("AddModifyCourseDtoForm") AddModifyCourseDtoForm addModifyCourseDtoForm,
+    public String doPostUpdateCourseInfo(@PathVariable String id, @Valid @ModelAttribute("AddModifyCourseDtoForm") CourseDtoForm addModifyCourseDtoForm,
                                          BindingResult result,
                                          RedirectAttributes redirectAttributes, Locale locale, Model model, Principal principal) {
 
@@ -136,8 +135,8 @@ public class CourseOperations {
         }
         try {
             courseImpl.update(Long.parseLong(id), addModifyCourseDtoForm.getCourseName(), addModifyCourseDtoForm.getPrice(), addModifyCourseDtoForm.getCategory(),
-                    addModifyCourseDtoForm.getImage() != null ? addModifyCourseDtoForm.getImage().getOriginalFilename() : null,
-                    addModifyCourseDtoForm.getImage() != null ? addModifyCourseDtoForm.getImage().getBytes() : null, addModifyCourseDtoForm.getDescription(), principal.getName());
+                    addModifyCourseDtoForm.getMultipartFile() != null ? addModifyCourseDtoForm.getMultipartFile().getOriginalFilename() : null,
+                    addModifyCourseDtoForm.getMultipartFile() != null ? addModifyCourseDtoForm.getMultipartFile().getBytes() : null, addModifyCourseDtoForm.getDescription(), principal.getName());
             redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                     "updatecourse.success", new Object[]{id}, locale));
         } catch (InstanceNotFoundException ex) {

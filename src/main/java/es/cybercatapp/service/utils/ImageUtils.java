@@ -21,18 +21,4 @@ public class ImageUtils {
         return encodedImage;
     }
 
-    public String getImageType(String image) {
-        if (image != null && image.trim().length() > 0) {
-            Path path = Paths.get(image);
-            String fileType = "";
-            try {
-                fileType = Files.probeContentType(path);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return fileType;
-        }
-        return null;
-    }
-
 }

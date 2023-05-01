@@ -1,41 +1,49 @@
 package es.cybercatapp.model.entities;
-/*
+
 import es.cybercatapp.common.Constants;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Objects;
 
 @Entity(name = Constants.TESTOPTIONS_ENTITY)
 @Table(name = Constants.TESTOPTIONS_TABLE)
 public class TestOptions  {
 
-    @EmbeddedId
-    private TestOptionsId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long testOptionId;
 
 
-    @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "contentName", referencedColumnName = "contentName", insertable = false, updatable = false),
-            @JoinColumn(name = "moduleName", referencedColumnName = "moduleName", insertable = false, updatable = false),
-            @JoinColumn(name = "courseId", referencedColumnName = "courseId", insertable = false, updatable = false)
-    })
+    @Column(name="stringOption",nullable = false)
+    private String stringOption;
+
+    @Column(name="correct",nullable = false)
+    private Boolean correct;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "contentId", nullable = false)
     private Content content;
 
 
     public TestOptions(){}
 
-    public TestOptions(String optionString, Content content) {
-        this.content = content;
-        this.id = new TestOptionsId(optionString, content.getContentId());
+    public TestOptions(String stringOption, boolean correct) {
+        this.stringOption = stringOption;
+        this.correct = correct;
     }
 
-    public TestOptionsId getId() {
-        return id;
+    public Long getTestOptionId() {
+        return testOptionId;
     }
 
-    public void setId(TestOptionsId id) {
-        this.id = id;
+    public void setTestOptionId(Long testOptionId) {
+        this.testOptionId = testOptionId;
+    }
+
+    public String getStringOption() {
+        return stringOption;
+    }
+
+    public void setStringOption(String stringOption) {
+        this.stringOption = stringOption;
     }
 
     public Content getContent() {
@@ -46,24 +54,13 @@ public class TestOptions  {
         this.content = content;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TestOptions that = (TestOptions) o;
-        return id.equals(that.id) && content.equals(that.content);
+
+    public boolean isCorrect() {
+        return correct;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, content);
+    public void setCorrect(boolean correct) {
+        this.correct = correct;
     }
+}
 
-    @Override
-    public String toString() {
-        return "TestOptions{" +
-                "id=" + id +
-                ", content=" + content +
-                '}';
-    }
-}*/

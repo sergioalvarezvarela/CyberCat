@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-/*
+
 @Entity(name = Constants.TESTQUESTIONS_TABLE)
 @Table(name = Constants.TESTQUESTIONS_ENTITY)
 public class TestQuestions extends Content {
@@ -24,12 +24,8 @@ public class TestQuestions extends Content {
 
     }
 
-    public TestQuestions(String question) {
-        this.question = question;
-    }
-
-    public TestQuestions(String contentName, Module module, String question) {
-        super(contentName, module);
+    public TestQuestions(String contentName, int contentPosition, Modules module, String question) {
+        super(contentName, contentPosition, module);
         this.question = question;
     }
 
@@ -55,7 +51,7 @@ public class TestQuestions extends Content {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         TestQuestions that = (TestQuestions) o;
-        return Objects.equals(question, that.question) && Objects.equals(testOptions, that.testOptions);
+        return question.equals(that.question) && testOptions.equals(that.testOptions);
     }
 
     @Override
@@ -63,5 +59,10 @@ public class TestQuestions extends Content {
         return Objects.hash(super.hashCode(), question, testOptions);
     }
 
-
-}*/
+    @Override
+    public String toString() {
+        return "TestQuestions{" +
+                "question='" + question + '\'' +
+                '}';
+    }
+}
