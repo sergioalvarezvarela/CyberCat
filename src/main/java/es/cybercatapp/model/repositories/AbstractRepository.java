@@ -3,15 +3,15 @@ package es.cybercatapp.model.repositories;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.utils.ExceptionGenerationUtils;
 import es.cybercatapp.common.Constants;
+import org.hibernate.Hibernate;
+import org.hibernate.collection.spi.PersistentCollection;
+import org.hibernate.proxy.HibernateProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.GenericTypeResolver;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -59,4 +59,5 @@ public abstract class AbstractRepository<T> {
                     Constants.INSTANCE_NOT_FOUND_MESSAGE);
         }
     }
+
 }

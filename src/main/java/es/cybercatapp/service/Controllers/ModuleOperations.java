@@ -69,7 +69,7 @@ public class ModuleOperations {
                 List<ContentDtoForm> contentDto = new ArrayList<>();
                 for (Content contents : module.getContents()) {
                     Long contentId = contents.getContentId();
-                    contentDto.add(new ContentDtoForm(contentId, contents.getContentName(), module.getModuleName(), 0, null));
+                    contentDto.add(new ContentDtoForm(contentId, contents.getContentName(), module.getModuleName(), 0, contents.getContent_category().getDescripcion()));
                 }
                 moduleDto.add(new ModuleDtoForm(moduleId, module.getModuleName(), module.getModulePosition(), contentDto));
 

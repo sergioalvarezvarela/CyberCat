@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<header th:replace="tools/package :: #package-include"></header>
+<header th:replace="tools/header :: #header-include"></header>
+
+<body>
+<div class="container">
+    <div class="row mt-2">
+        <div th:replace="tools/Messages :: #messages-fragment"></div>
+    </div>
+    <form th:action="@{/managecourses/{courseId}/editcourses/{moduleId}/editcontent/{contentId}/savepuzzle(courseId=${StringCompleteDtoFormShow.courseId}, moduleId =${StringCompleteDtoFormShow.moduleId}, contentId = ${StringCompleteDtoFormShow.contentId})}" method="post" class="" id="miFormulario">
+    <div class="row mt-2 mb-2">
+        <div class="col">
+            <a th:href="@{/managecourses/{courseId}/editcourses(courseId=${StringCompleteDtoFormShow.courseId})}">
+                <button type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Atrás
+                </button>
+            </a>
+        </div>
+        <div class="col d-flex justify-content-end">
+            <button id="btnSave" type="submit" class="btn btn-info" style="margin-right: 10px">Guardar
+                cambios
+            </button>
+        </div>
+    </div>
+    <div class="row mt-2">
+            <div class="form-group mt-2">
+                <label for="enunciado">Escribe un enunciado para la pregunta</label>
+                <input th:text="${StringCompleteDtoFormShow.enunciado}" th:field="${StringCompleteDtoFormShow.enunciado}" type="text" class="form-control" id="enunciado" placeholder="Enunciado de pregunta">
+            </div>
+            <div class="form-group mt-2">
+                <label for="sentence">Escribe la frase (donde quieras situar un espacio para rellenar con el puzzle pon "__")</label>
+                <textarea th:text="${StringCompleteDtoFormShow.frase}" th:field="${StringCompleteDtoFormShow.frase}"  class="form-control" id="sentence" rows="3" placeholder="Frase para el test"></textarea>
+            </div>
+            <div class="form-group mt-2">
+                <div class="form-group">
+                    <label for="correctsentence">Escribe la frase correcta (sin los "__")</label>
+                    <textarea th:text="${StringCompleteDtoFormShow.fraseCorrecta}" th:field="${StringCompleteDtoFormShow.fraseCorrecta}"  class="form-control" id="correctsentence" placeholder="Frase utilizada para la corrección" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <label for="words">Introduce las palabras para utilizar en el puzzle (Separadas con salto de línea)</label>
+                <textarea th:text="${StringCompleteDtoFormShow.words}" th:field="${StringCompleteDtoFormShow.words}" class="form-control" id="words" rows="3" placeholder="Palabras utilizadas en el puzzle"></textarea>
+            </div>
+    </div>
+    </form>
+
+</div>
+
+<script>
+</script>
+
+</body>
+<footer th:replace="tools/footer :: #footer-include"></footer>
+</html>

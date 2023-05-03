@@ -10,13 +10,14 @@ import java.util.Objects;
 @Entity(name = Constants.TESTQUESTIONS_TABLE)
 @Table(name = Constants.TESTQUESTIONS_ENTITY)
 public class TestQuestions extends Content {
+    private static final long serialVersionUID = -6410842115245824837L;
     @Column(name="question",nullable = false)
     private String question;
 
     @OneToMany(
             mappedBy = "content",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
     )
     private List<TestOptions> testOptions = new ArrayList<>();
 
@@ -24,8 +25,8 @@ public class TestQuestions extends Content {
 
     }
 
-    public TestQuestions(String contentName, int contentPosition, Modules module, String question) {
-        super(contentName, contentPosition, module);
+    public TestQuestions(String contentName, int contentPosition, Type content_category, Modules module, String question) {
+        super(contentName, contentPosition, content_category, module);
         this.question = question;
     }
 

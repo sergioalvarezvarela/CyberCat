@@ -18,16 +18,17 @@ public class TestOptions  {
 
     @Column(name="correct",nullable = false)
     private Boolean correct;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {},fetch = FetchType.EAGER)
     @JoinColumn(name = "contentId", nullable = false)
     private Content content;
 
 
     public TestOptions(){}
 
-    public TestOptions(String stringOption, boolean correct) {
+    public TestOptions(String stringOption, Boolean correct, Content content) {
         this.stringOption = stringOption;
         this.correct = correct;
+        this.content = content;
     }
 
     public Long getTestOptionId() {
@@ -46,6 +47,14 @@ public class TestOptions  {
         this.stringOption = stringOption;
     }
 
+    public Boolean getCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(Boolean correct) {
+        this.correct = correct;
+    }
+
     public Content getContent() {
         return content;
     }
@@ -54,13 +63,46 @@ public class TestOptions  {
         this.content = content;
     }
 
-
     public boolean isCorrect() {
         return correct;
     }
 
     public void setCorrect(boolean correct) {
         this.correct = correct;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        TestOptions other = (TestOptions) obj;
+        if (getTestOptionId() == null) {
+            if (other.getTestOptionId() != null)
+                return false;
+        } else if (!getTestOptionId().equals(other.getTestOptionId()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getTestOptionId() == null) ? 0 : getTestOptionId().hashCode());
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "TestOptions{" +
+                "testOptionId=" + testOptionId +
+                ", stringOption='" + stringOption + '\'' +
+                ", correct=" + correct +
+                '}';
     }
 }
 

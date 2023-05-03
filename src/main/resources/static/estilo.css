@@ -112,6 +112,19 @@ footer {
     width: 100%;
 }
 
+.ghost {
+    opacity: 0.5;
+}
+
+.highlight {
+    background-color: #e6e6e6;
+}
+
+.filled {
+    color: black;
+    cursor: default;
+}
+
 
 
 

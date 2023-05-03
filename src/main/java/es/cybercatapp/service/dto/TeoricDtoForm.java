@@ -7,14 +7,17 @@ public class TeoricDtoForm {
     @NotNull
     Long contentId;
 
+    @NotNull
     Long moduleId;
 
+    @NotNull
     Long courseId;
     @NotNull
     @Size(min = 16)
     String html;
 
-    public TeoricDtoForm(Long contentId, Long moduleId, Long courseId, String html) {
+
+    public TeoricDtoForm(Long contentId, Long moduleId, Long courseId, String html, String type) {
         this.contentId = contentId;
         this.moduleId = moduleId;
         this.courseId = courseId;
@@ -54,4 +57,5 @@ public class TeoricDtoForm {
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
+
 }

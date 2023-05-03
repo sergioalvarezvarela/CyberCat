@@ -7,10 +7,53 @@
 <div class="container">
   <div class="row mt-2">
     <div th:replace="tools/Messages :: #messages-fragment"></div>
-
+  </div>
+  <div class="row">
+    <div id="quiz-container">
+      Hola soy <span id="blank-1" class="blank"></span> y estudio <span id="blank-2" class="blank"></span>.
+      <div id="options-container">
+        <div id="option-1" class="option">Sergio</div>
+        <div id="option-2" class="option">Raúl</div>
+        <div id="option-3" class="option">Informática</div>
+        <div id="option-4" class="option">Tractor</div>
+      </div>
+    </div>
   </div>
 
 </div>
+<script>
+  var optionsContainer = document.getElementById('options-container');
+
+  new Sortable(optionsContainer, {
+    group: 'shared',
+    animation: 150,
+    delay: 0,
+    ghostClass: 'ghost',
+    onEnd: function(evt) {
+      if (evt.item.classList.contains('filled')) {
+        evt.item.classList.remove('filled');
+        evt.item.parentNode.insertBefore(evt.item, evt.item.nextSibling);
+      }
+    }
+  });
+
+  var blanks = document.querySelectorAll('.blank');
+
+  for (var i = 0; i < blanks.length; i++) {
+    new Sortable(blanks[i], {
+      group: 'shared',
+      animation: 150,
+      delay: 0,
+      ghostClass: 'ghost',
+      onAdd: function(evt) {
+        if (evt.item.classList.contains('option')) {
+          evt.item.classList.add('filled');
+          evt.item.parentNode.removeChild(evt.item);
+        }
+      }
+    });
+  }
+</script>
 
 </body>
 <footer th:replace="tools/footer :: #footer-include"></footer>

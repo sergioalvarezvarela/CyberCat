@@ -20,6 +20,12 @@ public class Constants {
     public static final String TESTOPTIONS_ENTITY = "Testoption";
     public static final String TESTOPTIONS_TABLE = "Testoptions";
 
+    public static final String STRINGCOMPLETE_ENTITY = "StringComplete";
+    public static final String STRINGCOMPLETE_TABLE = "StringCompletes";
+
+    public static final String STRINGCOMPLETEOPTIONS_ENTITY = "Stringcompleteoption";
+    public static final String STRINGCOMPLETEOPTIONS_TABLE = "Stringcompleteoptions";
+
     public static final String INSCRIPTIONS_ENTITY = "Inscription";
     public static final String INSCRIPTIONS_TABLE = "Inscriptions";
 
