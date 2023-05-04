@@ -18,6 +18,8 @@ import java.util.List;
 public abstract class AbstractRepository<T> {
 
     protected final Logger logger;
+
+    private static final String FIND_ALL_QUERY = "SELECT t FROM {0} t";
     
     private final Class<T> genericType;
 
@@ -59,5 +61,15 @@ public abstract class AbstractRepository<T> {
                     Constants.INSTANCE_NOT_FOUND_MESSAGE);
         }
     }
+
+    public List<T> findAll(int pageIndex, int pageSize) {
+        String queryString = MessageFormat.format(FIND_ALL_QUERY,genericType.getSimpleName());
+        Query query = entityManager.createQuery(queryString);
+        query.setFirstResult(pageIndex);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
+    }
+
+
 
 }

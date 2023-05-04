@@ -2,25 +2,22 @@
 <header id="header-include" style="background-color: #173753">
   <nav class="navbar navbar-expand" id="nav">
     <div class="container col-md-12 col-sm-6 mt-3">
-      <ul class="navbar-nav navbar-expand-lg ">
-        <li class="nav-item mx-lg-5">
-          <a href="/" >
-            <img src="/images/logo.png" alt="Error al cargar la imagen" class="logo_tamano"
-                 style="width: 75% ; height: 75%">
-          </a>
-        </li>
-
-      </ul>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
               aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-dark navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-around" id="navbarNav">
         <ul class="navbar-nav">
-          <li class="nav-item mx-lg-5 mt-3">
-            <div class="input-group" style="width: 100%">
+          <li class="nav-item mx-lg-2">
+            <a href="/" >
+              <img src="/images/logo.png" alt="Error al cargar la imagen" class="logo_tamano"
+                   style="width: 70% ; height: 70%">
+            </a>
+          </li>
+          <li class="nav-item mx-lg-2 mt-3">
+            <div class="input-group" style="width: 80%">
               <div class="input-group-prepend">
-                <select class="form-select rounded-0 " style="background-color:  #d4e4f4 " id="cat1"
+                <select class="form-select rounded-0 " style="background-color:  #d4e4f4" id="cat1"
                         name="catlist">
                   <option>Todos</option>
                   <option>Forense</option>
@@ -39,10 +36,10 @@
 
             </div>
           </li>
-          <li class="nav-item mx-lg-5 mt-3">
-            <a class="nav-item nav-link home-letter-nav" style="font-size: 13px" href="#">Catálogo</a>
+          <li class="nav-item mx-lg-2 mt-3">
+            <a class="nav-item nav-link home-letter-nav" style="font-size: 13px" th:href="@{/catalog(start=0,count=5)}">Catálogo</a>
           </li>
-          <li class="nav-item mx-lg-5 mt-3">
+          <li class="nav-item mx-lg-2 mt-3">
             <a class="nav-item nav-link home-letter-nav" data-method="post" th:href="@{/logout}"
                style="font-size: 13px">Cerrar sesión</a>
           </li>

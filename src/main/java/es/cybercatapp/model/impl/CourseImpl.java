@@ -71,6 +71,11 @@ public class CourseImpl {
     public Courses findCoursesById(long id) throws InstanceNotFoundException {
         return courseRepository.findById(id);
     }
+    @Transactional(readOnly = true)
+    public List<Courses> findAll(int start, int count) throws InstanceNotFoundException {
+        return courseRepository.findAll(start,count);
+    }
+
 
     @Transactional
     public void updatePositions(Courses courses) {

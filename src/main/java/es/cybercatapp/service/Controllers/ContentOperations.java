@@ -1,7 +1,7 @@
 package es.cybercatapp.service.Controllers;
 
 import es.cybercatapp.model.entities.*;
-import es.cybercatapp.service.dto.StringCompleteDtoForm;
+import es.cybercatapp.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import es.cybercatapp.common.Constants;
@@ -11,9 +11,6 @@ import es.cybercatapp.model.impl.ContentImpl;
 import es.cybercatapp.model.impl.ModuleImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
-import es.cybercatapp.service.dto.ContentDtoForm;
-import es.cybercatapp.service.dto.ListContentDtoForm;
-import es.cybercatapp.service.dto.TeoricDtoForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -61,20 +58,18 @@ public class ContentOperations {
 
         Content content = null;
         try {
+            String enunciado = "Enunciado de prueba";
             if (addContentDtoForm.getContentType().equals("teoric")) {
                 String html = "Lorem Ipsum";
                 content = contentImpl.createTeoricContent(Long.valueOf(moduleId), addContentDtoForm.getContentName(), html);
             }
-            if (addContentDtoForm.getContentType().equals("select")) {
-                String enunciado = "Enunciado de prueba";
-                content = contentImpl.createTestQuestionContent(Long.valueOf(moduleId), addContentDtoForm.getContentName(), enunciado);
-            }
-            if (addContentDtoForm.getContentType().equals("puzzle")) {
-                String enunciado = "Enunciado de prueba";
+            else if (addContentDtoForm.getContentType().equals("puzzle")) {
                 String frase = "Enunciado de __ para test";
                 String frasecorrecta = "Enunciado de ejemplo para test";
                 String words = "ejemplo\nPalabra1";
                 content = contentImpl.createStringCompleteContent(Long.valueOf(moduleId), addContentDtoForm.getContentName(), enunciado, frase, frasecorrecta, words);
+            } else {
+                content = contentImpl.createTestQuestionContent(Long.valueOf(moduleId), addContentDtoForm.getContentName(), enunciado );
             }
             if (logger.isDebugEnabled()) {
                 logger.debug(MessageFormat.format("Contenido {0} con id {1} creado", addContentDtoForm.getContentName(), content.getContentId()));
@@ -164,22 +159,16 @@ public class ContentOperations {
         try {
             if (contentImpl.findByContentId(Long.valueOf(contentId)) instanceof StringContent) {
                 StringContent content = (StringContent) contentImpl.findByContentId(Long.parseLong(contentId));
-                model.addAttribute("TeoricDtoFormShow", new TeoricDtoForm(content.getContentId(), Long.parseLong(moduleId), Long.parseLong(courseid), content.getHtml(), content.getContent_category().getDescripcion()));
-                model.addAttribute("TeoricDtoForm", new TeoricDtoForm());
+                model.addAttribute("TeoricDtoForm", new TeoricDtoForm(content.getContentId(), Long.parseLong(moduleId), Long.parseLong(courseid), content.getHtml(), content.getContent_category().getDescripcion()));
                 return "teoricContent";
             } else if (contentImpl.findByContentId(Long.valueOf(contentId)) instanceof StringComplete) {
                 StringComplete content = (StringComplete) contentImpl.findByContentId(Long.parseLong(contentId));
-                content = contentImpl.initializeStringOptions(content);
-                StringBuilder words = new StringBuilder();
-                for (StringCompleteOptions word : content.getStringCompleteOptions()) {
-                    words.append(word.getStringCompleteOption());
-                    words.append("\n");
-                }
-                model.addAttribute("StringCompleteDtoFormShow", new StringCompleteDtoForm(content.getContentId(), Long.parseLong(moduleId), Long.parseLong(courseid), content.getEnunciado(), content.getSentence(), content.getCorrectSentence(), words.toString()));
+                model.addAttribute("StringCompleteDtoForm", new StringCompleteDtoForm(content.getContentId(), Long.parseLong(moduleId), Long.parseLong(courseid), content.getEnunciado(), content.getSentence(), content.getCorrectSentence(), content.getContent()));
                 return "createPuzzle";
-            } else{
+            } else {
                 TestQuestions content = (TestQuestions) contentImpl.findByContentId(Long.parseLong(contentId));
-                return null;
+                model.addAttribute("TestOptionsDtoForm",new TestOptionsDtoForm(content.getContentId(),Long.parseLong(moduleId), Long.parseLong(courseid),content.getQuestion(),content.getOption1(),content.getOption2(),content.getOption3(),content.getOption4(),content.getCorrect()));
+                return "testoption";
             }
 
         } catch (InstanceNotFoundException e) {
@@ -190,8 +179,8 @@ public class ContentOperations {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = {"/managecourses/{courseId}/editcourses/{moduleId}/editcontent/{contentId}/saveteoric"})
     public String doPostEditTeoricContent(@PathVariable("courseId") String courseid, @PathVariable("moduleId") String moduleId, @PathVariable("contentId") String contentId, @Valid @ModelAttribute("TeoricDtoForm") TeoricDtoForm teoricDtoForm, BindingResult result,
-                                    RedirectAttributes redirectAttributes, Locale locale,
-                                    Model model) {
+                                          RedirectAttributes redirectAttributes, Locale locale,
+                                          Model model) {
 
         if (result.hasErrors()) {
             serviceRedirectExceptions.serviceInvalidFormError(result, "editcontent.invalid.parameters", contentId, locale, redirectAttributes);
@@ -234,6 +223,31 @@ public class ContentOperations {
                 "editcontent.success", new Object[]{moduleId}, locale));
         return "redirect:/managecourses/" + courseid + "/editcourses/" + moduleId + "/editcontent/" + contentId;
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(value = {"/managecourses/{courseId}/editcourses/{moduleId}/editcontent/{contentId}/savetest"})
+    public String doPostEditTestContent(@PathVariable("courseId") String courseid, @PathVariable("moduleId") String moduleId, @PathVariable("contentId") String contentId, @Valid @ModelAttribute("TestOptionsDtoForm") TestOptionsDtoForm testOptionsDtoForm, BindingResult result,
+                                          RedirectAttributes redirectAttributes, Locale locale,
+                                          Model model) {
+
+        if (result.hasErrors()) {
+            serviceRedirectExceptions.serviceInvalidFormError(result, "editcontent.invalid.parameters", contentId, locale, redirectAttributes);
+            return "redirect:/managecourses/" + courseid + "/editcourses/" + moduleId + "/editcontent/" + contentId;
+        }
+
+        try {
+            contentImpl.testContentUpdate(Long.valueOf(contentId),testOptionsDtoForm.getEnunciado(), testOptionsDtoForm.getOpcion1(), testOptionsDtoForm.getOpcion2(), testOptionsDtoForm.getOpcion3(), testOptionsDtoForm.getOpcion4(),testOptionsDtoForm.getSelectedOption());
+        } catch (InstanceNotFoundException ex) {
+            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        } catch (DuplicatedResourceException ex) {
+            serviceRedirectExceptions.serviceDuplicatedResourceException(ex, redirectAttributes);
+            return "redirect:/managecourses/" + courseid + "/editcourses/" + moduleId + "/editcontent/" + contentId;
+        }
+        redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
+                "editcontent.success", new Object[]{moduleId}, locale));
+        return "redirect:/managecourses/" + courseid + "/editcourses/" + moduleId + "/editcontent/" + contentId;
+    }
+
 
 
 }

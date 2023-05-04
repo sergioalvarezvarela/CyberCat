@@ -110,6 +110,7 @@ h2{
 footer {
     position: absolute;
     width: 100%;
+
 }
 
 .ghost {
@@ -125,6 +126,16 @@ footer {
     cursor: default;
 }
 
+.container{
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
 
 
 

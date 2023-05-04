@@ -22,23 +22,21 @@ public class StringComplete extends Content  {
     @Column(name = "correctSentence", nullable = false, length = Integer.MAX_VALUE)
     private String correctSentence;
 
-    @OneToMany(
-            mappedBy = "stringComplete",
-            fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}
-    )
-    private List<StringCompleteOptions> stringCompleteOptions=  new ArrayList<>();
+    @Column(name = "content", nullable = false)
+    private String content;
+
 
     public StringComplete() {
 
     }
 
 
-    public StringComplete(String contentName, int contentPosition, Type content_category, Modules module, String enunciado, String sentence, String correctSentence) {
+    public StringComplete(String contentName, int contentPosition, Type content_category, Modules module, String enunciado, String sentence, String correctSentence, String content) {
         super(contentName, contentPosition, content_category, module);
         this.enunciado = enunciado;
         this.sentence = sentence;
         this.correctSentence = correctSentence;
+        this.content = content;
     }
 
     public String getSentence() {
@@ -57,13 +55,6 @@ public class StringComplete extends Content  {
         this.correctSentence = correctSentence;
     }
 
-    public List<StringCompleteOptions> getStringCompleteOptions() {
-        return stringCompleteOptions;
-    }
-
-    public void setStringCompleteOptions(List<StringCompleteOptions> stringCompleteOptions) {
-        this.stringCompleteOptions = stringCompleteOptions;
-    }
 
     public String getEnunciado() {
         return enunciado;
@@ -71,6 +62,14 @@ public class StringComplete extends Content  {
 
     public void setEnunciado(String enunciado) {
         this.enunciado = enunciado;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     @Override

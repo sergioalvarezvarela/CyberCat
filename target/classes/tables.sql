@@ -16,10 +16,6 @@ alter table modules
 drop
 foreign key FK8qnnp812q1jd38fx7mxrhpw;
 
-alter table stringcompleteoptions
-drop
-foreign key FK10v08ilaqh36y1yqph10pbd9;
-
 alter table string_completes
 drop
 foreign key FK_87usiie886moctid7dg38gku;
@@ -40,11 +36,7 @@ drop table if exists inscriptions;
 
 drop table if exists modules;
 
-drop table if exists stringcompleteoptions;
-
 drop table if exists string_completes;
-
-drop table if exists testoptions;
 
 drop table if exists testquestion;
 
@@ -67,7 +59,7 @@ create table courses (
 create table hibernate_sequence (
     next_val bigint
 ) engine=InnoD;
-
+    
     insert into hibernate_sequence values ( 1 ;
 
 create table inscriptions (
@@ -86,31 +78,17 @@ create table modules (
                          primary key (module_id)
 ) engine=InnoD;
 
-create table stringcompleteoptions (
-                                       string_complete_id bigint not null,
-                                       string_complete_option varchar(255) not null,
-                                       content_id bigint not null,
-                                       primary key (string_complete_id)
-) engine=InnoD;
-
 create table string_completes (
                                   content_id bigint not null,
                                   content_name varchar(255) not null,
                                   content_position integer not null,
                                   content_category varchar(255) not null,
                                   module_id bigint not null,
+                                  content varchar(255) not null,
                                   correct_sentence longtext not null,
                                   enunciado varchar(255) not null,
                                   sentence longtext not null,
                                   primary key (content_id)
-) engine=InnoD;
-
-create table testoptions (
-                             test_option_id bigint not null,
-                             correct bit not null,
-                             string_option varchar(255) not null,
-                             content_id bigint not null,
-                             primary key (test_option_id)
 ) engine=InnoD;
 
 create table testquestion (
@@ -119,6 +97,11 @@ create table testquestion (
                               content_position integer not null,
                               content_category varchar(255) not null,
                               module_id bigint not null,
+                              correct integer not null,
+                              option1 varchar(255) not null,
+                              option2 varchar(255) not null,
+                              option3 varchar(255) not null,
+                              option4 varchar(255) not null,
                               question varchar(255) not null,
                               primary key (content_id)
 ) engine=InnoD;
@@ -169,11 +152,6 @@ alter table modules
     add constraint FK8qnnp812q1jd38fx7mxrhpw9
         foreign key (course_id)
             references courses (course_id);
-
-alter table stringcompleteoptions
-    add constraint FK10v08ilaqh36y1yqph10pbd9q
-        foreign key (content_id)
-            references string_completes (content_id);
 
 alter table string_completes
     add constraint FK_87usiie886moctid7dg38gkut

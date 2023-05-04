@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<header th:replace="tools/package :: #package-include"></header>
+<header id="header-include" style="background-color: #173753">
+    <nav class="navbar navbar-expand" id="nav">
+        <div class="container col-md-12 col-sm-6 mt-3">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-dark navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-around" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item mx-lg-2">
+                        <a href="/">
+                            <img src="/images/logo.png" alt="Error al cargar la imagen" class="logo_tamano"
+                                 style="width: 70% ; height: 70%">
+                        </a>
+                    </li>
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <div th:if="${principal != null}">
+                            <div class="input-group" style="width: 80%">
+                                <div class="input-group-prepend">
+                                    <select class="form-select rounded-0 " style="background-color:  #d4e4f4" id="cat1"
+                                            name="catlist">
+                                        <option>Todos</option>
+                                        <option>Forense</option>
+                                        <option>Criptografía</option>
+                                        <option>Infraestructura</option>
+                                        <option>Virus</option>
+                                        <option>Malware</option>
+                                        <option>Nube</option>
+                                        <option>Red</option>
+                                        <option>Otro</option>
+                                    </select>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Text input with dropdown button">
+                                <button type="submit" class="btn btn-light rounded-0"
+                                        style="background-color:  #d4e4f4 "><i
+                                        class="bi bi-search"></i></button>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <a class="nav-item nav-link home-letter-nav" style="font-size: 13px"
+                           th:href="@{/catalog(start=0,count=5)}">Catálogo</a>
+                    </li>
+
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <div th:if="${principal != null}">
+                            <a class="nav-item nav-link home-letter-nav" data-method="post" th:href="@{/logout}"
+                               style="font-size: 13px">Cerrar sesión</a>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        const navbarToggler = document.getElementById("nav");
+
+        function checkWindowSize() {
+            if (window.innerWidth < 1200) {
+                navbarToggler.className = "navbar";
+            } else {
+                navbarToggler.className = "navbar navbar-expand-md";
+            }
+        }
+
+        checkWindowSize();
+        window.addEventListener('resize', checkWindowSize);
+    </script>
+</header>
+<body>
+<div class="container">
+    <div class="row mt-2">
+        <div th:replace="tools/Messages :: #messages-fragment"></div>
+    </div>
+    <div class="row mt-2 mb-2">
+        <div class="col">
+            <a href="/">
+                <button type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Atrás
+                </button>
+            </a>
+        </div>
+        <div class="col d-flex justify-content-end">
+            <button id="btnSave" type="submit" class="btn btn-info" style="margin-right: 10px">Guardar
+                cambios
+            </button>
+        </div>
+    </div>
+    <div class="row justify-content-center mb-3" th:each="course : ${CourseDtoForm}">
+        <div class="col-md-12 col-xl-10">
+            <div class="card shadow-0 border rounded-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                            <div class="bg-image hover-zoom ripple rounded ripple-surface">
+                                <img th:src="'data:' + ${course.imageType} + ';base64,' + ${course.image}"
+                                     alt="Profile image" style="width: 100%; height: 100%;"
+                                     class="w-100"/>
+                                <a href="#!">
+                                    <div class="hover-overlay">
+                                        <div class="mask"
+                                             style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-6 col-xl-6">
+                            <h5 th:text="${course.courseName}"></h5>
+                            <div class="d-flex flex-row">
+                                <div class="text-danger mb-1 me-2">
+                                    <i class="bi bi-star-fill" style="color: gold"></i>
+                                    <i class="bi bi-star-fill" style="color: gold"></i>
+                                    <i class="bi bi-star-fill" style="color: gold"></i>
+                                    <i class="bi bi-star-fill" style="color: gold"></i>
+                                    <i class="bi bi-star-fill" style="color: gold"></i>
+                                </div>
+                                <span>310 comentarios</span>
+                            </div>
+                            <div class="mt-1 mb-0 text-muted small">
+                                <span class="text-primary"> • </span>
+                                <span th:text="${course.category}"></span>
+                            </div>
+                            <p class="text-truncate mb-4 mb-md-0" th:text="${course.description}"></p>
+                        </div>
+                        <div class="col-md-6 col-lg-3 col-xl-3 align-self-center">
+                            <div class="d-flex flex-row align-items-center mb-1">
+                                <h4 class="mb-1 me-1" th:text="${course.price + ' €'}"></h4>
+                            </div>
+                            <div class="d-flex flex-column mt-4">
+                                <button class="btn btn-primary btn-sm" type="button"
+                                >Inscribirse
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav aria-label="Page navigation example">
+        <input type="hidden" id="hiddenStart" th:value="${PaginationDtoForm.start}"/>
+        <input type="hidden" id="hiddenCount" th:value="${PaginationDtoForm.count}"/>
+        <ul class="pagination justify-content-end">
+            <li class="page-item"><a id="previous" class="page-link" onclick="updatePreviusLink()">Anterior</a></li>
+            <li class="page-item"><a class="page-link" th:href="@{/catalog(start=0,count=5)}">1</a></li>
+            <li class="page-item"><a class="page-link" th:href="@{/catalog(start=5,count=10)}">2</a></li>
+            <li class="page-item"><a class="page-link" th:href="@{/catalog(start=10,count=15)}">3</a></li>
+            <li class="page-item"><a id="next" class="page-link" onclick="updateNextLink()">Siguiente</a></li>
+        </ul>
+    </nav>
+</div>
+</body>
+<footer class="fixed-bottom" style="position: absolute; margin: 0"
+        th:replace="tools/footer :: #footer-include"></footer>
+
+<script>
+    function updateNextLink() {
+        var hiddenStart = parseInt(document.getElementById("hiddenStart").value) + 5;
+        var hiddenCount = parseInt(document.getElementById("hiddenCount").value) + 5;
+        var next = document.getElementById("next");
+
+        var newHref = '/catalog?start=' + hiddenStart + '&count=' + hiddenCount;
+        next.setAttribute("href", newHref);
+    }
+
+    function updatePreviusLink() {
+        var hiddenStart = parseInt(document.getElementById("hiddenStart").value) - 5;
+
+        var hiddenCount = parseInt(document.getElementById("hiddenCount").value) - 5;
+        var previous = document.getElementById("previous");
+        if (hiddenStart >= 0) {
+            var newHref = '/catalog?start=' + hiddenStart + '&count=' + hiddenCount;
+            previous.setAttribute("href", newHref);
+        }
+    }
+</script>
+</html>

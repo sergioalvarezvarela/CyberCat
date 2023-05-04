@@ -8,10 +8,10 @@
     <div class="row mt-2">
         <div th:replace="tools/Messages :: #messages-fragment"></div>
     </div>
-    <form th:action="@{/managecourses/{courseId}/editcourses/{moduleId}/editcontent/{contentId}/saveteoric(courseId=${TeoricDtoFormShow.courseId}, moduleId=${TeoricDtoFormShow.moduleId}, contentId=${TeoricDtoFormShow.contentId})}" method="post" class="" id="miFormulario">
+    <form th:action="@{/managecourses/{courseId}/editcourses/{moduleId}/editcontent/{contentId}/saveteoric(courseId=${TeoricDtoForm.courseId}, moduleId=${TeoricDtoForm.moduleId}, contentId=${TeoricDtoForm.contentId})}" method="post" class="" id="miFormulario">
         <div class="row mt-2 mb-2">
             <div class="col">
-                <a th:href="@{/managecourses/{courseId}/editcourses(courseId=${TeoricDtoFormShow.courseId})}">
+                <a th:href="@{/managecourses/{courseId}/editcourses(courseId=${TeoricDtoForm.courseId})}">
                     <button type="button" class="btn btn-primary">
                         <i class="bi bi-arrow-left"></i> Atrás
                     </button>
@@ -25,7 +25,7 @@
         </div>
 
         <label for="markdownContent"></label>
-        <textarea th:text="${TeoricDtoFormShow.html}" th:field="${TeoricDtoFormShow.html}" class="form-control" id="markdownContent" rows="3"></textarea>
+        <textarea th:field="${TeoricDtoForm.html}" class="form-control" id="markdownContent" rows="3"></textarea>
     </form>
 
 </div>

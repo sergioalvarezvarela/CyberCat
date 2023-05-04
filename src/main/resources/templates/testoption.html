@@ -5,56 +5,115 @@
 
 <body>
 <div class="container">
-  <div class="row mt-2">
-    <div th:replace="tools/Messages :: #messages-fragment"></div>
-  </div>
-  <div class="row">
-    <div id="quiz-container">
-      Hola soy <span id="blank-1" class="blank"></span> y estudio <span id="blank-2" class="blank"></span>.
-      <div id="options-container">
-        <div id="option-1" class="option">Sergio</div>
-        <div id="option-2" class="option">Raúl</div>
-        <div id="option-3" class="option">Informática</div>
-        <div id="option-4" class="option">Tractor</div>
-      </div>
+    <div class="row mt-2">
+        <div th:replace="tools/Messages :: #messages-fragment"></div>
     </div>
-  </div>
+    <form th:action="@{/managecourses/{courseId}/editcourses/{moduleId}/editcontent/{contentId}/savetest(courseId=${TestOptionsDtoForm.courseId}, moduleId=${TestOptionsDtoForm.moduleId}, contentId=${TestOptionsDtoForm.contentId})}"
+          method="post" class="" id="miFormulario">
+        <div class="row mt-2 mb-2">
+            <div class="col">
+                <a th:href="@{/managecourses/{courseId}/editcourses(courseId=${TestOptionsDtoForm.courseId})}">
+                    <button type="button" class="btn btn-primary">
+                        <i class="bi bi-arrow-left"></i> Atrás
+                    </button>
+                </a>
+            </div>
+            <div class="col d-flex justify-content-end">
+                <button id="btnSave" type="submit" class="btn btn-info" style="margin-right: 10px">Guardar
+                    cambios
+                </button>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="form-group mt-2">
+                <label for="enunciado">Escribe el enunciado de la pregunta</label>
+                <input class="form-control"  th:field="${TestOptionsDtoForm.enunciado}" type="text" id="enunciado" placeholder="Enunciado de la pregunta" required>
 
+            </div>
+            <div class="form-group mt-2">
+                <div class="row">
+                    <div class="col-11">
+                        <label for="opcion1">Escribe una opción</label>
+                        <input th:field="${TestOptionsDtoForm.opcion1}"
+                               type= "text" class="form-control" id="opcion1" placeholder="Opcion para el test" required>
+                    </div>
+                    <div class="col-1 align-self-center mt-4">
+                        <input th:field="${TestOptionsDtoForm.selectedOption}"
+                               th:value="1"
+                               class="form-check-input" type="radio" name="booleanOption" id="bool1">
+                        <label class="form-check-label" for="bool1"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <div class="row">
+                    <div class="col-11">
+                        <label for="opcion2">Escribe otra opcion</label>
+                        <input th:field="${TestOptionsDtoForm.opcion2}"
+                               class="form-control" id="opcion2" placeholder="Opcion para el test" required>
+                    </div>
+                    <div class="col-1 align-self-center mt-4">
+                        <input th:field="${TestOptionsDtoForm.selectedOption}"
+                               th:value="2"
+                               class="form-check-input" type="radio" name="booleanOption" id="bool2">
+                        <label class="form-check-label" for="bool2"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <div class="row">
+                    <div class="col-11">
+                        <label for="opcion3">Escribe otra opcion</label>
+                        <input th:field="${TestOptionsDtoForm.opcion3}"
+                               class="form-control" id="opcion3" placeholder="Opcion para el test" required>
+                    </div>
+
+                    <div class="col-1 align-self-center mt-4">
+                        <input th:field="${TestOptionsDtoForm.selectedOption}"
+                               th:value="3"
+                               class="form-check-input" type="radio" name="booleanOption" id="bool3">
+                        <label class="form-check-label" for="bool3"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <div class="row">
+                    <div class="col-11">
+                        <label for="opcion4">Escribe otra opcion</label>
+                        <input th:field="${TestOptionsDtoForm.opcion4}"
+                               class="form-control" id="opcion4" placeholder="Opcion para el test" required>
+                    </div>
+
+                    <div class="col-1 align-self-center mt-4">
+                        <input th:field="${TestOptionsDtoForm.selectedOption}"
+                               th:value="4"
+                               class="form-check-input" type="radio" name="booleanOption" id="bool4">
+                        <label class="form-check-label" for="bool4"></label>
+                    </div>
+                </div>
+            </div>
+            <p class="text-info mt-2">Antes de guardar recuerda señalar una de las preguntas como correcta.</p>
+        </div>
+    </form>
 </div>
-<script>
-  var optionsContainer = document.getElementById('options-container');
-
-  new Sortable(optionsContainer, {
-    group: 'shared',
-    animation: 150,
-    delay: 0,
-    ghostClass: 'ghost',
-    onEnd: function(evt) {
-      if (evt.item.classList.contains('filled')) {
-        evt.item.classList.remove('filled');
-        evt.item.parentNode.insertBefore(evt.item, evt.item.nextSibling);
-      }
-    }
-  });
-
-  var blanks = document.querySelectorAll('.blank');
-
-  for (var i = 0; i < blanks.length; i++) {
-    new Sortable(blanks[i], {
-      group: 'shared',
-      animation: 150,
-      delay: 0,
-      ghostClass: 'ghost',
-      onAdd: function(evt) {
-        if (evt.item.classList.contains('option')) {
-          evt.item.classList.add('filled');
-          evt.item.parentNode.removeChild(evt.item);
-        }
-      }
-    });
-  }
-</script>
-
 </body>
 <footer th:replace="tools/footer :: #footer-include"></footer>
+
+<script>
+    const checkboxes = document.querySelectorAll('input[type=checkbox][name=booleanOption]');
+
+    checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener('click', (event) => {
+            checkboxes.forEach((cb) => {
+                if (cb !== checkbox) {
+                    cb.checked = false;
+                }
+            });
+            if (event.target.checked === false) {
+                checkbox.checked = false;
+            }
+        });
+    });
+</script>
+
 </html>

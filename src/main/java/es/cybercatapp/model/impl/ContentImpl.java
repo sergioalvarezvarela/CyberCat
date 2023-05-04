@@ -13,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-
 @Service(value = "contentImpl")
 public class ContentImpl {
 
@@ -34,18 +31,19 @@ public class ContentImpl {
     @Autowired
     ContentRepository contentRepository;
 
+
     @Transactional
     public StringContent createTeoricContent(Long moduleId, String contentName, String html) throws InstanceNotFoundException, DuplicatedResourceException {
         try {
 
             Modules module = moduleRepository.findById(moduleId);
-            StringContent content = (StringContent) contentRepository.findContentsByContentNameAndModule(moduleId, contentName);
-            if (content != null) {
+            Content contenido =  contentRepository.findContentsByContentNameAndModule(moduleId, contentName);
+            if (contenido != null) {
 
                 throw exceptionGenerationUtils.toDuplicatedResourceException("Content", contentName,
                         "createcontent.duplicated.exception");
             } else {
-                content = new StringContent(contentName, module.getContents().size() + 1,Type.TEORIC, module, html);
+                StringContent content = new StringContent(contentName, module.getContents().size() + 1, Type.TEORIC, module, html);
                 contentRepository.create(content);
                 module.getContents().add(content);
                 moduleRepository.update(module);
@@ -62,16 +60,14 @@ public class ContentImpl {
         try {
 
             Modules module = moduleRepository.findById(moduleId);
-            TestQuestions content = (TestQuestions) contentRepository.findContentsByContentNameAndModule(moduleId, contentName);
-            if (content != null) {
+            Content contenido = contentRepository.findContentsByContentNameAndModule(moduleId, contentName);
+            if (contenido != null) {
 
                 throw exceptionGenerationUtils.toDuplicatedResourceException("Content", contentName,
                         "createcontent.duplicated.exception");
             } else {
-                content = new TestQuestions(contentName, module.getContents().size() + 1, Type.TESTCHOOSE, module, enunciado);
+                TestQuestions content = new TestQuestions(contentName, module.getContents().size() + 1, Type.TESTCHOOSE, module, enunciado, "Frase 1", "Frase 2", "Frase 3", "Frase 4", 1);
                 contentRepository.create(content);
-                module.getContents().add(content);
-                moduleRepository.update(module);
                 return content;
             }
 
@@ -85,19 +81,13 @@ public class ContentImpl {
         try {
 
             Modules module = moduleRepository.findById(moduleId);
-            StringComplete content = (StringComplete) contentRepository.findContentsByContentNameAndModule(moduleId, contentName);
-            if (content != null) {
+            Content contenido =  contentRepository.findContentsByContentNameAndModule(moduleId, contentName);
+            if (contenido != null) {
 
                 throw exceptionGenerationUtils.toDuplicatedResourceException("Content", contentName,
                         "createcontent.duplicated.exception");
             } else {
-                content = new StringComplete(contentName, module.getContents().size() + 1, Type.TESTPUZZLE, module, enunciado, frase, frasecorrecta);
-                List<StringCompleteOptions> palabras = new java.util.ArrayList<>(Collections.emptyList());
-                String[] wordList = words.split("\n");
-                for (String word: wordList){
-                    palabras.add(new StringCompleteOptions(word,content));
-                }
-                content.setStringCompleteOptions(palabras);
+                StringComplete content = new StringComplete(contentName, module.getContents().size() + 1, Type.TESTPUZZLE, module, enunciado, frase, frasecorrecta, words);
                 contentRepository.create(content);
                 return content;
             }
@@ -106,7 +96,6 @@ public class ContentImpl {
             throw new InstanceNotFoundException(moduleId.toString(), Modules.class.toString(), "Module not found");
         }
     }
-
 
 
     @Transactional
@@ -120,15 +109,16 @@ public class ContentImpl {
 
 
     }
+
     @Transactional
-    public void contentUpdate(Long moduleId, Long contentId,String newContentName) throws InstanceNotFoundException,DuplicatedResourceException {
+    public void contentUpdate(Long moduleId, Long contentId, String newContentName) throws InstanceNotFoundException, DuplicatedResourceException {
 
         Content content = contentRepository.findById(contentId);
-        Content content1 = contentRepository.findContentsByContentNameAndModule(moduleId,newContentName);
+        Content content1 = contentRepository.findContentsByContentNameAndModule(moduleId, newContentName);
         if (content == null) {
             throw new InstanceNotFoundException(contentId.toString(), Content.class.toString(), "Content not found");
         }
-        if (content1 != null){
+        if (content1 != null) {
             throw exceptionGenerationUtils.toDuplicatedResourceException("Content", content1.getContentId().toString(),
                     "updatecontent.duplicated.exception");
         } else {
@@ -137,53 +127,59 @@ public class ContentImpl {
         }
 
 
-
     }
 
     @Transactional
-    public void puzzleContentUpdate(Long contentId, String enunciado, String sentence, String correctsentence, String words) throws InstanceNotFoundException,DuplicatedResourceException {
+    public void puzzleContentUpdate(Long contentId, String enunciado, String sentence, String correctsentence, String words) throws InstanceNotFoundException, DuplicatedResourceException {
 
         StringComplete content = (StringComplete) contentRepository.findById(contentId);
         if (content == null) {
             throw new InstanceNotFoundException(contentId.toString(), Content.class.toString(), "Content not found");
         }
 
-        List<StringCompleteOptions> palabras = new java.util.ArrayList<>(Collections.emptyList());
-        List<StringCompleteOptions> palabras2 = content.getStringCompleteOptions();
-        String[] wordList = words.split("\\s*\n\\s*");
-        for (String word: wordList){
-            palabras.add(new StringCompleteOptions(word,content));
-        }
-        int count = 0;
-        for (StringCompleteOptions word: palabras2){
-            if (word.getStringCompleteOption().equals(palabras.get(count).getStringCompleteOption())){
-                palabras.get(count).setStringCompleteId(word.getStringCompleteId());
-            } else {
-                count++;
-            }
 
-        }
-
-        if (content.getEnunciado().equals(enunciado) && content.getSentence().equals(sentence) && content.getCorrectSentence().equals(correctsentence) && palabras.equals(content.getStringCompleteOptions())){
+        if (content.getEnunciado().equals(enunciado) && content.getSentence().equals(sentence) && content.getCorrectSentence().equals(correctsentence) && words.equals(content.getContent())) {
             throw exceptionGenerationUtils.toDuplicatedResourceException("Content", content.getContentId().toString(),
                     "editcontent.duplicated.exception");
         } else {
             content.setEnunciado(enunciado);
             content.setSentence(sentence);
             content.setCorrectSentence(correctsentence);
-            content.setStringCompleteOptions(palabras);
+            content.setContent(words);
             contentRepository.update(content);
         }
     }
 
     @Transactional
-    public void stringContentUpdate(String html, Long contentId) throws InstanceNotFoundException,DuplicatedResourceException {
+    public void testContentUpdate(Long contentId, String question, String word1, String word2, String word3, String word4, int correct) throws InstanceNotFoundException, DuplicatedResourceException {
+
+        TestQuestions content = (TestQuestions) contentRepository.findById(contentId);
+        if (content == null) {
+            throw new InstanceNotFoundException(contentId.toString(), Content.class.toString(), "Content not found");
+        }
+
+        if (content.getQuestion().equals(question) && content.getOption1().equals(word1) && content.getOption2().equals(word2) && content.getOption3().equals(word3) && content.getOption4().equals(word4) && content.getCorrect() == correct) {
+            throw exceptionGenerationUtils.toDuplicatedResourceException("Content", content.getContentId().toString(),
+                    "editcontent.duplicated.exception");
+        } else {
+            content.setQuestion(question);
+            content.setOption1(word1);
+            content.setOption2(word2);
+            content.setOption3(word3);
+            content.setOption4(word4);
+            content.setCorrect(correct);
+            contentRepository.update(content);
+        }
+    }
+
+    @Transactional
+    public void stringContentUpdate(String html, Long contentId) throws InstanceNotFoundException, DuplicatedResourceException {
 
         StringContent content = (StringContent) contentRepository.findById(contentId);
         if (content == null) {
             throw new InstanceNotFoundException(contentId.toString(), Content.class.toString(), "Content not found");
         }
-        if (content.getHtml().equals(html)){
+        if (content.getHtml().equals(html)) {
             throw exceptionGenerationUtils.toDuplicatedResourceException("Content", content.getContentId().toString(),
                     "editcontent.duplicated.exception");
         } else {
@@ -192,19 +188,12 @@ public class ContentImpl {
         }
     }
 
-    @Transactional
-    public StringComplete initializeStringOptions(StringComplete stringComplete) {
-        System.out.println("hola");
-        return contentRepository.initializeStringCompleteOptions(stringComplete);
-    }
-
 
 
     @Transactional(readOnly = true)
     public Content findByContentId(Long contentId) throws InstanceNotFoundException {
         return contentRepository.findById(contentId);
     }
-
 
 
 }

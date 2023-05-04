@@ -1,9 +1,6 @@
 package es.cybercatapp.model.repositories;
 
-import es.cybercatapp.model.entities.Content;
-import es.cybercatapp.model.entities.Modules;
-import es.cybercatapp.model.entities.StringComplete;
-import es.cybercatapp.model.entities.Users;
+import es.cybercatapp.model.entities.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,8 +11,6 @@ import javax.persistence.TypedQuery;
 public class ContentRepository extends AbstractRepository<Content> {
 
     private static final String FIND_CONTENT_NAME_BY_MODULE = "SELECT c FROM Contents c WHERE c.contentName = :contentName AND c.module.moduleId = :moduleId";
-
-    private static final String INITIALIZE_STRING_COMPLETE_OPTIONS = "SELECT sc FROM StringComplete sc JOIN FETCH sc.stringCompleteOptions WHERE sc.contentId = :contentId";
 
     public Content findContentsByContentNameAndModule(Long moduleId, String contentName) {
         try {
@@ -31,18 +26,7 @@ public class ContentRepository extends AbstractRepository<Content> {
 
     }
 
-    public StringComplete initializeStringCompleteOptions(StringComplete stringComplete) {
-        try {
-            TypedQuery<StringComplete> query = entityManager.createQuery(INITIALIZE_STRING_COMPLETE_OPTIONS, StringComplete.class);
-            query.setParameter("contentId", stringComplete.getContentId());
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            logger.error(e.getMessage(), e);
-            return null;
-        }
 
-
-    }
 
 
 }

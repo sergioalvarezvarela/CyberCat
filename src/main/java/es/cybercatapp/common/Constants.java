@@ -11,29 +11,18 @@ public class Constants {
 
     // Course
 
-    public static final String COURSE_ENTITY = "Course";
+    public static final String COURSE_ENTITY = "Courses";
     public static final String COURSE_TABLE = "Courses";
 
     public static final String MODULE_ENTITY = "Module";
     public static final String MODULE_TABLE = "Modules";
 
-    public static final String TESTOPTIONS_ENTITY = "Testoption";
-    public static final String TESTOPTIONS_TABLE = "Testoptions";
 
     public static final String STRINGCOMPLETE_ENTITY = "StringComplete";
     public static final String STRINGCOMPLETE_TABLE = "StringCompletes";
 
-    public static final String STRINGCOMPLETEOPTIONS_ENTITY = "Stringcompleteoption";
-    public static final String STRINGCOMPLETEOPTIONS_TABLE = "Stringcompleteoptions";
-
     public static final String INSCRIPTIONS_ENTITY = "Inscription";
     public static final String INSCRIPTIONS_TABLE = "Inscriptions";
-
-    public static final String CONTENTUSER_ENTITY = "Contentuser";
-    public static final String CONTENTUSER_TABLE = "Contentusers";
-
-    public static final String MODULEUSER_ENTITY = "Moduleuser";
-    public static final String MODULEUSER_TABLE = "Moduleusers";
 
     public static final String CONTENT_ENTITY = "Content";
     public static final String CONTENT_TABLE = "Contents";
