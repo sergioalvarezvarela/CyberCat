@@ -54,6 +54,7 @@ public class UserOperations {
 
     @GetMapping(value = {"/register"})
     public String doGetRegisterPage(Model model) {
+        model.addAttribute("LoginDtoForm", new LoginDtoForm());
         model.addAttribute("RegisterDtoForm", new RegisterDtoForm());
         return "register";
     }
@@ -62,13 +63,13 @@ public class UserOperations {
     public String doRegister(@Valid @ModelAttribute("RegisterDtoForm") RegisterDtoForm registerDtoForm,
                              BindingResult result,
                              RedirectAttributes redirectAttributes,
-                             HttpSession session,
+                             HttpSession session, Principal principal,
                              Locale locale,
                              Model model) {
         if (result.hasErrors()) {
-            serviceExceptions.serviceInvalidFormError(result,
-                    "registration.invalid.parameters", model, locale);
-            return "register";
+            serviceRedirectExceptions.serviceInvalidFormError(result,
+                    "registration.invalid.parameters", principal.getName(), locale,redirectAttributes);
+            return "redirect:/register";
         }
         Users user;
         try {
@@ -83,8 +84,8 @@ public class UserOperations {
             redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                     "registration.success", new Object[]{user.getUsername()}, locale));
         } catch (DuplicatedResourceException ex) {
-            serviceExceptions.serviceDuplicatedResourceException(ex, model);
-            return "register";
+            serviceRedirectExceptions.serviceDuplicatedResourceException(ex,redirectAttributes);
+            return "redirect:/register";
         } catch (IOException ex) {
             return serviceExceptions.serviceUnexpectedException(ex, model);
         }

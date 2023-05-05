@@ -1,33 +1,50 @@
 <!DOCTYPE html>
 <header th:replace="tools/package :: #package-include"></header>
-
-<header style="background-color: #173753">
-    <nav class="navbar navbar-expand-md">
-        <div class="container col-lg-10 col-md-10 col-sm-6">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+<header id="header-include-nr" style="background-color: #173753">
+    <nav class="navbar navbar-expand" id="nav">
+        <div class="container col-md-12 col-sm-6 mt-3">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-dark navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-around" id="navbarNav">
-                <ul class="navbar-nav mt-3">
+                <ul class="navbar-nav">
                     <li class="nav-item mx-lg-2">
-                        <a href="/" >
+                        <a href="/">
                             <img src="/images/logo.png" alt="Error al cargar la imagen" class="logo_tamano"
                                  style="width: 70% ; height: 70%">
                         </a>
                     </li>
-                    <li class="nav-item mx-lg-5">
-                        <a class="nav-link" style="color: white; font-size: 16px; font-weight: bold" th:href="@{/catalog(start=0,count=5)}">Catálogo</a>
-                    </li>
-                    <li class="nav-item mx-lg-5">
+                    <li class="nav-item mx-lg-2 mt-3">
                         <a class="nav-link" style="color: white; font-size: 16px; font-weight: bold" href="register">Regístrate</a>
                     </li>
-                    <li class="nav-item mx-lg-5">
-                        <a class="nav-link" style="color: white; font-size: 16px; font-weight: bold" href="#loginModal" data-bs-toggle="modal">Inicia Sesión</a>
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <a class="nav-item nav-link home-letter-nav" style="font-size: 16px"
+                           th:href="@{/catalog(start=0,count=5)}">Catálogo</a>
+                    </li>
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <a class="nav-link" style="color: white; font-size: 16px; font-weight: bold" href="#loginModal"
+                           data-bs-toggle="modal">Inicia Sesión</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
+    <script>
+        const navbarToggler = document.getElementById("nav");
+
+        function checkWindowSize() {
+            if (window.innerWidth < 1200) {
+                navbarToggler.className = "navbar";
+            } else {
+                navbarToggler.className = "navbar navbar-expand-md";
+            }
+        }
+
+        checkWindowSize();
+        window.addEventListener('resize', checkWindowSize);
+
+    </script>
 </header>
 <body class="register-background-color">
 <div class="container-fluid f-main">
@@ -85,7 +102,7 @@
                 <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
                     <div class="card" style="background-color: #6DAEDB;height: 100%; border: 4px solid #173753">
                         <img src="/images/card1.png" class="card-img-top"
-                             alt="No se ha podido cargar la imagen" />
+                             alt="No se ha podido cargar la imagen"/>
                         <div class="card-body">
                             <h5 class="card-title">Como comenzar</h5>
                             <p class="card-text">
@@ -98,7 +115,7 @@
                 <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
                     <div class="card" style="height: 100%; background-color: #6DAEDB; border: 4px solid #173753">
                         <img src="/images/card2.png" class="card-img-top "
-                             alt="No se ha podido cargar la imagen" />
+                             alt="No se ha podido cargar la imagen"/>
                         <div class="card-body">
                             <h5 class="card-title" style="font-size: 17px">Aprendiendo con nosotros</h5>
                             <p class="card-text">
@@ -111,7 +128,7 @@
                 <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
                     <div class="card" style="height: 100%; background-color: #6DAEDB; border: 4px solid #173753">
                         <img src="/images/card3.png" class="card-img-top "
-                             alt="No se ha podido cargar la imagen" />
+                             alt="No se ha podido cargar la imagen"/>
                         <div class="card-body">
                             <h5 class="card-title">Mostrando resultados</h5>
                             <p class="card-text">Realiza el pago a través de una de nuestras plataformas y obtén el
@@ -122,24 +139,15 @@
             </div>
         </div>
     </div>
-
-
-
-
 </div>
 <div th:replace="login :: #loginModal"></div>
 </body>
-
-<footer th:replace="tools/footer :: #footer-include"></footer>
-
-
 
 <script>
     let eye = document.getElementById('eyeid');
 
     eye.addEventListener("click", function () {
         var passwordField = document.getElementById('password');
-        password = document.querySelector('.password');
 
         if (passwordField.type === 'password') {
             eye.className = "bi bi-eye-slash-fill show-password-icon-index";
@@ -149,8 +157,11 @@
             passwordField.type = 'password';
         }
     })
-
-
 </script>
+
+<footer th:replace="tools/footer :: #footer-include"></footer>
+
+
+
 
 </html>

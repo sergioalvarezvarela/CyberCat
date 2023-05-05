@@ -12,6 +12,7 @@ import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
 import es.cybercatapp.service.conversor.CoursesConversor;
 import es.cybercatapp.service.dto.CourseDtoForm;
+import es.cybercatapp.service.dto.LoginDtoForm;
 import es.cybercatapp.service.dto.PaginationDtoForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +61,7 @@ public class CatalogOperations {
             model.addAttribute("CourseDtoForm", courseDtos);
             model.addAttribute("PaginationDtoForm", new PaginationDtoForm(Integer.parseInt(start), Integer.parseInt(count)));
             model.addAttribute("principal", principal);
+            model.addAttribute("LoginDtoForm", new LoginDtoForm());
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }

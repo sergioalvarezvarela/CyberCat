@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <header th:replace="tools/package :: #package-include"></header>
-<header id="header-include" style="background-color: #173753">
+<header id="header-include-nr" style="background-color: #173753">
     <nav class="navbar navbar-expand" id="nav">
         <div class="container col-md-12 col-sm-6 mt-3">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -16,6 +16,7 @@
                                  style="width: 70% ; height: 70%">
                         </a>
                     </li>
+
                     <li class="nav-item mx-lg-2 mt-3">
                         <div th:if="${principal != null}">
                             <div class="input-group" style="width: 80%">
@@ -37,19 +38,36 @@
                                 <button type="submit" class="btn btn-light rounded-0"
                                         style="background-color:  #d4e4f4 "><i
                                         class="bi bi-search"></i></button>
-                            </div>
 
+                            </div>
                         </div>
                     </li>
+
+
                     <li class="nav-item mx-lg-2 mt-3">
-                        <a class="nav-item nav-link home-letter-nav" style="font-size: 13px"
+                        <div th:if="${principal == null}">
+                            <a class="nav-link" style="color: white; font-size: 16px; font-weight: bold"
+                               href="register">Regístrate</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <a class="nav-item nav-link home-letter-nav" style="font-size: 16px"
                            th:href="@{/catalog(start=0,count=5)}">Catálogo</a>
+                    </li>
+
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <div th:if="${principal == null}">
+                            <a class="nav-link" style="color: white; font-size: 16px; font-weight: bold"
+                               href="#loginModal"
+                               data-bs-toggle="modal">Inicia Sesión</a>
+                        </div>
                     </li>
 
                     <li class="nav-item mx-lg-2 mt-3">
                         <div th:if="${principal != null}">
                             <a class="nav-item nav-link home-letter-nav" data-method="post" th:href="@{/logout}"
-                               style="font-size: 13px">Cerrar sesión</a>
+                               style="font-size: 16px">Cerrar sesión</a>
                         </div>
                     </li>
 
@@ -57,7 +75,6 @@
             </div>
         </div>
     </nav>
-
     <script>
         const navbarToggler = document.getElementById("nav");
 
@@ -71,8 +88,11 @@
 
         checkWindowSize();
         window.addEventListener('resize', checkWindowSize);
+
     </script>
 </header>
+
+
 <body>
 <div class="container">
     <div class="row mt-2">
@@ -155,9 +175,9 @@
         </ul>
     </nav>
 </div>
+<div th:replace="login :: #loginModal"></div>
 </body>
-<footer class="fixed-bottom" style="position: absolute; margin: 0"
-        th:replace="tools/footer :: #footer-include"></footer>
+<footer th:replace="tools/footer :: #footer-include"></footer>
 
 <script>
     function updateNextLink() {
@@ -178,6 +198,21 @@
             var newHref = '/catalog?start=' + hiddenStart + '&count=' + hiddenCount;
             previous.setAttribute("href", newHref);
         }
+
     }
+
+    let eye = document.getElementById('eyeid');
+
+    eye.addEventListener("click", function () {
+        var passwordField = document.getElementById('password');
+
+        if (passwordField.type === 'password') {
+            eye.className = "bi bi-eye-slash-fill show-password-icon-index";
+            passwordField.type = 'text';
+        } else {
+            eye.className = "bi bi-eye-fill show-password-icon-index";
+            passwordField.type = 'password';
+        }
+    })
 </script>
 </html>

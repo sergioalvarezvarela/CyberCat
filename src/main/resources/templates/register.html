@@ -1,19 +1,61 @@
 <!DOCTYPE html>
 <header th:replace="tools/package :: #package-include"></header>
 
-<body class="register-background-color container d-flex justify-content-center align-items-center mt-4" style="height: 100vh">
-    <div class="row">
-        <div class="col-md-12 mx-auto">
-            <div class="row mb-4 justify-content-center">
-
-                <div class="col-8">
-                    <a href="/">
-                        <img src="/images/logo2.png"   alt="Error al cargar la imagen" class="logo_tamano" style="height: 100%; width: 100%">
-                    </a>
-                </div>
+<header id="header-include-nr" style="background-color: #173753">
+    <nav class="navbar navbar-expand" id="nav">
+        <div class="container col-md-12 col-sm-6 mt-3">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-dark navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-around" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item mx-lg-2">
+                        <a href="/">
+                            <img src="/images/logo.png" alt="Error al cargar la imagen" class="logo_tamano"
+                                 style="width: 70% ; height: 70%">
+                        </a>
+                    </li>
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <a class="nav-link" style="color: white; font-size: 16px; font-weight: bold" href="register">Regístrate</a>
+                    </li>
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <a class="nav-item nav-link home-letter-nav" style="font-size: 16px"
+                           th:href="@{/catalog(start=0,count=5)}">Catálogo</a>
+                    </li>
+                    <li class="nav-item mx-lg-2 mt-3">
+                            <a class="nav-link" style="color: white; font-size: 16px; font-weight: bold"
+                               href="#loginModal"
+                               data-bs-toggle="modal">Inicia Sesión</a>
+                    </li>
+                </ul>
             </div>
+        </div>
+    </nav>
+    <script>
+        const navbarToggler = document.getElementById("nav");
+
+        function checkWindowSize() {
+            if (window.innerWidth < 1200) {
+                navbarToggler.className = "navbar";
+            } else {
+                navbarToggler.className = "navbar navbar-expand-md";
+            }
+        }
+
+        checkWindowSize();
+        window.addEventListener('resize', checkWindowSize);
+
+    </script>
+</header>
+<body>
+<div class="container">
+    <div class="mt-2" th:replace="tools/Messages :: #messages-fragment"></div>
+    <div class="row d-flex justify-content-center align-content-center mt-3">
+        <div class="col-6 mx-auto">
             <h3 class="text-center">Regístrate</h3>
-            <form th:action="@{/register}" method="post" class="text-left" id="miFormulario" enctype="multipart/form-data">
+            <form th:action="@{/register}" method="post" class="text-left" id="miFormulario"
+                  enctype="multipart/form-data">
                 <div class="form-group row">
                     <div class="col">
                         <div class="row">
@@ -37,13 +79,13 @@
                     <div class="col">
                         <div class="row">
                             <div class="col">
-                                <label for="username">Nombre de usuario</label>
+                                <label for="username1">Nombre de usuario</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
 
-                                <input type="text" class="form-control form-control-lg" id="username"
+                                <input type="text" class="form-control form-control-lg" id="username1"
                                        placeholder="Introduce usuario" th:field="*{RegisterDtoForm.username}">
                                 <p class="hide_alert text-danger" id="alert_user">El campo Nombre de usuario es
                                     obligatorio</p>
@@ -70,10 +112,12 @@
                             <div class="col">
                                 <div class="input-group mb-3">
                                     <input type="password" class="password1 form-control form-control-lg" id="password1"
-                                           th:field="*{RegisterDtoForm.password}"  aria-label="password" placeholder="Introduce contraseña"
+                                           th:field="*{RegisterDtoForm.password}" aria-label="password"
+                                           placeholder="Introduce contraseña"
                                            aria-describedby="basic-addon2" required>
-                                    <span class="input-group-text" id="basic-addon2" style="background-color: #f7f7f7"><i
-                                            class="bi bi-eye-fill show-password-icon-index show-password" id="eyeid"
+                                    <span class="input-group-text" id="basic-addon2"
+                                          style="background-color: #f7f7f7"><i
+                                            class="bi bi-eye-fill show-password-icon-index show-password" id="eyeid1"
                                             style="font-size: 1.3em"></i></span>
                                 </div>
                                 <p class="hide_alert text-danger" id="alert_pass1">El campo Contraseña es
@@ -119,28 +163,28 @@
                 </div>
                 <br>
                 <div class="form-group row">
-                    <div class="col-md-12 col-sm-6">
+                    <div class="col-6">
                         <div class="row">
                             <div class="col">
                                 <label for="image">Foto de perfil</label>
                             </div>
                         </div>
                         <br>
-                        <div class="row">
-                            <div class="col">
-                                <input type="file" class="form-control-file" id="image"
-                                       th:field="*{RegisterDtoForm.image}">
+                        <div class="row d-flex align-content-center">
+                            <input type="file" class="form-control-file d-none" id="image"
+                                   th:field="*{RegisterDtoForm.image}">
+                            <div class="col-12">
+                            <button type="button" class="btn btn-primary" id="customFileButton">Seleccionar archivo</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 col-sm-12">
+                    <div class="col-12">
                         <br>
                         <input type="submit" onclick="comprobarErrores()" id="register" value="Regístrate"
                                class=" register-button-color btn btn-primary register-custom-btn"
                                style="margin-bottom: 20px; width: 100%">
-                        <div th:replace="tools/Messages :: #messages-fragment"></div>
                     </div>
                 </div>
             </form>
@@ -148,30 +192,31 @@
     </div>
 </div>
 
+
 <script>
     const formulario = document.getElementById('miFormulario');
     let reg = null;
 
-    window.addEventListener("load", function () {
-        showPassword = document.querySelector('.show-password');
-        showPassword.addEventListener('click', () => {
-
-            password1 = document.querySelector('.password1');
-            password2 = document.querySelector('.password2');
-            eye = document.getElementById("eyeid");
-
-            if (password1.type === "text") {
-                password1.type = "password"
-                password2.type = "password"
-                eye.className = 'bi bi-eye-fill show-password-icon';
-            } else {
-                password1.type = "text"
-                password2.type = "text"
-                eye.className = "bi bi-eye-slash-fill show-password-icon";
-
-            }
-        })
+    document.getElementById('customFileButton').addEventListener('click', function() {
+        document.getElementById('image').click();
     });
+
+    let eye1 = document.getElementById('eyeid1');
+
+    eye1.addEventListener("click", function () {
+        var passwordField = document.getElementById('password1');
+        var passwordField2 = document.getElementById('password2');
+
+        if (passwordField.type === 'password') {
+            eye1.className = "bi bi-eye-slash-fill show-password-icon-index";
+            passwordField.type = 'text';
+            passwordField2.type = 'text';
+        } else {
+            eye1.className = "bi bi-eye-fill show-password-icon-index";
+            passwordField.type = 'password';
+            passwordField2.type = 'password'
+        }
+    })
 
     function comprobarPass(reg) {
         var password = document.getElementById("password1").value;
@@ -220,7 +265,7 @@
 
     function comprobarErrores() {
         reg = false;
-        var username = document.getElementById("username");
+        var username = document.getElementById("username1");
         username.className = "form-control form-control-lg acierto";
         document.getElementById("alert_user").className = "hide_alert text-danger";
         var email = document.getElementById("email");
@@ -292,5 +337,26 @@
     });
 
 
+
 </script>
+<div th:replace="login :: #loginModal"></div>
 </body>
+
+<script>
+    let eye = document.getElementById('eyeid');
+
+    eye.addEventListener("click", function () {
+        var passwordField = document.getElementById('password');
+
+        if (passwordField.type === 'password') {
+            eye.className = "bi bi-eye-slash-fill show-password-icon-index";
+            passwordField.type = 'text';
+        } else {
+            eye.className = "bi bi-eye-fill show-password-icon-index";
+            passwordField.type = 'password';
+        }
+    })
+</script>
+
+<footer th:replace="tools/footer :: #footer-include"></footer>
+
