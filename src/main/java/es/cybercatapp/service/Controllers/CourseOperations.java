@@ -1,5 +1,6 @@
 package es.cybercatapp.service.Controllers;
 
+import es.cybercatapp.service.dto.CatalogDtoForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import es.cybercatapp.common.Constants;
@@ -60,6 +61,7 @@ public class CourseOperations {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = {"/managecourses"})
     public String doGetCourseManagement(Model model, Principal principal, Locale locale) {
+
 
         try {
 

@@ -71,9 +71,12 @@ public class CourseImpl {
     public Courses findCoursesById(long id) throws InstanceNotFoundException {
         return courseRepository.findById(id);
     }
+
     @Transactional(readOnly = true)
-    public List<Courses> findAll(int start, int count) throws InstanceNotFoundException {
-        return courseRepository.findAll(start,count);
+    public List<Courses> findAllFiltered(int start, int count, int filter, String category, String word) throws InstanceNotFoundException {
+            return courseRepository.findAllFiltered(start,count, filter,category,word);
+
+
     }
 
 

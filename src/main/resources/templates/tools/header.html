@@ -1,66 +1,72 @@
 <!DOCTYPE html>
 <header id="header-include" style="background-color: #173753">
-  <nav class="navbar navbar-expand" id="nav">
-    <div class="container col-md-12 col-sm-6 mt-3">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-dark navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-around" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item mx-lg-2">
-            <a href="/" >
-              <img src="/images/logo.png" alt="Error al cargar la imagen" class="logo_tamano"
-                   style="width: 70% ; height: 70%">
-            </a>
-          </li>
-          <li class="nav-item mx-lg-2 mt-3">
-            <div class="input-group" style="width: 80%">
-              <div class="input-group-prepend">
-                <select class="form-select rounded-0 " style="background-color:  #d4e4f4" id="cat1"
-                        name="catlist">
-                  <option>Todos</option>
-                  <option>Forense</option>
-                  <option>Criptografía</option>
-                  <option>Infraestructura</option>
-                  <option>Virus</option>
-                  <option>Malware</option>
-                  <option>Nube</option>
-                  <option>Red</option>
-                  <option>Otro</option>
-                </select>
-              </div>
-              <input type="text" class="form-control" aria-label="Text input with dropdown button">
-              <button type="submit" class="btn btn-light rounded-0" style="background-color:  #d4e4f4 "><i
-                      class="bi bi-search"></i></button>
-
+    <nav class="navbar navbar-expand" id="nav">
+        <div class="container col-md-12 col-sm-6 mt-3">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-dark navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-around" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item mx-lg-2">
+                        <a href="/">
+                            <img src="/images/logo.png" alt="Error al cargar la imagen" class="logo_tamano"
+                                 style="width: 70% ; height: 70%">
+                        </a>
+                    </li>
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <form th:action="@{/catalog}">
+                            <input type="hidden" name="start" th:value="0"/>
+                            <input type="hidden" name="count" value="5"/>
+                            <div class="input-group" style="width: 80%">
+                                <div class="input-group-prepend">
+                                    <select class="form-select rounded-0 " style="background-color:  #d4e4f4" id="cat1"
+                                            name="category">
+                                        <option >Todos</option>
+                                        <option >Forense</option>
+                                        <option >Criptografía</option>
+                                        <option >Infraestructura</option>
+                                        <option >Virus</option>
+                                        <option >Malware</option>
+                                        <option >Nube</option>
+                                        <option >Red</option>
+                                        <option >Otro</option>
+                                    </select>
+                                </div>
+                                <input type="hidden" name="filter" th:value="1"/>
+                                <input name="word" type="text" class="form-control" aria-label="Text input with dropdown button">
+                                <button type="submit" class="btn btn-light rounded-0"
+                                        style="background-color:  #d4e4f4 "><i
+                                        class="bi bi-search"></i></button>
+                            </div>
+                        </form>
+                    </li>
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <a class="nav-item nav-link home-letter-nav" style="font-size: 13px"
+                           th:href="@{/catalog(start=0,count=5, category='Todos', word='', filter=1)}">Catálogo</a>
+                    </li>
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <a class="nav-item nav-link home-letter-nav" data-method="post" th:href="@{/logout}"
+                           style="font-size: 13px">Cerrar sesión</a>
+                    </li>
+                </ul>
             </div>
-          </li>
-          <li class="nav-item mx-lg-2 mt-3">
-            <a class="nav-item nav-link home-letter-nav" style="font-size: 13px" th:href="@{/catalog(start=0,count=5)}">Catálogo</a>
-          </li>
-          <li class="nav-item mx-lg-2 mt-3">
-            <a class="nav-item nav-link home-letter-nav" data-method="post" th:href="@{/logout}"
-               style="font-size: 13px">Cerrar sesión</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+        </div>
+    </nav>
 
-  <script>
-    const navbarToggler = document.getElementById("nav");
+    <script>
+        const navbarToggler = document.getElementById("nav");
 
-    function checkWindowSize() {
-      if (window.innerWidth < 1200) {
-        navbarToggler.className = "navbar";
-      } else {
-        navbarToggler.className = "navbar navbar-expand-md";
-      }
-    }
+        function checkWindowSize() {
+            if (window.innerWidth < 1200) {
+                navbarToggler.className = "navbar";
+            } else {
+                navbarToggler.className = "navbar navbar-expand-md";
+            }
+        }
 
-    checkWindowSize();
-    window.addEventListener('resize', checkWindowSize);
-  </script>
+        checkWindowSize();
+        window.addEventListener('resize', checkWindowSize);
+    </script>
 </header>
 </html>

@@ -128,8 +128,6 @@ public class UserOperations {
     @PreAuthorize("#username == authentication.principal.username")
     public String doGetEditProfile(@PathVariable String username, Model model, Principal principal, Locale locale) {
         try {
-
-
             Users user = userImpl.findByUsername(principal.getName());
             byte[] image = userImpl.getImage(user.getUserId());
             ProfileDtoForm editProfileDtoForm = UserConversor.toProfile(user, image, user.getImagen_perfil());
@@ -144,6 +142,7 @@ public class UserOperations {
     }
 
     @PostMapping("/editprofile/remove/{username}")
+    @PreAuthorize("#username == authentication.principal.username")
     public String doPostRemoveProfile(@PathVariable String username, Principal principal, Locale locale,
                                       RedirectAttributes redirectAttributes) {
 
@@ -154,6 +153,7 @@ public class UserOperations {
     }
 
     @PostMapping("/editprofile/changepassword")
+    @PreAuthorize("#username == authentication.principal.username")
     public String doPostChangePassword(Principal principal, @Valid @ModelAttribute("ChangePasswordDtoForm") ChangePasswordDtoForm changePasswordDtoForm,
                                         BindingResult result, Locale locale,
                                        Model model, RedirectAttributes redirectAttributes) {
@@ -185,6 +185,7 @@ public class UserOperations {
     }
 
     @PostMapping("/editprofile/modify")
+    @PreAuthorize("#username == authentication.principal.username")
     public String doPostModifyProfile(Principal principal, @Valid @ModelAttribute("EditProfileDtoForm") ProfileDtoForm editProfileDtoForm,
                                       BindingResult result, Locale locale,  RedirectAttributes redirectAttributes,
                                       Model model) {
@@ -208,6 +209,7 @@ public class UserOperations {
     }
 
     @PostMapping("/editprofile/updatephoto")
+    @PreAuthorize("#username == authentication.principal.username")
     public String doPostUpdatePhoto(Principal principal, @Valid @ModelAttribute("UpdateImageProfileDtoForm") UpdateImageProfileDtoForm updateImageProfileDtoForm,
                                     Locale locale, BindingResult result,
                                     Model model, RedirectAttributes redirectAttributes) {
