@@ -10,6 +10,7 @@ import es.cybercatapp.model.exceptions.AuthenticationException;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.repositories.CourseRepository;
+import es.cybercatapp.model.repositories.InscriptionsRepository;
 import es.cybercatapp.model.repositories.UserRepository;
 import es.cybercatapp.model.utils.ExceptionGenerationUtils;
 import org.apache.commons.io.IOUtils;
@@ -53,6 +54,9 @@ public class UserImpl implements UserDetailsService {
     private CourseRepository courseRepository;
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private InscriptionsRepository inscriptionsRepository;
 
     private File resourcesDir;
 
@@ -111,6 +115,26 @@ public class UserImpl implements UserDetailsService {
                 courseRepository.remove(courses);
             }
             userRepository.remove(user);
+        }
+    }
+
+    @Transactional
+    public void signOn(String username, Long courseId) throws InstanceNotFoundException, DuplicatedResourceException {
+        Users user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
+        } else {
+            Inscriptions inscriptions;
+            inscriptions = inscriptionsRepository.findInscription(courseId,user.getUserId());
+            if (inscriptions!= null){
+                throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USERNAME_FIELD, username,
+                        "inscription.duplicated.exception");
+            }else {
+                Courses courses = courseRepository.findById(courseId);
+                inscriptions = new Inscriptions(user,courses,false);
+                user.getInscriptions().add(inscriptions);
+            }
+
         }
     }
 

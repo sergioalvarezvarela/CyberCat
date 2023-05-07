@@ -1,5 +1,8 @@
 package es.cybercatapp.service.Controllers;
 
+import es.cybercatapp.model.entities.Courses;
+import es.cybercatapp.model.impl.CourseImpl;
+import es.cybercatapp.service.conversor.CoursesConversor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import es.cybercatapp.common.Constants;
@@ -30,7 +33,9 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -50,6 +55,9 @@ public class UserOperations {
 
     @Autowired
     private UserImpl userImpl;
+
+    @Autowired
+    private CourseImpl courseImpl;
 
 
     @GetMapping(value = {"/register"})
@@ -114,6 +122,14 @@ public class UserOperations {
             ProfileDtoForm profileDtoForm = UserConversor.toProfile(user, image, user.getImagen_perfil());
             model.addAttribute("ProfileDtoForm", profileDtoForm);
             AdminChecker.isAdmin(model, authentication);
+            List<Courses> courses = courseImpl.findCoursesInscriptionsByUser(authentication.getName());
+            List<CourseDtoForm> courseDto = new ArrayList<>();
+
+            for (Courses course : courses) {
+                byte[] image2 = courseImpl.getImage(course.getCourseId());
+                courseDto.add(CoursesConversor.toCourseDtoForm(course, image2, course.getCourse_photo()));
+            }
+            model.addAttribute("CourseDtoForm", courseDto);
             return "profile";
         } catch (Exception ex) {
             return serviceExceptions.serviceUnexpectedException(ex, model);
@@ -153,7 +169,6 @@ public class UserOperations {
     }
 
     @PostMapping("/editprofile/changepassword")
-    @PreAuthorize("#username == authentication.principal.username")
     public String doPostChangePassword(Principal principal, @Valid @ModelAttribute("ChangePasswordDtoForm") ChangePasswordDtoForm changePasswordDtoForm,
                                         BindingResult result, Locale locale,
                                        Model model, RedirectAttributes redirectAttributes) {
@@ -185,7 +200,6 @@ public class UserOperations {
     }
 
     @PostMapping("/editprofile/modify")
-    @PreAuthorize("#username == authentication.principal.username")
     public String doPostModifyProfile(Principal principal, @Valid @ModelAttribute("EditProfileDtoForm") ProfileDtoForm editProfileDtoForm,
                                       BindingResult result, Locale locale,  RedirectAttributes redirectAttributes,
                                       Model model) {
@@ -209,7 +223,6 @@ public class UserOperations {
     }
 
     @PostMapping("/editprofile/updatephoto")
-    @PreAuthorize("#username == authentication.principal.username")
     public String doPostUpdatePhoto(Principal principal, @Valid @ModelAttribute("UpdateImageProfileDtoForm") UpdateImageProfileDtoForm updateImageProfileDtoForm,
                                     Locale locale, BindingResult result,
                                     Model model, RedirectAttributes redirectAttributes) {

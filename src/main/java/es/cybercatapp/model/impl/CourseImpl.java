@@ -4,10 +4,12 @@ import es.cybercatapp.common.ConfigurationParameters;
 import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Category;
 import es.cybercatapp.model.entities.Courses;
+import es.cybercatapp.model.entities.Inscriptions;
 import es.cybercatapp.model.entities.Users;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.repositories.CourseRepository;
+import es.cybercatapp.model.repositories.InscriptionsRepository;
 import es.cybercatapp.model.repositories.UserRepository;
 import es.cybercatapp.model.utils.ExceptionGenerationUtils;
 import org.apache.commons.io.IOUtils;
@@ -46,6 +48,9 @@ public class CourseImpl {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private InscriptionsRepository inscriptionsRepository;
+
     private File resourcesDir;
 
     @PostConstruct
@@ -74,9 +79,14 @@ public class CourseImpl {
 
     @Transactional(readOnly = true)
     public List<Courses> findAllFiltered(int start, int count, int filter, String category, String word) throws InstanceNotFoundException {
-            return courseRepository.findAllFiltered(start,count, filter,category,word);
+        return courseRepository.findAllFiltered(start, count, filter, category, word);
 
 
+    }
+
+    @Transactional(readOnly = true)
+    public List<Courses> findCoursesInscriptionsByUser(String username) {
+        return inscriptionsRepository.findCoursesByUser(username);
     }
 
 

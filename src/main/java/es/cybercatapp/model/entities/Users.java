@@ -57,8 +57,7 @@ public class Users implements Serializable {
     @OneToMany(
             fetch = FetchType.LAZY,
             mappedBy = "users",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
     )
     private List<Inscriptions> inscriptions = new ArrayList<>();
 

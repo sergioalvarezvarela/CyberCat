@@ -179,10 +179,19 @@
                             <div class="d-flex flex-row align-items-center mb-1">
                                 <h4 class="mb-1 me-1" th:text="${course.price + ' €'}"></h4>
                             </div>
-                            <div class="d-flex flex-column mt-4">
-                                <button class="btn btn-primary btn-sm" type="button"
+                            <div th:if="${principal == null}" class="d-flex flex-column mt-4">
+                                <button data-bs-toggle="modal" href="#loginModal" class="btn btn-primary btn-sm"
+                                        type="button"
                                 >Inscribirse
                                 </button>
+                            </div>
+                            <div th:if="${principal != null}" class="d-flex flex-column mt-4">
+                                <form th:action="@{/sigon/{courseId}(courseId=${course.id})}" method="post">
+                                    <button
+                                            class="btn btn-primary btn-md" style="height: 100%" type="submit"
+                                    >Inscribirse
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -237,7 +246,7 @@
         var hiddenWord = document.getElementById("hiddenWord").value;
         var next = document.getElementById("next");
 
-        if (hiddenWord!=null && hiddenCategory != null) {
+        if (hiddenWord != null && hiddenCategory != null) {
             newHref = '/catalog?start=' + hiddenStart + '&count=' + hiddenCount + '&category=' + hiddenCategory + '&word=' + hiddenWord + '&filter=' + hiddenCatalog;
             next.setAttribute("href", newHref);
         } else {
@@ -251,14 +260,14 @@
         var hiddenCount = parseInt(document.getElementById("hiddenCount").value) - 5;
         var hiddenCatalog = parseInt(document.getElementById("hiddenCatalog").value);
         var hiddenCategory = document.getElementById("hiddenCategory").value;
-        var hiddenWord= document.getElementById("hiddenWord").value;
+        var hiddenWord = document.getElementById("hiddenWord").value;
         var previous = document.getElementById("previous");
         var newHref = "";
-        if (hiddenStart >= 0 && hiddenWord!=null && hiddenCategory != null) {
+        if (hiddenStart >= 0 && hiddenWord != null && hiddenCategory != null) {
             newHref = '/catalog?start=' + hiddenStart + '&count=' + hiddenCount + '&category=' + hiddenCategory + '&word=' + hiddenWord + '&filter=' + hiddenCatalog;
             previous.setAttribute("href", newHref);
         } else if (hiddenStart >= 0) {
-            newHref = '/catalog?start=' + hiddenStart + '&count=' + hiddenCount +'&category=' + 'Todos' + '&word=' + '' + '&filter=' + hiddenCatalog;
+            newHref = '/catalog?start=' + hiddenStart + '&count=' + hiddenCount + '&category=' + 'Todos' + '&word=' + '' + '&filter=' + hiddenCatalog;
             previous.setAttribute("href", newHref);
         }
 
