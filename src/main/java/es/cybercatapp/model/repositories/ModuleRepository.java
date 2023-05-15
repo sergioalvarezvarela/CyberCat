@@ -1,15 +1,19 @@
 package es.cybercatapp.model.repositories;
 
+import es.cybercatapp.model.entities.ModuleUser;
 import es.cybercatapp.model.entities.Modules;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ModuleRepository extends AbstractRepository<Modules> {
 
     private static final String FIND_COURSES_BY_MODULE_BY_NAME_AND_COURSE = "SELECT m FROM Module m WHERE m.moduleName = :moduleName AND m.courseId.courseId = :courseId";
+
 
     public Modules findModulesByModuleNameAndCourse(Long courseId, String moduleName) {
         try {
@@ -24,5 +28,7 @@ public class ModuleRepository extends AbstractRepository<Modules> {
 
 
     }
+
+
 
 }

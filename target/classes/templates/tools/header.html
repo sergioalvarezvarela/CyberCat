@@ -17,14 +17,13 @@
                     <li class="nav-item mx-lg-2 mt-3">
                         <form th:action="@{/catalog}">
                             <input type="hidden" name="start" th:value="0"/>
-                            <input type="hidden" name="count" value="5"/>
                             <div class="input-group" style="width: 80%">
                                 <div class="input-group-prepend">
                                     <select class="form-select rounded-0 " style="background-color:  #d4e4f4" id="cat1"
                                             name="category">
                                         <option >Todos</option>
                                         <option >Forense</option>
-                                        <option >Criptografía</option>
+                                        <option >Criptografia</option>
                                         <option >Infraestructura</option>
                                         <option >Virus</option>
                                         <option >Malware</option>
@@ -43,7 +42,7 @@
                     </li>
                     <li class="nav-item mx-lg-2 mt-3">
                         <a class="nav-item nav-link home-letter-nav" style="font-size: 13px"
-                           th:href="@{/catalog(start=0,count=5, category='Todos', word='', filter=1)}">Catálogo</a>
+                           th:href="@{/catalog(start=0, category='Todos', word='', filter=1)}">Catálogo</a>
                     </li>
                     <li class="nav-item mx-lg-2 mt-3">
                         <a class="nav-item nav-link home-letter-nav" data-method="post" th:href="@{/logout}"

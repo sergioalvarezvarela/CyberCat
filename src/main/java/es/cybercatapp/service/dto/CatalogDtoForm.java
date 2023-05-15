@@ -7,8 +7,6 @@ public class CatalogDtoForm {
     @NotNull
     int start;
 
-    @NotNull
-    int count;
 
     @NotNull
     int filter;
@@ -18,9 +16,8 @@ public class CatalogDtoForm {
     @NotNull
     String category;
 
-    public CatalogDtoForm(int start, int count, int filter, String word, String category) {
+    public CatalogDtoForm(int start, int filter, String word, String category) {
         this.start = start;
-        this.count = count;
         this.filter = filter;
         this.word = word;
         this.category = category;
@@ -35,14 +32,6 @@ public class CatalogDtoForm {
 
     public void setStart(int start) {
         this.start = start;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
     }
 
     public int getFilter() {

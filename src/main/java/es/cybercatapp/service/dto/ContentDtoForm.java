@@ -17,16 +17,19 @@ public class ContentDtoForm {
 
     private String contentType;
 
+    private Boolean completed;
+
 
     public ContentDtoForm() {
     }
 
-    public ContentDtoForm(Long contentId,String contentName, String moduleName, int contentPosition, String contentType) {
+    public ContentDtoForm(Long contentId,String contentName, String moduleName, int contentPosition, String contentType, Boolean completed) {
         this.moduleName = moduleName;
         this.contentId = contentId;
         this.contentName = contentName;
         this.contentPosition = contentPosition;
         this.contentType = contentType;
+        this.completed = completed;
     }
 
     public Long getContentId() {
@@ -67,5 +70,13 @@ public class ContentDtoForm {
 
     public void setContentType(String contentType) {
         this.contentType = contentType;
+    }
+
+    public Boolean getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
     }
 }

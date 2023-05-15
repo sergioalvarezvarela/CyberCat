@@ -4,16 +4,16 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
-/*@Embeddable
+@Embeddable
 public class ModuleUserId implements Serializable {
 
     private static final long serialVersionUID = 5045976325752371300L;
 
     private Long userId;
 
-    private ModuleId moduleId;
+    private Long moduleId;
 
-    public ModuleUserId(Long userId, ModuleId moduleId) {
+    public ModuleUserId(Long userId, Long moduleId) {
         this.userId = userId;
         this.moduleId = moduleId;
     }
@@ -29,11 +29,11 @@ public class ModuleUserId implements Serializable {
         this.userId = userId;
     }
 
-    public ModuleId getModuleId() {
+    public Long getModuleId() {
         return moduleId;
     }
 
-    public void setModuleId(ModuleId moduleId) {
+    public void setModuleId(Long moduleId) {
         this.moduleId = moduleId;
     }
 
@@ -42,7 +42,7 @@ public class ModuleUserId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ModuleUserId that = (ModuleUserId) o;
-        return userId.equals(that.userId) && moduleId.equals(that.moduleId);
+        return Objects.equals(userId, that.userId) && Objects.equals(moduleId, that.moduleId);
     }
 
     @Override
@@ -57,4 +57,4 @@ public class ModuleUserId implements Serializable {
                 ", moduleId=" + moduleId +
                 '}';
     }
-}*/
+}

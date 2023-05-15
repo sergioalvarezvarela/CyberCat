@@ -1,5 +1,5 @@
 package es.cybercatapp.model.entities;
-/*
+
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,7 +9,7 @@ public class ContentUserId implements Serializable {
     private static final long serialVersionUID = 3557795495973288591L;
     private Long userId;
 
-    private ContentId contentId;
+    private Long contentId;
 
     public Long getUserId() {
         return userId;
@@ -19,15 +19,15 @@ public class ContentUserId implements Serializable {
         this.userId = userId;
     }
 
-    public ContentId getContentId() {
+    public Long getContentId() {
         return contentId;
     }
 
-    public void setContentId(ContentId contentId) {
+    public void setContentId(Long contentId) {
         this.contentId = contentId;
     }
 
-    public ContentUserId(Long userId, ContentId contentId) {
+    public ContentUserId(Long userId, Long contentId) {
         this.userId = userId;
         this.contentId = contentId;
     }
@@ -40,7 +40,7 @@ public class ContentUserId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ContentUserId that = (ContentUserId) o;
-        return userId.equals(that.userId) && contentId.equals(that.contentId);
+        return Objects.equals(userId, that.userId) && Objects.equals(contentId, that.contentId);
     }
 
     @Override
@@ -55,4 +55,4 @@ public class ContentUserId implements Serializable {
                 ", contentId=" + contentId +
                 '}';
     }
-}*/
+}

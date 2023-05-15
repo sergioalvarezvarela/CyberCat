@@ -4,14 +4,15 @@ import es.cybercatapp.common.ConfigurationParameters;
 import es.cybercatapp.model.entities.*;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
-import es.cybercatapp.model.repositories.ContentRepository;
-import es.cybercatapp.model.repositories.ModuleRepository;
+import es.cybercatapp.model.repositories.*;
 import es.cybercatapp.model.utils.ExceptionGenerationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service(value = "contentImpl")
 public class ContentImpl {
@@ -31,6 +32,12 @@ public class ContentImpl {
     @Autowired
     ContentRepository contentRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
+
+    @Autowired
+    ContentUserRepository contentUserRepository;
 
     @Transactional
     public StringContent createTeoricContent(Long moduleId, String contentName, String html) throws InstanceNotFoundException, DuplicatedResourceException {
@@ -94,6 +101,25 @@ public class ContentImpl {
 
         } catch (InstanceNotFoundException ex) {
             throw new InstanceNotFoundException(moduleId.toString(), Modules.class.toString(), "Module not found");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<ContentUser> findListContentUser(String username , Long moduleId) throws InstanceNotFoundException {
+        Users user = userRepository.findByUsername(username);
+        return contentUserRepository.findListContentUser(user.getUserId(),moduleId);
+    }
+
+    @Transactional
+    public void updateContentInscription(String username, long moduleId) throws InstanceNotFoundException {
+        Users user = userRepository.findByUsername(username);
+        Modules modules = moduleRepository.findById(moduleId);
+        List<Content> contents = contentUserRepository.findListContent(user.getUserId(),moduleId);
+            for (Content content: modules.getContents()) {
+            if (!contents.contains(content)){
+                ContentUser cU = new ContentUser(user,content,null);
+                contentUserRepository.create(cU);
+            }
         }
     }
 

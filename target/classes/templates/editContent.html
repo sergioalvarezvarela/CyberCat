@@ -9,7 +9,24 @@
                  draggable="true" th:attr="data-content-id=${content.contentId}">
                 <div class="d-flex justify-content-between"
                      style="cursor: pointer; color: #173753">
-                    <h4 th:text="${content.contentName}"></h4>
+                    <div th:if="${content.contentType == 'puzzle'}">
+                        <h4>
+                            <i class="bi bi-puzzle" style="color:limegreen;"></i>
+                            <span th:text="${content.contentName}"></span>
+                        </h4>
+                    </div>
+                    <div th:if="${content.contentType == 'select'}">
+                        <h4>
+                            <i class="bi bi-question-lg" style="color: orangered "></i>
+                            <span th:text="${content.contentName}"></span>
+                        </h4>
+                    </div>
+                    <div th:if="${content.contentType == 'teoric'}">
+                        <h4>
+                            <i class="bi bi-file-text" style="color: #1d70a2"></i>
+                            <span th:text="${content.contentName}"></span>
+                        </h4>
+                    </div>
                     <div>
                         <a th:href="@{/managecourses/{courseId}/editcourses/{moduleId}/editcontent/{contentId}(courseId=${courseId}, moduleId=${modules.id}, contentId=${content.contentId})}
                         "><i class="bi bi-gear me-2" style="color: dodgerblue;"></i></a>

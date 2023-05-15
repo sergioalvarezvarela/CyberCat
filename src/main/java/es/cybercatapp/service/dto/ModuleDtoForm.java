@@ -15,14 +15,17 @@ public class ModuleDtoForm {
 
     private List<ContentDtoForm> contentList;
 
+    private Boolean completed;
+
     public ModuleDtoForm() {
     }
 
-    public ModuleDtoForm(Long id, String moduleName, int modulePosition, List<ContentDtoForm> contentList) {
+    public ModuleDtoForm(Long id, String moduleName, int modulePosition, List<ContentDtoForm> contentList, Boolean completed) {
         this.id = id;
         this.moduleName = moduleName;
         this.modulePosition= modulePosition;
         this.contentList = contentList;
+        this.completed = completed;
     }
 
     public List<ContentDtoForm> getContentList() {
@@ -57,4 +60,11 @@ public class ModuleDtoForm {
         this.modulePosition = modulePosition;
     }
 
+    public Boolean getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
+    }
 }

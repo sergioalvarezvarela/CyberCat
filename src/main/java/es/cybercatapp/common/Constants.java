@@ -2,6 +2,8 @@ package es.cybercatapp.common;
 
 public class Constants {
 
+
+
     private Constants() {
     }
 
@@ -32,6 +34,12 @@ public class Constants {
 
     public static final String TESTQUESTIONS_ENTITY = "Testquestion";
     public static final String TESTQUESTIONS_TABLE = "Testquestions";
+
+    public static final String MODULEUSER_ENTITY ="ModuleUser";
+    public static final String MODULEUSER_TABLE="ModuleUsers";
+
+    public static final String CONTENTUSER_ENTITY ="ContentUser";
+    public static final String CONTENTUSER_TABLE="ContentUsers";
 
     public static final String EMAIL_FIELD = "email";
     public static final String USERNAME_FIELD = "username";

@@ -5,33 +5,33 @@ import es.cybercatapp.common.Constants;
 import javax.persistence.*;
 import java.util.Objects;
 
-/*@Entity(name = Constants.MODULEUSER_ENTITY)
+@Entity(name = Constants.MODULEUSER_ENTITY)
 @Table(name = Constants.MODULEUSER_TABLE)
 public class ModuleUser {
     @EmbeddedId
     private ModuleUserId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("userId")
     private Users users;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("moduleId")
-    private Module module;
+    private Modules module;
 
 
-    @Column(name = "completed", nullable = false)
-    private boolean completed;
+    @Column(name = "completed")
+    private Boolean completed;
 
 
+    public ModuleUser() {
+    }
 
-    public ModuleUser(){}
-
-    public ModuleUser (Users users, Module module, boolean completed){
+    public ModuleUser(Users users, Modules module, Boolean completed) {
         this.users = users;
         this.module = module;
         this.completed = completed;
-        this.id = new ModuleUserId(users.getUserId(), module.getId());
+        this.id = new ModuleUserId(users.getUserId(),module.getModuleId());
     }
 
     public ModuleUserId getId() {
@@ -50,19 +50,19 @@ public class ModuleUser {
         this.users = users;
     }
 
-    public Module getModule() {
+    public Modules getModule() {
         return module;
     }
 
-    public void setModule(Module module) {
+    public void setModule(Modules module) {
         this.module = module;
     }
 
-    public boolean isCompleted() {
+    public Boolean getCompleted() {
         return completed;
     }
 
-    public void setCompleted(boolean completed) {
+    public void setCompleted(Boolean completed) {
         this.completed = completed;
     }
 
@@ -71,7 +71,7 @@ public class ModuleUser {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ModuleUser that = (ModuleUser) o;
-        return completed == that.completed && id.equals(that.id) && users.equals(that.users) && module.equals(that.module);
+        return completed == that.completed && Objects.equals(id, that.id) && Objects.equals(users, that.users) && Objects.equals(module, that.module);
     }
 
     @Override
@@ -88,4 +88,4 @@ public class ModuleUser {
                 ", completed=" + completed +
                 '}';
     }
-}*/
+}

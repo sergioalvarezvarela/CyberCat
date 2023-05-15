@@ -1,5 +1,5 @@
 package es.cybercatapp.model.entities;
-/*
+
 import es.cybercatapp.common.Constants;
 
 import javax.persistence.*;
@@ -12,23 +12,23 @@ public class ContentUser {
     @EmbeddedId
     private ContentUserId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("userId")
     private Users users;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("contentId")
     private Content content;
 
 
-    @Column(name = "completed", nullable = false)
-    private boolean completed;
+    @Column(name = "completed")
+    private Boolean completed;
 
-    public ContentUser(ContentUserId id, Users users, Content content, boolean completed) {
-        this.id = id;
+    public ContentUser(Users users, Content content, Boolean completed) {
         this.users = users;
         this.content = content;
         this.completed = completed;
+        this.id = new ContentUserId(users.getUserId(), content.getContentId());
     }
 
     public ContentUser() {
@@ -59,11 +59,11 @@ public class ContentUser {
         this.content = content;
     }
 
-    public boolean isCompleted() {
+    public Boolean getCompleted() {
         return completed;
     }
 
-    public void setCompleted(boolean completed) {
+    public void setCompleted(Boolean completed) {
         this.completed = completed;
     }
 
@@ -72,7 +72,7 @@ public class ContentUser {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ContentUser that = (ContentUser) o;
-        return completed == that.completed && id.equals(that.id) && users.equals(that.users) && content.equals(that.content);
+        return completed == that.completed && Objects.equals(id, that.id) && Objects.equals(users, that.users) && Objects.equals(content, that.content);
     }
 
     @Override
@@ -89,4 +89,4 @@ public class ContentUser {
                 ", completed=" + completed +
                 '}';
     }
-}*/
+}

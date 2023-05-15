@@ -32,7 +32,7 @@ public class CourseRepository extends AbstractRepository<Courses> {
     /* private static final String FIND_ALL_COURSES_BY_NOTE = "SELECT c FROM Contents c WHERE c.contentName = :contentName AND c.module.moduleId = :moduleId";*/
 
 
-    public List<Courses> findAllFiltered(int pageIndex, int pageSize, int filter, String category, String word) {
+    public List<Courses> findAllFiltered(int pageIndex, int filter, String category, String word) {
         TypedQuery<Courses> query = null;
 
         try {
@@ -48,7 +48,7 @@ public class CourseRepository extends AbstractRepository<Courses> {
                 }
                 query.setParameter("coursename", "%" + word + "%");
                 query.setFirstResult(pageIndex);
-                query.setMaxResults(pageSize);
+                query.setMaxResults(5);
                 return query.getResultList();
 
 
@@ -63,7 +63,7 @@ public class CourseRepository extends AbstractRepository<Courses> {
             query.setParameter("coursename", "%" + word + "%");
             query.setParameter("category", Category.valueOf(category.toUpperCase()));
             query.setFirstResult(pageIndex);
-            query.setMaxResults(pageSize);
+            query.setMaxResults(5);
             return query.getResultList();
         } catch (NoResultException e) {
 

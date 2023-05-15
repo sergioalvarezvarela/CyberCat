@@ -1,5 +1,9 @@
 
 
+alter table content_users
+drop
+foreign key FKim0183q15eol9wyg2k1ff7je;
+
 alter table courses
 drop
 foreign key FK51k53m6m5gi9n91fnlxkxgpm;
@@ -16,6 +20,14 @@ alter table modules
 drop
 foreign key FK8qnnp812q1jd38fx7mxrhpw;
 
+alter table module_users
+drop
+foreign key FKtolq176hl36x59htuc65wa4k;
+
+alter table module_users
+drop
+foreign key FKdhl62qlp3jqqdmdccf87qjww;
+
 alter table string_completes
 drop
 foreign key FK_87usiie886moctid7dg38gku;
@@ -28,6 +40,8 @@ alter table teststring
 drop
 foreign key FK_3gh0y5qbtkg0jpiuj4lxo1fh;
 
+drop table if exists content_users;
+
 drop table if exists courses;
 
 drop table if exists hibernate_sequence;
@@ -36,6 +50,8 @@ drop table if exists inscriptions;
 
 drop table if exists modules;
 
+drop table if exists module_users;
+
 drop table if exists string_completes;
 
 drop table if exists testquestion;
@@ -43,6 +59,13 @@ drop table if exists testquestion;
 drop table if exists teststring;
 
 drop table if exists users;
+
+create table content_users (
+                               completed bit,
+                               users_user_id bigint not null,
+                               content_content_id bigint not null,
+                               primary key (content_content_id, users_user_id)
+) engine=InnoD;
 
 create table courses (
                          course_id bigint not null auto_increment,
@@ -76,6 +99,13 @@ create table modules (
                          module_position integer not null,
                          course_id bigint not null,
                          primary key (module_id)
+) engine=InnoD;
+
+create table module_users (
+                              completed bit,
+                              module_module_id bigint not null,
+                              users_user_id bigint not null,
+                              primary key (module_module_id, users_user_id)
 ) engine=InnoD;
 
 create table string_completes (
@@ -133,6 +163,11 @@ alter table users
 alter table users
     add constraint UK_r43af9ap4edm43mmtq01oddj6 unique (username);
 
+alter table content_users
+    add constraint FKim0183q15eol9wyg2k1ff7je5
+        foreign key (users_user_id)
+            references users (user_id);
+
 alter table courses
     add constraint FK51k53m6m5gi9n91fnlxkxgpmv
         foreign key (user_id)
@@ -152,6 +187,16 @@ alter table modules
     add constraint FK8qnnp812q1jd38fx7mxrhpw9
         foreign key (course_id)
             references courses (course_id);
+
+alter table module_users
+    add constraint FKtolq176hl36x59htuc65wa4k5
+        foreign key (module_module_id)
+            references modules (module_id);
+
+alter table module_users
+    add constraint FKdhl62qlp3jqqdmdccf87qjwwd
+        foreign key (users_user_id)
+            references users (user_id);
 
 alter table string_completes
     add constraint FK_87usiie886moctid7dg38gkut

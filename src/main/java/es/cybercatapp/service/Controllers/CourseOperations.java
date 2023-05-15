@@ -1,12 +1,15 @@
 package es.cybercatapp.service.Controllers;
 
+import com.fasterxml.jackson.databind.Module;
+import es.cybercatapp.model.entities.*;
+import es.cybercatapp.model.impl.ContentImpl;
+import es.cybercatapp.model.impl.ModuleImpl;
 import es.cybercatapp.service.dto.CatalogDtoForm;
+import es.cybercatapp.service.dto.ContentDtoForm;
+import es.cybercatapp.service.dto.ModuleDtoForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import es.cybercatapp.common.Constants;
-import es.cybercatapp.model.entities.Category;
-import es.cybercatapp.model.entities.Courses;
-import es.cybercatapp.model.entities.Users;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.CourseImpl;
@@ -50,7 +53,13 @@ public class CourseOperations {
     private CourseImpl courseImpl;
 
     @Autowired
+    private ModuleImpl moduleImpl;
+
+    @Autowired
     private UserImpl userImpl;
+
+    @Autowired
+    private ContentImpl contentImpl;
 
 
 
@@ -150,6 +159,37 @@ public class CourseOperations {
             return Constants.SEND_REDIRECT + "/managecourses";
         }
         return Constants.SEND_REDIRECT + "/managecourses";
+    }
+
+    @GetMapping("/course/{courseId}")
+    public String doGetCourseContent(@PathVariable String courseId, Locale locale, RedirectAttributes redirectAttributes, Model model, Principal principal) {
+        try {
+            model.addAttribute("ModuleDtoForm", new ModuleDtoForm());
+            model.addAttribute("ContentDtoForm", new ContentDtoForm());
+            model.addAttribute("username", principal.getName());
+            moduleImpl.updateModuleInscription(principal.getName(),Long.parseLong(courseId));
+            List<ModuleUser> moduleUsers = moduleImpl.findListModuleUser(principal.getName(), Long.parseLong(courseId));
+            List<ModuleDtoForm> moduleDto = new ArrayList<>();
+
+
+            for (ModuleUser usuarioModulo : moduleUsers) {
+                Long moduleId = usuarioModulo.getId().getModuleId();
+                contentImpl.updateContentInscription(principal.getName(),moduleId);
+                List<ContentDtoForm> contentDto = new ArrayList<>();
+                for (ContentUser contents : contentImpl.findListContentUser(principal.getName(),moduleId)) {
+                    contentDto.add(new ContentDtoForm(contents.getContent().getContentId(), contents.getContent().getContentName(), usuarioModulo.getModule().getModuleName(), contents.getContent().getContentPosition(), contents.getContent().getContent_category().getDescripcion(),contents.getCompleted()));
+                }
+                moduleDto.add(new ModuleDtoForm(moduleId, usuarioModulo.getModule().getModuleName(), usuarioModulo.getModule().getModulePosition(), contentDto, usuarioModulo.getCompleted()));
+
+            }
+
+            model.addAttribute("ModuleDtoList", moduleDto);
+
+            model.addAttribute("courseId", courseId);
+        } catch (InstanceNotFoundException ex) {
+            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        }
+        return "viewcontent";
     }
 
 }

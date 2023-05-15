@@ -2,16 +2,11 @@ package es.cybercatapp.model.impl;
 
 import es.cybercatapp.common.ConfigurationParameters;
 import es.cybercatapp.common.Constants;
-import es.cybercatapp.model.entities.Courses;
-import es.cybercatapp.model.entities.Inscriptions;
-import es.cybercatapp.model.entities.Roles;
-import es.cybercatapp.model.entities.Users;
+import es.cybercatapp.model.entities.*;
 import es.cybercatapp.model.exceptions.AuthenticationException;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
-import es.cybercatapp.model.repositories.CourseRepository;
-import es.cybercatapp.model.repositories.InscriptionsRepository;
-import es.cybercatapp.model.repositories.UserRepository;
+import es.cybercatapp.model.repositories.*;
 import es.cybercatapp.model.utils.ExceptionGenerationUtils;
 import org.apache.commons.io.IOUtils;
 import org.mindrot.jbcrypt.BCrypt;
@@ -54,6 +49,12 @@ public class UserImpl implements UserDetailsService {
     private CourseRepository courseRepository;
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ContentUserRepository contentUserRepository;
+
+    @Autowired
+    private ModuleUserRepository moduleUserRepository;
 
     @Autowired
     private InscriptionsRepository inscriptionsRepository;
@@ -133,6 +134,14 @@ public class UserImpl implements UserDetailsService {
                 Courses courses = courseRepository.findById(courseId);
                 inscriptions = new Inscriptions(user,courses,false);
                 user.getInscriptions().add(inscriptions);
+                for (Modules module: courses.getModules()) {
+                    ModuleUser moduleUser = new ModuleUser(user,module,null);
+                    for (Content content: module.getContents()) {
+                        ContentUser contentUser = new ContentUser(user,content,null);
+                        contentUserRepository.create(contentUser);
+                    }
+                    moduleUserRepository.create(moduleUser);
+                }
             }
 
         }

@@ -78,8 +78,8 @@ public class CourseImpl {
     }
 
     @Transactional(readOnly = true)
-    public List<Courses> findAllFiltered(int start, int count, int filter, String category, String word) throws InstanceNotFoundException {
-        return courseRepository.findAllFiltered(start, count, filter, category, word);
+    public List<Courses> findAllFiltered(int start, int filter, String category, String word) throws InstanceNotFoundException {
+        return courseRepository.findAllFiltered(start, filter, category, word);
 
 
     }

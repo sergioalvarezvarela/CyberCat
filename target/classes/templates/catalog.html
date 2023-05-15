@@ -23,14 +23,13 @@
                                 <div class="input-group" style="width: 80%">
                                     <div class="input-group-prepend">
                                         <input type="hidden" name="start" value="0"/>
-                                        <input type="hidden" name="count" value="5"/>
                                         <select class="form-select rounded-0 "
                                                 style="background-color:  #d4e4f4"
                                                 id="cat1"
                                                 name="category">
                                             <option>Todos</option>
                                             <option>Forense</option>
-                                            <option>Criptografía</option>
+                                            <option>Criptografia</option>
                                             <option>Infraestructura</option>
                                             <option>Virus</option>
                                             <option>Malware</option>
@@ -61,7 +60,7 @@
 
                     <li class="nav-item mx-lg-2 mt-3">
                         <a class="nav-item nav-link home-letter-nav" style="font-size: 16px"
-                           th:href="@{/catalog(start=0,count=5, category= 'Todos', word='', filter=1)}">Catálogo</a>
+                           th:href="@{/catalog(start=0, category= 'Todos', word='', filter=1)}">Catálogo</a>
                     </li>
 
                     <li class="nav-item mx-lg-2 mt-3">
@@ -118,7 +117,6 @@
             <div class="col-8">
                 <form id="catalogForm" th:action="@{/catalog}">
                     <input type="hidden" name="start" th:value="${CatalogDtoForm.start}"/>
-                    <input type="hidden" name="count" th:value="${CatalogDtoForm.count}"/>
                     <input type="hidden" name="category" th:value="${CatalogDtoForm.category}"/>
                     <input type="hidden" name="word" th:value="${CatalogDtoForm.word}"/>
                     <label for="cat2"></label>
@@ -201,7 +199,6 @@
     </div>
     <nav aria-label="Page navigation example">
         <input type="hidden" id="hiddenStart" th:value="${CatalogDtoForm.start}"/>
-        <input type="hidden" id="hiddenCount" th:value="${CatalogDtoForm.count}"/>
         <input type="hidden" id="hiddenCatalog" th:value="${CatalogDtoForm.filter}"/>
         <input type="hidden" id="hiddenCategory" th:value="${CatalogDtoForm.category}"/>
         <input type="hidden" id="hiddenWord" th:value="${CatalogDtoForm.word}"/>
@@ -211,22 +208,22 @@
                                      onclick="updatePreviusLink()">Anterior</a></li>
             <li class="page-item">
                 <a th:if="${CatalogDtoForm.word == null && CatalogDtoForm.category==null}" class="page-link"
-                   th:href="@{/catalog(start=0,count=5,category='Todos', word = '',filter=${CatalogDtoForm.filter})}">1</a>
+                   th:href="@{/catalog(start=0,category='Todos', word = '',filter=${CatalogDtoForm.filter})}">1</a>
                 <a th:if="${CatalogDtoForm.word != null && CatalogDtoForm.category!=null}" class="page-link"
-                   th:href="@{/catalog(start=0,count=5,category=${CatalogDtoForm.category}, word= ${CatalogDtoForm.word}, filter=${CatalogDtoForm.filter})}">1</a>
+                   th:href="@{/catalog(start=0,category=${CatalogDtoForm.category}, word= ${CatalogDtoForm.word}, filter=${CatalogDtoForm.filter})}">1</a>
             </li>
             <li class="page-item">
 
                 <a th:if="${CatalogDtoForm.word == null && CatalogDtoForm.category==null}" class="page-link"
-                   th:href="@{/catalog(start=5,count=10, category='Todos', word = '', filter=${CatalogDtoForm.filter})}">2</a>
+                   th:href="@{/catalog(start=5, category='Todos', word = '', filter=${CatalogDtoForm.filter})}">2</a>
                 <a th:if="${CatalogDtoForm.word != null && CatalogDtoForm.category!=null}" class="page-link"
-                   th:href="@{/catalog(start=5,count=10,category=${CatalogDtoForm.category}, word= ${CatalogDtoForm.word}, filter=${CatalogDtoForm.filter})}">2</a>
+                   th:href="@{/catalog(start=5,category=${CatalogDtoForm.category}, word= ${CatalogDtoForm.word}, filter=${CatalogDtoForm.filter})}">2</a>
             </li>
             <li class="page-item">
                 <a th:if="${CatalogDtoForm.word == null && CatalogDtoForm.category==null}" class="page-link"
-                   th:href="@{/catalog(start=10,count=15, category='Todos', word = '',filter=${CatalogDtoForm.filter})}">3</a>
+                   th:href="@{/catalog(start=10, category='Todos', word = '',filter=${CatalogDtoForm.filter})}">3</a>
                 <a th:if="${CatalogDtoForm.word != null && CatalogDtoForm.category!=null}" class="page-link"
-                   th:href="@{/catalog(start=10,count=15,category=${CatalogDtoForm.category}, word= ${CatalogDtoForm.word},filter=${CatalogDtoForm.filter})}">3</a>
+                   th:href="@{/catalog(start=10,category=${CatalogDtoForm.category}, word= ${CatalogDtoForm.word},filter=${CatalogDtoForm.filter})}">3</a>
             </li>
             <li class="page-item"><a id="next" class="page-link" style="cursor: pointer" onclick="updateNextLink()">Siguiente</a>
             </li>
@@ -240,34 +237,32 @@
 <script>
     function updateNextLink() {
         var hiddenStart = parseInt(document.getElementById("hiddenStart").value) + 5;
-        var hiddenCount = parseInt(document.getElementById("hiddenCount").value) + 5;
         var hiddenCatalog = parseInt(document.getElementById("hiddenCatalog").value);
         var hiddenCategory = document.getElementById("hiddenCategory").value;
         var hiddenWord = document.getElementById("hiddenWord").value;
         var next = document.getElementById("next");
 
         if (hiddenWord != null && hiddenCategory != null) {
-            newHref = '/catalog?start=' + hiddenStart + '&count=' + hiddenCount + '&category=' + hiddenCategory + '&word=' + hiddenWord + '&filter=' + hiddenCatalog;
+            newHref = '/catalog?start=' + hiddenStart + '&category=' + hiddenCategory + '&word=' + hiddenWord + '&filter=' + hiddenCatalog;
             next.setAttribute("href", newHref);
         } else {
-            newHref = '/catalog?start=' + hiddenStart + '&count=' + hiddenCount + '&category=' + 'Todos' + '&word=' + '' + '&filter=' + hiddenCatalog;
+            newHref = '/catalog?start=' + hiddenStart + '&category=' + 'Todos' + '&word=' + '' + '&filter=' + hiddenCatalog;
             next.setAttribute("href", newHref);
         }
     }
 
     function updatePreviusLink() {
         var hiddenStart = parseInt(document.getElementById("hiddenStart").value) - 5;
-        var hiddenCount = parseInt(document.getElementById("hiddenCount").value) - 5;
         var hiddenCatalog = parseInt(document.getElementById("hiddenCatalog").value);
         var hiddenCategory = document.getElementById("hiddenCategory").value;
         var hiddenWord = document.getElementById("hiddenWord").value;
         var previous = document.getElementById("previous");
         var newHref = "";
         if (hiddenStart >= 0 && hiddenWord != null && hiddenCategory != null) {
-            newHref = '/catalog?start=' + hiddenStart + '&count=' + hiddenCount + '&category=' + hiddenCategory + '&word=' + hiddenWord + '&filter=' + hiddenCatalog;
+            newHref = '/catalog?start=' + hiddenStart + '&category=' + hiddenCategory + '&word=' + hiddenWord + '&filter=' + hiddenCatalog;
             previous.setAttribute("href", newHref);
         } else if (hiddenStart >= 0) {
-            newHref = '/catalog?start=' + hiddenStart + '&count=' + hiddenCount + '&category=' + 'Todos' + '&word=' + '' + '&filter=' + hiddenCatalog;
+            newHref = '/catalog?start=' + hiddenStart + '&category=' + 'Todos' + '&word=' + '' + '&filter=' + hiddenCatalog;
             previous.setAttribute("href", newHref);
         }
 
