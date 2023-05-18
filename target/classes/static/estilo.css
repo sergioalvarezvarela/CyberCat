@@ -137,6 +137,17 @@ html, body {
     margin: 0;
 }
 
+.card.selected {
+    border-color: dodgerblue;
+}
+
+.card.incorrect {
+    border-color: orangered;
+}
+
+.card.correct {
+    border-color: limegreen;
+}
 
 
 

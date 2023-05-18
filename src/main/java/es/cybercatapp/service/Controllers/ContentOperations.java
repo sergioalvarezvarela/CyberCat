@@ -19,9 +19,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -62,14 +66,13 @@ public class ContentOperations {
             if (addContentDtoForm.getContentType().equals("teoric")) {
                 String html = "Lorem Ipsum";
                 content = contentImpl.createTeoricContent(Long.valueOf(moduleId), addContentDtoForm.getContentName(), html);
-            }
-            else if (addContentDtoForm.getContentType().equals("puzzle")) {
+            } else if (addContentDtoForm.getContentType().equals("puzzle")) {
                 String frase = "Enunciado de __ para test";
                 String frasecorrecta = "Enunciado de ejemplo para test";
                 String words = "ejemplo\nPalabra1";
                 content = contentImpl.createStringCompleteContent(Long.valueOf(moduleId), addContentDtoForm.getContentName(), enunciado, frase, frasecorrecta, words);
             } else {
-                content = contentImpl.createTestQuestionContent(Long.valueOf(moduleId), addContentDtoForm.getContentName(), enunciado );
+                content = contentImpl.createTestQuestionContent(Long.valueOf(moduleId), addContentDtoForm.getContentName(), enunciado);
             }
             if (logger.isDebugEnabled()) {
                 logger.debug(MessageFormat.format("Contenido {0} con id {1} creado", addContentDtoForm.getContentName(), content.getContentId()));
@@ -167,7 +170,7 @@ public class ContentOperations {
                 return "createPuzzle";
             } else {
                 TestQuestions content = (TestQuestions) contentImpl.findByContentId(Long.parseLong(contentId));
-                model.addAttribute("TestOptionsDtoForm",new TestOptionsDtoForm(content.getContentId(),Long.parseLong(moduleId), Long.parseLong(courseid),content.getQuestion(),content.getOption1(),content.getOption2(),content.getOption3(),content.getOption4(),content.getCorrect()));
+                model.addAttribute("TestOptionsDtoForm", new TestOptionsDtoForm(content.getContentId(), Long.parseLong(moduleId), Long.parseLong(courseid), content.getQuestion(), content.getOption1(), content.getOption2(), content.getOption3(), content.getOption4(), content.getCorrect()));
                 return "testoption";
             }
 
@@ -227,8 +230,8 @@ public class ContentOperations {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = {"/managecourses/{courseId}/editcourses/{moduleId}/editcontent/{contentId}/savetest"})
     public String doPostEditTestContent(@PathVariable("courseId") String courseid, @PathVariable("moduleId") String moduleId, @PathVariable("contentId") String contentId, @Valid @ModelAttribute("TestOptionsDtoForm") TestOptionsDtoForm testOptionsDtoForm, BindingResult result,
-                                          RedirectAttributes redirectAttributes, Locale locale,
-                                          Model model) {
+                                        RedirectAttributes redirectAttributes, Locale locale,
+                                        Model model) {
 
         if (result.hasErrors()) {
             serviceRedirectExceptions.serviceInvalidFormError(result, "editcontent.invalid.parameters", contentId, locale, redirectAttributes);
@@ -236,7 +239,7 @@ public class ContentOperations {
         }
 
         try {
-            contentImpl.testContentUpdate(Long.valueOf(contentId),testOptionsDtoForm.getEnunciado(), testOptionsDtoForm.getOpcion1(), testOptionsDtoForm.getOpcion2(), testOptionsDtoForm.getOpcion3(), testOptionsDtoForm.getOpcion4(),testOptionsDtoForm.getSelectedOption());
+            contentImpl.testContentUpdate(Long.valueOf(contentId), testOptionsDtoForm.getEnunciado(), testOptionsDtoForm.getOpcion1(), testOptionsDtoForm.getOpcion2(), testOptionsDtoForm.getOpcion3(), testOptionsDtoForm.getOpcion4(), testOptionsDtoForm.getSelectedOption());
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         } catch (DuplicatedResourceException ex) {
@@ -249,5 +252,74 @@ public class ContentOperations {
     }
 
 
+    @GetMapping(value = {"/course/{courseId}/module/{moduleId}/learn/{contentId}"})
+    public String doGetSeeContent(@PathVariable("courseId") String courseid, @PathVariable("moduleId") String moduleid, @PathVariable("contentId") String contentId, @RequestParam("contenttype") String contentType, Principal principal, Locale locale,
+                                   Model model, HttpServletRequest request) {
+        model.addAttribute("courseId", Long.valueOf(courseid));
+        model.addAttribute("moduleId", Long.valueOf(moduleid));
 
+
+        try {
+            Modules modules = moduleImpl.findModulesById(Long.parseLong(moduleid));
+            if (contentType.equals("teoric")) {
+                StringContent content = (StringContent) contentImpl.findByContentId(Long.parseLong(contentId));
+                model.addAttribute("TeoricDtoForm", new TeoricDtoForm(content.getContentId(), content.getModule().getModuleId(), Long.parseLong(courseid), content.getHtml(), content.getContent_category().getDescripcion()));
+                Content before = contentImpl.findContentByModuleIdAndPosition(Long.parseLong(moduleid), content.getContentPosition() - 1);
+                if (before != null) {
+                    model.addAttribute("before", new ContentDtoForm(before.getContentId(), before.getContentName(), before.getModule().getModuleName(), before.getContentPosition(), before.getContent_category().getDescripcion(), null));
+                }
+                Content next = contentImpl.findContentByModuleIdAndPosition(Long.parseLong(moduleid), content.getContentPosition() + 1);
+                if (next != null) {
+                    model.addAttribute("next", new ContentDtoForm(next.getContentId(), next.getContentName(), next.getModule().getModuleName(), next.getContentPosition(), next.getContent_category().getDescripcion(), null));
+                }
+                model.addAttribute("progress", Math.round((float) (content.getContentPosition() - 1) / modules.getContents().size() * 100));
+                contentImpl.updateUserContent(principal.getName(), Long.parseLong(contentId),true);
+                return "seeTeoricContent";
+            } else if (contentType.equals("select")) {
+                TestQuestions content = (TestQuestions) contentImpl.findByContentId(Long.parseLong(contentId));
+                model.addAttribute("TestOptionsDtoForm", new TestOptionsDtoForm(content.getContentId(), content.getModule().getModuleId(), Long.parseLong(courseid), content.getQuestion(), content.getOption1(), content.getOption2(), content.getOption3(), content.getOption4(), content.getCorrect()));
+                model.addAttribute("selectedOption", new TestCheckDtoForm());
+
+                Content before = contentImpl.findContentByModuleIdAndPosition(Long.parseLong(moduleid), content.getContentPosition() - 1);
+                if (model.getAttribute("TestCheckDtoForm")!=null){
+                    model.getAttribute("TestCheckDtoForm");
+                }else {
+                    model.addAttribute("TestCheckDtoForm",new TestCheckDtoForm());
+                }
+                if (before != null) {
+                    model.addAttribute("before", new ContentDtoForm(before.getContentId(), before.getContentName(), before.getModule().getModuleName(), before.getContentPosition(), before.getContent_category().getDescripcion(), null));
+                }
+                Content next = contentImpl.findContentByModuleIdAndPosition(Long.parseLong(moduleid), content.getContentPosition() + 1);
+                if (next != null) {
+                    model.addAttribute("next", new ContentDtoForm(next.getContentId(), next.getContentName(), next.getModule().getModuleName(), next.getContentPosition(), next.getContent_category().getDescripcion(), null));
+                }
+                model.addAttribute("progress", Math.round((float) (content.getContentPosition() - 1) / modules.getContents().size() * 100));
+                return "seeTestContent";
+            }
+        } catch (InstanceNotFoundException ex) {
+            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        }
+        return null;
+    }
+
+    @PostMapping(value = {"/course/{courseId}/module/{moduleId}/learn/{contentId}/checktest"})
+    public String doPostCheckCorrect(@PathVariable("courseId") String courseid, @PathVariable("moduleId") String moduleId, @PathVariable("contentId") String contentId,@ModelAttribute("TestCheckDtoForm") TestCheckDtoForm testCheckDtoForm, BindingResult result,
+                                     RedirectAttributes redirectAttributes, Locale locale,
+                                     Model model, Principal principal) {
+
+
+        try {
+            if (testCheckDtoForm.getSelectedOption() == null) {
+                serviceRedirectExceptions.serviceInvalidFormError(result, "checktest.invalid.parameters", contentId, locale, redirectAttributes);
+                return "redirect:/course/" + courseid + "/module/" + moduleId + "/learn/" + contentId + "?contenttype=select" ;
+            }
+            boolean correct = contentImpl.isTestCorrect(Long.parseLong(contentId), testCheckDtoForm.getSelectedOption());
+            contentImpl.updateUserContent(principal.getName(), Long.parseLong(contentId), correct);
+            redirectAttributes.addFlashAttribute("TestCheckDtoForm", new TestCheckDtoForm(testCheckDtoForm.getSelectedOption(),correct));
+            return "redirect:/course/" + courseid + "/module/" + moduleId + "/learn/" + contentId + "?contenttype=select";
+        } catch (InstanceNotFoundException ex) {
+            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        }
+
+    }
 }

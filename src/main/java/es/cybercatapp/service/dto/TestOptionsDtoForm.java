@@ -29,12 +29,12 @@ public class TestOptionsDtoForm {
     String opcion4;
 
     @NotNull
-    int selectedOption;
+    Integer selectedOption;
 
     public TestOptionsDtoForm() {
     }
 
-    public TestOptionsDtoForm(Long contentId, Long moduleId, Long courseId, String enunciado, String opcion1, String opcion2, String opcion3, String opcion4, int selectedOption) {
+    public TestOptionsDtoForm(Long contentId, Long moduleId, Long courseId, String enunciado, String opcion1, String opcion2, String opcion3, String opcion4, Integer selectedOption) {
         this.contentId = contentId;
         this.moduleId = moduleId;
         this.courseId = courseId;
@@ -110,11 +110,11 @@ public class TestOptionsDtoForm {
         this.opcion4 = opcion4;
     }
 
-    public int getSelectedOption() {
+    public Integer getSelectedOption() {
         return selectedOption;
     }
 
-    public void setSelectedOption(int selectedOption) {
+    public void setSelectedOption(Integer selectedOption) {
         this.selectedOption = selectedOption;
     }
 }

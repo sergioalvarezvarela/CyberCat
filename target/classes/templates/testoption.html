@@ -99,21 +99,4 @@
 </body>
 <footer th:replace="tools/footer :: #footer-include"></footer>
 
-<script>
-    const checkboxes = document.querySelectorAll('input[type=checkbox][name=booleanOption]');
-
-    checkboxes.forEach((checkbox) => {
-        checkbox.addEventListener('click', (event) => {
-            checkboxes.forEach((cb) => {
-                if (cb !== checkbox) {
-                    cb.checked = false;
-                }
-            });
-            if (event.target.checked === false) {
-                checkbox.checked = false;
-            }
-        });
-    });
-</script>
-
 </html>

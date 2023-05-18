@@ -44,7 +44,7 @@ public class ContentImpl {
         try {
 
             Modules module = moduleRepository.findById(moduleId);
-            Content contenido =  contentRepository.findContentsByContentNameAndModule(moduleId, contentName);
+            Content contenido = contentRepository.findContentsByContentNameAndModule(moduleId, contentName);
             if (contenido != null) {
 
                 throw exceptionGenerationUtils.toDuplicatedResourceException("Content", contentName,
@@ -88,7 +88,7 @@ public class ContentImpl {
         try {
 
             Modules module = moduleRepository.findById(moduleId);
-            Content contenido =  contentRepository.findContentsByContentNameAndModule(moduleId, contentName);
+            Content contenido = contentRepository.findContentsByContentNameAndModule(moduleId, contentName);
             if (contenido != null) {
 
                 throw exceptionGenerationUtils.toDuplicatedResourceException("Content", contentName,
@@ -105,22 +105,35 @@ public class ContentImpl {
     }
 
     @Transactional(readOnly = true)
-    public List<ContentUser> findListContentUser(String username , Long moduleId) throws InstanceNotFoundException {
+    public List<ContentUser> findListContentUser(String username, Long moduleId) throws InstanceNotFoundException {
         Users user = userRepository.findByUsername(username);
-        return contentUserRepository.findListContentUser(user.getUserId(),moduleId);
+        return contentUserRepository.findListContentUser(user.getUserId(), moduleId);
+    }
+
+    @Transactional(readOnly = true)
+    public Content findContentByModuleIdAndPosition(Long moduleId, int position) {
+        return contentRepository.findContentByModuleIdAndPosition(moduleId, position);
     }
 
     @Transactional
     public void updateContentInscription(String username, long moduleId) throws InstanceNotFoundException {
         Users user = userRepository.findByUsername(username);
         Modules modules = moduleRepository.findById(moduleId);
-        List<Content> contents = contentUserRepository.findListContent(user.getUserId(),moduleId);
-            for (Content content: modules.getContents()) {
-            if (!contents.contains(content)){
-                ContentUser cU = new ContentUser(user,content,null);
+        List<Content> contents = contentUserRepository.findListContent(user.getUserId(), moduleId);
+        for (Content content : modules.getContents()) {
+            if (!contents.contains(content)) {
+                ContentUser cU = new ContentUser(user, content, null);
                 contentUserRepository.create(cU);
             }
         }
+    }
+
+    @Transactional
+    public void updateUserContent(String username, long contentId, boolean completed) throws InstanceNotFoundException {
+        Users user = userRepository.findByUsername(username);
+        Content content = contentRepository.findById(contentId);
+        ContentUser contentUser = new ContentUser(user, content, completed);
+        contentUserRepository.update(contentUser);
     }
 
 
@@ -215,11 +228,14 @@ public class ContentImpl {
     }
 
 
-
     @Transactional(readOnly = true)
     public Content findByContentId(Long contentId) throws InstanceNotFoundException {
         return contentRepository.findById(contentId);
     }
 
-
+    @Transactional(readOnly = true)
+    public boolean isTestCorrect(Long contentId, Integer chosen) throws InstanceNotFoundException {
+        TestQuestions content = (TestQuestions) contentRepository.findById(contentId);
+        return chosen == content.getCorrect();
+    }
 }

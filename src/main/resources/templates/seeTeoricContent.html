@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<header th:replace="tools/package :: #package-include"></header>
+<header th:replace="tools/header :: #header-include"></header>
+<body>
+<div class="container mt-5 mb-3">
+    <div class="row d-flex align-items-center mb-2">
+        <div class="col d-flex justify-content-start mb-2">
+            <a th:if="${before}==null" th:href="@{'/course/'+ ${courseId}}">
+                <button type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Atrás
+                </button>
+            </a>
+            <a th:if="${before}!=null" th:href="@{'/course/' + ${courseId} +'/module/'+${moduleId} +'/learn/' + ${before.contentId}(contenttype=${before.contentType})}">
+                <button type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Atrás
+                </button>
+            </a>
+        </div>
+        <div class="col d-flex justify-content-end">
+            <a th:if="${next}!=null"
+               th:href="@{'/course/' + ${courseId} +'/module/'+${moduleId} +'/learn/' + ${next.contentId}(contenttype=${next.contentType})}"
+               class="btn btn-info" style="margin-right: 10px">Continuar</a>
+            <a th:if="${next}==null"
+               th:href="@{'/course/'+ ${courseId}}"
+               class="btn btn-info" style="margin-right: 10px">Continuar</a>
+        </div>
+    </div>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" th:style="'width:'+ ${progress} +'%'" th:aria-valuenow="${progress}" aria-valuemin="0" th:value = "${progress}" aria-valuemax="100"></div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label for="teoricContent"></label>
+            <textarea th:field="${TeoricDtoForm.html}" class="form-control" id="teoricContent"></textarea>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    tinymce.init({
+        selector: '#teoricContent',
+        readonly: true,
+        plugins: 'autoresize',
+        toolbar: false,
+        menubar: false,
+    });
+</script>
+
+<footer th:replace="tools/footer :: #footer-include"></footer>
+
+
+</html>

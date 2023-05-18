@@ -32,40 +32,43 @@
         </div>
         <div th:id="'collapse-' + ${modules.id}" class="collapse" aria-labelledby="headingOne">
             <div th:each="content : ${modules.contentList}">
-                <div class="card p-3 mt-3 text-dark" style="background-color: #dedede">
-                    <div class="d-flex justify-content-between"
-                         style="cursor: pointer; color: #173753">
-                        <div th:if="${content.contentType == 'puzzle'}">
-                            <h4>
-                                <i class="bi bi-puzzle" style="color:limegreen;"></i>
-                                <span th:text="${content.contentName}"></span>
-                            </h4>
-                        </div>
-                        <div th:if="${content.contentType == 'select'}">
-                            <h4>
-                            <i class="bi bi-question-lg" style="color: orangered "></i>
-                            <span th:text="${content.contentName}"></span>
-                            </h4>
-                        </div>
-                        <div th:if="${content.contentType == 'teoric'}">
-                            <h4>
-                                <i class="bi bi-file-text" style="color: #1d70a2"></i>
-                                <span th:text="${content.contentName}"></span>
-                            </h4>
-                        </div>
-                        <div>
-                            <div th:if="${content.completed == 'true'}">
-                                <i class="bi bi-clipboard-check" style="color: limegreen; font-size: 20px"></i>
+                <a th:href="@{'/course/' + ${courseId} +'/module/'+${modules.id} +'/learn/' + ${content.contentId}(contenttype=${content.contentType})}"
+                   style="text-decoration: none;">
+                    <div class="card p-3 mt-3 text-dark" style="background-color: #dedede">
+                        <div class="d-flex justify-content-between"
+                             style="cursor: pointer; color: #173753">
+                            <div th:if="${content.contentType == 'puzzle'}">
+                                <h4>
+                                    <i class="bi bi-puzzle" style="color:limegreen;"></i>
+                                    <span th:text="${content.contentName}"></span>
+                                </h4>
                             </div>
-                            <div th:if="${content.completed == 'false'}">
-                                <i class="bi bi-clipboard2-x" style="color: orangered; font-size: 20px"></i>
+                            <div th:if="${content.contentType == 'select'}">
+                                <h4>
+                                    <i class="bi bi-question-lg" style="color: orangered "></i>
+                                    <span th:text="${content.contentName}"></span>
+                                </h4>
                             </div>
-                            <div th:if="${content.completed == null}">
-                                <i class="bi bi-clipboard-minus" style="color: #1d70a2; font-size: 20px"></i>
+                            <div th:if="${content.contentType == 'teoric'}">
+                                <h4>
+                                    <i class="bi bi-file-text" style="color: #1d70a2"></i>
+                                    <span th:text="${content.contentName}"></span>
+                                </h4>
+                            </div>
+                            <div>
+                                <div th:if="${content.completed == true}">
+                                    <i class="bi bi-clipboard-check" style="color: limegreen; font-size: 20px"></i>
+                                </div>
+                                <div th:if="${content.completed == false}">
+                                    <i class="bi bi-clipboard2-x" style="color: orangered; font-size: 20px"></i>
+                                </div>
+                                <div th:if="${content.completed == null}">
+                                    <i class="bi bi-clipboard-minus" style="color: #1d70a2; font-size: 20px"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>

@@ -164,6 +164,7 @@ public class CourseOperations {
     @GetMapping("/course/{courseId}")
     public String doGetCourseContent(@PathVariable String courseId, Locale locale, RedirectAttributes redirectAttributes, Model model, Principal principal) {
         try {
+            model.addAttribute("courseId", courseId);
             model.addAttribute("ModuleDtoForm", new ModuleDtoForm());
             model.addAttribute("ContentDtoForm", new ContentDtoForm());
             model.addAttribute("username", principal.getName());
