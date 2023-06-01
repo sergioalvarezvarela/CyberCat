@@ -278,7 +278,6 @@ public class ContentOperations {
             } else if (contentType.equals("select")) {
                 TestQuestions content = (TestQuestions) contentImpl.findByContentId(Long.parseLong(contentId));
                 model.addAttribute("TestOptionsDtoForm", new TestOptionsDtoForm(content.getContentId(), content.getModule().getModuleId(), Long.parseLong(courseid), content.getQuestion(), content.getOption1(), content.getOption2(), content.getOption3(), content.getOption4(), content.getCorrect()));
-                model.addAttribute("selectedOption", new TestCheckDtoForm());
 
                 Content before = contentImpl.findContentByModuleIdAndPosition(Long.parseLong(moduleid), content.getContentPosition() - 1);
                 if (model.getAttribute("TestCheckDtoForm")!=null){
@@ -295,15 +294,33 @@ public class ContentOperations {
                 }
                 model.addAttribute("progress", Math.round((float) (content.getContentPosition() - 1) / modules.getContents().size() * 100));
                 return "seeTestContent";
+            } else{
+                StringComplete content = (StringComplete) contentImpl.findByContentId(Long.parseLong(contentId));
+                model.addAttribute("StringCompleteDtoForm", new StringCompleteDtoForm(content.getContentId(), content.getModule().getModuleId(), Long.parseLong(courseid), content.getEnunciado(), content.getSentence(),content.getCorrectSentence(),content.getContent()));
+                Content before = contentImpl.findContentByModuleIdAndPosition(Long.parseLong(moduleid), content.getContentPosition() - 1);
+                if (model.getAttribute("PuzzleCheckDtoForm")!=null){
+                    model.getAttribute("PuzzleCheckDtoForm");
+                }else {
+                    model.addAttribute("PuzzleCheckDtoForm",new PuzzleCheckDtoForm());
+                }
+                if (before != null) {
+                    model.addAttribute("before", new ContentDtoForm(before.getContentId(), before.getContentName(), before.getModule().getModuleName(), before.getContentPosition(), before.getContent_category().getDescripcion(), null));
+                }
+                Content next = contentImpl.findContentByModuleIdAndPosition(Long.parseLong(moduleid), content.getContentPosition() + 1);
+                if (next != null) {
+                    model.addAttribute("next", new ContentDtoForm(next.getContentId(), next.getContentName(), next.getModule().getModuleName(), next.getContentPosition(), next.getContent_category().getDescripcion(), null));
+                }
+                model.addAttribute("progress", Math.round((float) (content.getContentPosition() - 1) / modules.getContents().size() * 100));
+                return "seePuzzleContent";
+
             }
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
-        return null;
     }
 
     @PostMapping(value = {"/course/{courseId}/module/{moduleId}/learn/{contentId}/checktest"})
-    public String doPostCheckCorrect(@PathVariable("courseId") String courseid, @PathVariable("moduleId") String moduleId, @PathVariable("contentId") String contentId,@ModelAttribute("TestCheckDtoForm") TestCheckDtoForm testCheckDtoForm, BindingResult result,
+    public String doPostCheckTestCorrect(@PathVariable("courseId") String courseid, @PathVariable("moduleId") String moduleId, @PathVariable("contentId") String contentId,@ModelAttribute("TestCheckDtoForm") TestCheckDtoForm testCheckDtoForm, BindingResult result,
                                      RedirectAttributes redirectAttributes, Locale locale,
                                      Model model, Principal principal) {
 
@@ -317,6 +334,35 @@ public class ContentOperations {
             contentImpl.updateUserContent(principal.getName(), Long.parseLong(contentId), correct);
             redirectAttributes.addFlashAttribute("TestCheckDtoForm", new TestCheckDtoForm(testCheckDtoForm.getSelectedOption(),correct));
             return "redirect:/course/" + courseid + "/module/" + moduleId + "/learn/" + contentId + "?contenttype=select";
+        } catch (InstanceNotFoundException ex) {
+            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        }
+
+    }
+
+
+    @PostMapping(value = {"/course/{courseId}/module/{moduleId}/learn/{contentId}/checkpuzzle"})
+    public String doPostCheckPuzzleCorrect(@PathVariable("courseId") String courseid, @PathVariable("moduleId") String moduleId, @PathVariable("contentId") String contentId,@ModelAttribute("PuzzleCheckDtoForm") PuzzleCheckDtoForm puzzleCheckDtoForm, BindingResult result,
+                                     RedirectAttributes redirectAttributes, Locale locale,
+                                     Model model, Principal principal) {
+
+
+        try {
+            if (puzzleCheckDtoForm.getWords() == null) {
+                serviceRedirectExceptions.serviceInvalidFormError(result, "checktest.invalid.parameters", contentId, locale, redirectAttributes);
+                return "redirect:/course/" + courseid + "/module/" + moduleId + "/learn/" + contentId + "?contenttype=puzzle" ;
+            }
+            PuzzleCheckReturn puzzleCheckReturn = contentImpl.isPuzzleCorrect(Long.parseLong(contentId), puzzleCheckDtoForm.getWords());
+            contentImpl.updateUserContent(principal.getName(), Long.parseLong(contentId), puzzleCheckReturn.isCorrect());
+            redirectAttributes.addFlashAttribute("PuzzleCheckDtoForm", new PuzzleCheckDtoForm(puzzleCheckReturn.getFormatedSentence(),puzzleCheckReturn.isCorrect()));
+            if (puzzleCheckReturn.isCorrect()){
+                redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
+                        "puzzlecontent.success", new Object[]{moduleId}, locale));
+            } else{
+                redirectAttributes.addFlashAttribute(Constants.ERROR_MESSAGE, messageSource.getMessage(
+                        "puzzlecontent.error", new Object[]{moduleId}, locale));
+            }
+            return "redirect:/course/" + courseid + "/module/" + moduleId + "/learn/" + contentId + "?contenttype=puzzle";
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }

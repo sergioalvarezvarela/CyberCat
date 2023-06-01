@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<header th:replace="tools/package :: #package-include"></header>
+<header th:replace="tools/header :: #header-include"></header>
+<body>
+<div class="container mt-5 mb-3">
+    <div th:replace="tools/Messages :: #messages-fragment"></div>
+    <div class="row d-flex align-items-center mb-2">
+
+
+        <div class="col d-flex justify-content-start mb-2">
+            <a th:if="${before}==null" th:href="@{'/course/'+ ${courseId}}">
+                <button type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Atrás
+                </button>
+            </a>
+            <a th:if="${before}!=null"
+               th:href="@{'/course/' + ${courseId} +'/module/'+${moduleId} +'/learn/' + ${before.contentId}(contenttype=${before.contentType})}">
+                <button type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Atrás
+                </button>
+            </a>
+        </div>
+        <form th:action="@{'/course/' + ${courseId} +'/module/'+${moduleId} +'/learn/' + ${StringCompleteDtoForm.contentId}+'/checkpuzzle'}"
+              method="post">
+            <input type="hidden" id="puzzle" th:field="${PuzzleCheckDtoForm.words}">
+            <div class="col d-flex justify-content-end">
+                <a th:if="${PuzzleCheckDtoForm.correct==false} "
+                   th:href="@{'/course/' + ${courseId} +'/module/'+${moduleId} +'/learn/' + ${StringCompleteDtoForm.contentId}(contenttype='puzzle')}"
+                   class="btn btn-primary" style="margin-right: 10px">Reintentar <i class="bi bi-repeat"></i></a>
+                <button type="submit" th:if="${PuzzleCheckDtoForm.correct!=true}"
+                        class="btn btn-info" onclick="obtenerPalabras()"
+                        style="margin-right: 10px">Continuar
+                </button>
+                <a th:if="${next != null && PuzzleCheckDtoForm.correct==true} "
+                   th:href="@{'/course/' + ${courseId} +'/module/'+${moduleId} +'/learn/' + ${next.contentId}(contenttype=${next.contentType})}"
+                   class="btn btn-info" style="margin-right: 10px">Continuar</a>
+                <a th:if="${next==null && PuzzleCheckDtoForm.correct==true}"
+                   th:href="@{'/course/'+ ${courseId}}"
+                   class="btn btn-info" style="margin-right: 10px">Continuar</a>
+            </div>
+        </form>
+    </div>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+             th:style="'width:'+ ${progress} +'%'" th:aria-valuenow="${progress}" aria-valuemin="0"
+             th:value="${progress}" aria-valuemax="100"></div>
+    </div>
+    <div th:if="${PuzzleCheckDtoForm.correct} == null" class="row d-flex justify-content-center mt-5">
+        <div class="col-8">
+            <h4 id="enunciado" th:text="${StringCompleteDtoForm.enunciado}" class="mt-1 ml-2"></h4>
+        </div>
+        <div class="col-8">
+            <h5 id="frase" th:text="${StringCompleteDtoForm.frase}" class="mt-1 ml-2"></h5>
+        </div>
+        <div class="col-8">
+            <div id="words" th:text="${StringCompleteDtoForm.words}" class="mt-1 ml-2"></div>
+        </div>
+    </div>
+
+    <div th:if="${PuzzleCheckDtoForm.correct} != null" class="row d-flex justify-content-center mt-5">
+        <div class="col-8">
+            <h4 id="enunciado2" th:text="${StringCompleteDtoForm.enunciado}" class="mt-1 ml-2"></h4>
+        </div>
+        <div class="col-8">
+            <h5 th:inline="html" id="frasecorrecta" th:utext="${PuzzleCheckDtoForm.words}" class="mt-1 ml-2"></h5>
+        </div>
+    </div>
+</div>
+<style>
+    .word {
+        display: inline-block;
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid #000;
+        cursor: move;
+        background: #f0f0f0;
+    }
+
+    .droppable {
+        display: inline-block;
+        width: 200px;
+        height: 30px;
+        line-height: 30px;
+        margin-top: 25px;
+        border: 1px dashed #000;
+        background: #f0f0f0;
+        text-align: center;
+    }
+
+</style>
+<script>
+    window.onload = function () {
+        var wordsString = document.getElementById('words').innerText;
+        var sentenceElement = document.getElementById('frase');
+
+        sentenceElement.innerHTML = sentenceElement.innerHTML.replace(/__/g, "<div class='droppable'></div>");
+
+        var words = wordsString.split(" ");
+
+        var wordsDiv = document.getElementById('words');
+        wordsDiv.innerHTML = '';
+        for (var i = 0; i < words.length; i++) {
+            var wordDiv = document.createElement('div');
+            wordDiv.innerText = words[i];
+            wordDiv.className = 'word';
+            wordsDiv.appendChild(wordDiv);
+        }
+
+        const word = document.querySelectorAll('.word');
+        let draggedWord;
+
+        for (var i = 0; i < word.length; i++) {
+            word[i].draggable = true;
+        }
+        word.forEach((word) => {
+            word.addEventListener('dragstart', dragStart);
+            word.addEventListener('dragend', dragEnd);
+        });
+
+        const classdrop = document.querySelectorAll('.droppable');
+
+        for (var i = 0; i < classdrop.length; i++) {
+            classdrop[i].draggable = true;
+        }
+
+        classdrop.forEach((classdrop) => {
+            classdrop.addEventListener('dragover', dragOver);
+            classdrop.addEventListener('drop', dragDrop);
+        });
+
+        function dragStart(e) {
+            draggedWord = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = "move";
+            e.dataTransfer.setData('text/plain', this.innerText);
+        }
+
+        function dragEnd() {
+            this.classList.remove('dragging');
+        }
+
+        function dragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            return false;
+        }
+
+        function dragDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+            if (draggedWord != this) {
+                if (this.textContent.trim() !== "") {
+                    var wordToReturn = document.createElement('div');
+                    wordToReturn.innerText = this.textContent;
+                    wordToReturn.className = 'word';
+                    wordToReturn.draggable = true;
+                    wordToReturn.addEventListener('dragstart', dragStart);
+                    wordToReturn.addEventListener('dragend', dragEnd);
+                    wordsDiv.appendChild(wordToReturn);
+                }
+                this.textContent = draggedWord.textContent;
+                draggedWord.parentNode.removeChild(draggedWord);
+            }
+            return false;
+        }
+    };
+
+    function obtenerPalabras() {
+        const classdrop = document.querySelectorAll('.droppable');
+        let palabras = "";
+
+        classdrop.forEach(element => {
+            palabras += element.innerText.trim() + "\r";
+        });
+        document.getElementById('puzzle').value = palabras;
+    }
+</script>
+</body>
+<footer th:replace="tools/footer :: #footer-include"></footer>
+
+</html>
+

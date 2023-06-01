@@ -238,4 +238,43 @@ public class ContentImpl {
         TestQuestions content = (TestQuestions) contentRepository.findById(contentId);
         return chosen == content.getCorrect();
     }
+
+    @Transactional(readOnly = true)
+    public PuzzleCheckReturn isPuzzleCorrect(Long contentId, String words) throws InstanceNotFoundException {
+        StringComplete content = (StringComplete) contentRepository.findById(contentId);
+
+        String[] palabras = words.split("\r\n");
+
+        StringBuilder frase = new StringBuilder(content.getSentence());
+
+        for (String word : palabras) {
+            int index = frase.indexOf("__");
+            if (index != -1) {
+                frase.replace(index, index + 2, word);
+            }
+        }
+
+        String[] fraseTroceada = content.getSentence().split("__");
+
+        int i = 0;
+        StringBuilder fraseFinal = new StringBuilder();
+        for (String frases : fraseTroceada) {
+            if (i <= palabras.length - 1) {
+                if (content.getCorrectSentence().contains(frases + palabras[i])) {
+                    fraseFinal.append(frases).append("<font color=\"green\">").append(palabras[i]).append("</font>");
+                } else {
+                    fraseFinal.append(frases).append("<font color=\"red\">").append(palabras[i]).append("</font>");
+                }
+            } else {
+                if (i < fraseTroceada.length -1) {
+                    fraseFinal.append(frases).append("<font color=\"red\">__</font>");
+                } else{
+                    fraseFinal.append(frases);
+                }
+            }
+            i++;
+        }
+
+        return new PuzzleCheckReturn(frase.toString().equals(content.getCorrectSentence()), fraseFinal.toString());
+    }
 }
