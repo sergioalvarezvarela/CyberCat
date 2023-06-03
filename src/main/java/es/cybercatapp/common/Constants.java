@@ -29,6 +29,12 @@ public class Constants {
     public static final String CONTENT_ENTITY = "Content";
     public static final String CONTENT_TABLE = "Contents";
 
+    public static final String COMMENT_ENTITY = "Comment";
+    public static final String COMMENT_TABLE = "Comments";
+
+    public static final String DIPLOMA_ENTITY = "Diploma";
+    public static final String DIPLOMA_TABLE = "Diplomas";
+
     public static final String TESTSTRING_ENTITY = "Teststring";
     public static final String TESTSTRING_TABLE = "Teststrings";
 

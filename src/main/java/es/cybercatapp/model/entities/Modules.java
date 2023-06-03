@@ -39,6 +39,14 @@ public class Modules implements Serializable {
     @OrderBy ("contentPosition")
     private List<Content> contents = new ArrayList<>();
 
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "module",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<ModuleUser> moduleUsers = new ArrayList<>();
+
 
     public Modules(String moduleName, LocalDate moduleDate, Courses courseId, int modulePosition) {
         this.moduleName = moduleName;
@@ -99,6 +107,14 @@ public class Modules implements Serializable {
 
     public void setModulePosition(int modulePosition) {
         this.modulePosition = modulePosition;
+    }
+
+    public List<ModuleUser> getModuleUsers() {
+        return moduleUsers;
+    }
+
+    public void setModuleUsers(List<ModuleUser> moduleUsers) {
+        this.moduleUsers = moduleUsers;
     }
 
     @Override

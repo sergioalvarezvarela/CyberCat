@@ -57,14 +57,37 @@ public class Courses implements Serializable {
     @OneToMany(
             fetch = FetchType.LAZY,
             mappedBy = "courses",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
     )
     private List<Inscriptions> inscriptions = new ArrayList<>();
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "courseId")
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "courseId",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     @OrderBy("modulePosition")
-    private List<Modules> modules;
+    private List<Modules> modules = new ArrayList<>();
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "courses",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "courses",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<Diploma> diplomas = new ArrayList<>();
 
 
     public Long getCourseId() {
@@ -146,6 +169,23 @@ public class Courses implements Serializable {
 
     public void setInscriptions(List<Inscriptions> inscriptions) {
         this.inscriptions = inscriptions;
+    }
+
+
+    public List<Diploma> getDiplomas() {
+        return diplomas;
+    }
+
+    public void setDiplomas(List<Diploma> diplomas) {
+        this.diplomas = diplomas;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override

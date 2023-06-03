@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Repository
-public class InscriptionsRepository extends AbstractRepository<InscriptionsRepository>{
+public class InscriptionsRepository extends AbstractRepository<Inscriptions>{
 
     private static final String FIND_INSCRIPTION = "SELECT t FROM Inscription t where t.courses.courseId = :courseId AND t.users.userId = :userId";
 

@@ -1,5 +1,13 @@
 
 
+alter table comments
+drop
+foreign key FK7ktrfqv6fgfuw6fvwludvibu;
+
+alter table comments
+drop
+foreign key FK8omq0tc18jd43bu5tjh6jvra;
+
 alter table content_users
 drop
 foreign key FKim0183q15eol9wyg2k1ff7je;
@@ -7,6 +15,14 @@ foreign key FKim0183q15eol9wyg2k1ff7je;
 alter table courses
 drop
 foreign key FK51k53m6m5gi9n91fnlxkxgpm;
+
+alter table diplomas
+drop
+foreign key FKoa6fhy7k7066qypx6riqc1na;
+
+alter table diplomas
+drop
+foreign key FKlpedyhd0xdm7vgti8dn41wvg;
 
 alter table inscriptions
 drop
@@ -40,9 +56,13 @@ alter table teststring
 drop
 foreign key FK_3gh0y5qbtkg0jpiuj4lxo1fh;
 
+drop table if exists comments;
+
 drop table if exists content_users;
 
 drop table if exists courses;
+
+drop table if exists diplomas;
 
 drop table if exists hibernate_sequence;
 
@@ -59,6 +79,16 @@ drop table if exists testquestion;
 drop table if exists teststring;
 
 drop table if exists users;
+
+create table comments (
+                          comment_id bigint not null,
+                          commentary varchar(255),
+                          creation_date date not null,
+                          grade integer not null,
+                          course_id bigint not null,
+                          user_id bigint not null,
+                          primary key (comment_id)
+) engine=InnoD;
 
 create table content_users (
                                completed bit,
@@ -77,6 +107,14 @@ create table courses (
                          creation_date date not null,
                          user_id bigint not null,
                          primary key (course_id)
+) engine=InnoD;
+
+create table diplomas (
+                          diploma_id bigint not null auto_increment,
+                          pdf varchar(255) not null,
+                          course_id bigint not null,
+                          user_id bigint not null,
+                          primary key (diploma_id)
 ) engine=InnoD;
 
 create table hibernate_sequence (
@@ -157,11 +195,24 @@ create table users (
                        primary key (user_id)
 ) engine=InnoD;
 
+alter table diplomas
+    add constraint UK_6rlaclpljsr7yjotjtsxbg3h1 unique (pdf);
+
 alter table users
     add constraint UK_6dotkott2kjsp8vw4d0m25fb7 unique (email);
 
 alter table users
     add constraint UK_r43af9ap4edm43mmtq01oddj6 unique (username);
+
+alter table comments
+    add constraint FK7ktrfqv6fgfuw6fvwludvibu4
+        foreign key (course_id)
+            references courses (course_id);
+
+alter table comments
+    add constraint FK8omq0tc18jd43bu5tjh6jvraq
+        foreign key (user_id)
+            references users (user_id);
 
 alter table content_users
     add constraint FKim0183q15eol9wyg2k1ff7je5
@@ -170,6 +221,16 @@ alter table content_users
 
 alter table courses
     add constraint FK51k53m6m5gi9n91fnlxkxgpmv
+        foreign key (user_id)
+            references users (user_id);
+
+alter table diplomas
+    add constraint FKoa6fhy7k7066qypx6riqc1naq
+        foreign key (course_id)
+            references courses (course_id);
+
+alter table diplomas
+    add constraint FKlpedyhd0xdm7vgti8dn41wvgd
         foreign key (user_id)
             references users (user_id);
 

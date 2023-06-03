@@ -4,6 +4,8 @@ import es.cybercatapp.common.Constants;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(name = Constants.CONTENT_TABLE)
@@ -29,6 +31,14 @@ public abstract class Content implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "module_id", nullable = false)
     private Modules module;
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "content",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<ContentUser> contentUsers = new ArrayList<>();
 
 
     public Content(){}
@@ -78,6 +88,15 @@ public abstract class Content implements Serializable {
 
     public void setContent_category(Type content_category) {
         this.content_category = content_category;
+    }
+
+
+    public List<ContentUser> getContentUsers() {
+        return contentUsers;
+    }
+
+    public void setContentUsers(List<ContentUser> contentUsers) {
+        this.contentUsers = contentUsers;
     }
 
     @Override

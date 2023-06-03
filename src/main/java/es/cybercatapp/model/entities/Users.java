@@ -50,30 +50,54 @@ public class Users implements Serializable {
     @Column(name = "imagen_perfil")
     private String imagen_perfil;
 
-    @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "user_owner")
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "user_owner",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<Courses> courses;
 
     @OneToMany(
             fetch = FetchType.LAZY,
             mappedBy = "users",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
     )
     private List<Inscriptions> inscriptions = new ArrayList<>();
 
-  /*  @OneToMany(
+    @OneToMany(
+            fetch = FetchType.LAZY,
             mappedBy = "users",
-            cascade = CascadeType.ALL,
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true
     )
-    private List<Module_User> module_users = new ArrayList<>();
+    private List<ModuleUser> module_users = new ArrayList<>();
 
     @OneToMany(
+            fetch = FetchType.LAZY,
             mappedBy = "users",
-            cascade = CascadeType.ALL,
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true
     )
-    private List<Content_User> content_users = new ArrayList<>();*/
+    private List<ContentUser> content_users = new ArrayList<>();
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "users",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<Diploma> diplomas = new ArrayList<>();
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "users",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<Comment> comments = new ArrayList<>();
 
 
     public Long getUserId() {
@@ -148,6 +172,37 @@ public class Users implements Serializable {
         this.inscriptions = inscriptions;
     }
 
+    public List<ModuleUser> getModule_users() {
+        return module_users;
+    }
+
+    public void setModule_users(List<ModuleUser> module_users) {
+        this.module_users = module_users;
+    }
+
+    public List<ContentUser> getContent_users() {
+        return content_users;
+    }
+
+    public void setContent_users(List<ContentUser> content_users) {
+        this.content_users = content_users;
+    }
+
+    public List<Diploma> getDiplomas() {
+        return diplomas;
+    }
+
+    public void setDiplomas(List<Diploma> diplomas) {
+        this.diplomas = diplomas;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -2,14 +2,12 @@ package es.cybercatapp.model.impl;
 
 import es.cybercatapp.common.ConfigurationParameters;
 import es.cybercatapp.common.Constants;
-import es.cybercatapp.model.entities.Category;
-import es.cybercatapp.model.entities.Courses;
-import es.cybercatapp.model.entities.Inscriptions;
-import es.cybercatapp.model.entities.Users;
+import es.cybercatapp.model.entities.*;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.repositories.CourseRepository;
 import es.cybercatapp.model.repositories.InscriptionsRepository;
+import es.cybercatapp.model.repositories.ModuleUserRepository;
 import es.cybercatapp.model.repositories.UserRepository;
 import es.cybercatapp.model.utils.ExceptionGenerationUtils;
 import org.apache.commons.io.IOUtils;
@@ -40,9 +38,6 @@ public class CourseImpl {
     ConfigurationParameters configurationParameters;
 
     @Autowired
-    private MessageSource messageSource;
-
-    @Autowired
     ExceptionGenerationUtils exceptionGenerationUtils;
 
     @Autowired
@@ -50,6 +45,9 @@ public class CourseImpl {
 
     @Autowired
     private InscriptionsRepository inscriptionsRepository;
+
+    @Autowired
+    private ModuleUserRepository moduleUserRepository;
 
     private File resourcesDir;
 
@@ -122,6 +120,29 @@ public class CourseImpl {
             } else {
                 throw exceptionGenerationUtils.toDuplicatedResourceException("Course", course.getCourseId().toString(),
                         "updatecourse.duplicated.exception");
+            }
+        }
+    }
+
+    @Transactional
+    public void updateInscriptionStatus(long courseId, String username) throws InstanceNotFoundException {
+
+        Users user = userRepository.findByUsername(username);
+        Inscriptions inscriptions = inscriptionsRepository.findInscription(courseId, user.getUserId());
+        if (inscriptions == null) {
+            throw new InstanceNotFoundException(String.valueOf(courseId), Inscriptions.class.toString(), "Inscription not found");
+        } else {
+            List<ModuleUser> modules = moduleUserRepository.findListModuleUser(user.getUserId(), courseId);
+            for (ModuleUser module : modules) {
+                Boolean moduleCompleted = module.getCompleted();
+                Boolean inscriptionCompleted = inscriptions.isCompleted();
+                if ((moduleCompleted == null || !moduleCompleted) && (inscriptionCompleted != null && inscriptionCompleted)) {
+                    inscriptions.setCompleted(false);
+                    inscriptionsRepository.update(inscriptions);
+                } else if ((moduleCompleted != null && moduleCompleted) && (inscriptionCompleted == null || !inscriptionCompleted)) {
+                    inscriptions.setCompleted(true);
+                    inscriptionsRepository.update(inscriptions);
+                }
             }
         }
     }

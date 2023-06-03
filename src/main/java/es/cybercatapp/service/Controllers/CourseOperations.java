@@ -168,6 +168,7 @@ public class CourseOperations {
             model.addAttribute("ModuleDtoForm", new ModuleDtoForm());
             model.addAttribute("ContentDtoForm", new ContentDtoForm());
             model.addAttribute("username", principal.getName());
+            courseImpl.updateInscriptionStatus(Long.parseLong(courseId), principal.getName());
             moduleImpl.updateModuleInscription(principal.getName(),Long.parseLong(courseId));
             List<ModuleUser> moduleUsers = moduleImpl.findListModuleUser(principal.getName(), Long.parseLong(courseId));
             List<ModuleDtoForm> moduleDto = new ArrayList<>();
