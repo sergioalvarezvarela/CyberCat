@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div id='addcomment'>
+    <div class="modal fade modal-login" id="addcommentModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCourseModalLabel">Añadir comentario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/course/{courseId}/addcomment(courseId=${courseId})}" method="post" id="miFormulario" class="row g-3">
+                        <div class="col-12">
+                            <label for="inputdescription1" class="form-label">Descripción breve</label>
+                            <input type="text" class="form-control" th:field="*{commentDtoForm.description}" id="inputdescription1" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Puntuación</label>
+                        </div>
+                        <div class="col-6">
+                            <div class="grade">
+                                <input type="radio" id="star1" name="grade" th:value="5" />
+                                <label for="star1" class="star" title="1 estrella"><i class="bi bi-star"></i></label>
+                                <input type="radio" id="star2" name="grade" th:value="4" />
+                                <label for="star2" class="star" title="2 estrellas"><i class="bi bi-star"></i></label>
+                                <input type="radio" id="star3" name="grade" th:value="3" />
+                                <label for="star3" class="star" title="3 estrellas"><i class="bi bi-star"></i></label>
+                                <input type="radio" id="star4" name="grade" th:value="2" />
+                                <label for="star4" class="star" title="4 estrellas"><i class="bi bi-star"></i></label>
+                                <input type="radio" id="star5" name="grade" th:value="1" />
+                                <label for="star5" class="star" title="5 estrellas"><i class="bi bi-star"></i></label>
+                            </div>
+                        </div>
+                        <input type="hidden" id="inputGrade" name="inputGrade" th:field="*{commentDtoForm.grade}"/>
+                        <div class="col-12">
+                            <label for="inputDescription2" class="form-label">Descripcion detallada</label>
+                            <textarea class="form-control" id="inputDescription2" rows="3" th:field="*{commentDtoForm.commentary}"></textarea>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" onclick="getGrade()" class="btn btn-primary">Añadir comentario</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

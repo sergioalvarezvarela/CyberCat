@@ -42,7 +42,7 @@ public class InscriptionsId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         InscriptionsId that = (InscriptionsId) o;
-        return userId.equals(that.userId) && courseId.equals(that.courseId);
+        return Objects.equals(userId, that.userId) && Objects.equals(courseId, that.courseId);
     }
 
     @Override

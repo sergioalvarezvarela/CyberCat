@@ -205,16 +205,28 @@ public class Users implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Users users = (Users) o;
-        return userId.equals(users.userId) && username.equals(users.username) && email.equals(users.email) && password.equals(users.password) && tipo == users.tipo && fecha_creacion.equals(users.fecha_creacion) && imagen_perfil.equals(users.imagen_perfil) && Objects.equals(courses, users.courses) && Objects.equals(inscriptions, users.inscriptions);
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Users other = (Users) obj;
+        if (getUserId() == null) {
+            if (other.getUserId() != null)
+                return false;
+        } else if (!getUserId().equals(other.getUserId()))
+            return false;
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, username, email, password, tipo, fecha_creacion, imagen_perfil, courses, inscriptions);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
+        return result;
     }
 
     @Override

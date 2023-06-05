@@ -103,6 +103,7 @@ public class StringComplete extends Content  {
                 "enunciado='" + enunciado + '\'' +
                 ", sentence='" + sentence + '\'' +
                 ", correctSentence='" + correctSentence + '\'' +
+                ", content='" + content + '\'' +
                 '}';
     }
 }

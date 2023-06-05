@@ -2,10 +2,9 @@ package es.cybercatapp.model.entities;
 
 import es.cybercatapp.common.Constants;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity(name = Constants.TESTQUESTIONS_TABLE)
 @Table(name = Constants.TESTQUESTIONS_ENTITY)
@@ -93,23 +92,39 @@ public class TestQuestions extends Content {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        TestQuestions that = (TestQuestions) o;
-        return correct == that.correct && Objects.equals(question, that.question) && Objects.equals(option1, that.option1) && Objects.equals(option2, that.option2) && Objects.equals(option3, that.option3) && Objects.equals(option4, that.option4);
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        TestQuestions other = (TestQuestions) obj;
+        if (getContentId() == null) {
+            if (other.getContentId() != null)
+                return false;
+        } else if (!getContentId().equals(other.getContentId()))
+            return false;
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), question, option1, option2, option3, option4, correct);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getContentId() == null) ? 0 : getContentId().hashCode());
+        return result;
     }
 
     @Override
     public String toString() {
         return "TestQuestions{" +
                 "question='" + question + '\'' +
+                ", option1='" + option1 + '\'' +
+                ", option2='" + option2 + '\'' +
+                ", option3='" + option3 + '\'' +
+                ", option4='" + option4 + '\'' +
+                ", correct=" + correct +
                 '}';
     }
 }

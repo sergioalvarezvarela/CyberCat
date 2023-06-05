@@ -69,18 +69,19 @@ public class Inscriptions  {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Inscriptions that = (Inscriptions) o;
-        return completed == that.completed && users.equals(that.users) && courses.equals(that.courses);
+        return completed == that.completed && Objects.equals(id, that.id) && Objects.equals(users, that.users) && Objects.equals(courses, that.courses);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(users, courses, completed);
+        return Objects.hash(id, users, courses, completed);
     }
 
     @Override
     public String toString() {
         return "Inscriptions{" +
-                "users=" + users +
+                "id=" + id +
+                ", users=" + users +
                 ", courses=" + courses +
                 ", completed=" + completed +
                 '}';

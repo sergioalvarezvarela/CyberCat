@@ -72,11 +72,31 @@
             </div>
         </div>
     </div>
-    <div class="card p-3 mb-3">
-
+    <div th:if="${commentDtoForm.creation_date == null}" class="card p-3 mb-3" style="background-color: #f0f0f0">
+        <div class="row align-content-center">
+            <div class="col">
+                <h6>No has añadido ningún comentario para el curso</h6>
+            </div>
+            <div class="col d-flex justify-content-end">
+                <button type="button" class="btn btn-info" href="#addcommentModal" data-bs-toggle="modal">Añadir
+                    comentario
+                </button>
+            </div>
+        </div>
     </div>
-</div>
+    <div th:replace="addcomment :: #addcommentModal"></div>
+    <script>
+        function getGrade() {
+            const inputGrade = document.getElementById("inputGrade");
+            document.querySelectorAll('.grade input').forEach(input => {
+                if (input.checked) {
+                    inputGrade.field = parseInt(input.value);
 
+                }
+            });
+        }
+    </script>
+</div>
 <footer th:replace="tools/footer :: #footer-include"></footer>
 </body>
 </html>

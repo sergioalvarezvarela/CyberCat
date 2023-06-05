@@ -69,6 +69,31 @@ public class Diploma implements Serializable {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Diploma other = (Diploma) obj;
+        if (getDiplomaId() == null) {
+            if (other.getDiplomaId() != null)
+                return false;
+        } else if (!getDiplomaId().equals(other.getDiplomaId()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getDiplomaId() == null) ? 0 : getDiplomaId().hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Diploma{" +
                 "diplomaId=" + diplomaId +

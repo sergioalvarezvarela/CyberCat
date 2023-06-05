@@ -72,7 +72,7 @@ public class ContentUser {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ContentUser that = (ContentUser) o;
-        return completed == that.completed && Objects.equals(id, that.id) && Objects.equals(users, that.users) && Objects.equals(content, that.content);
+        return Objects.equals(id, that.id) && Objects.equals(users, that.users) && Objects.equals(content, that.content) && Objects.equals(completed, that.completed);
     }
 
     @Override

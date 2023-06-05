@@ -84,6 +84,7 @@ create table comments (
                           comment_id bigint not null,
                           commentary varchar(255),
                           creation_date date not null,
+                          description varchar(255) not null,
                           grade integer not null,
                           course_id bigint not null,
                           user_id bigint not null,
@@ -120,7 +121,7 @@ create table diplomas (
 create table hibernate_sequence (
     next_val bigint
 ) engine=InnoD;
-    
+
     insert into hibernate_sequence values ( 1 ;
 
 create table inscriptions (

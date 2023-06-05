@@ -149,7 +149,26 @@ html, body {
     border-color: limegreen;
 }
 
+ .grade {
+     display: inline-flex;
+     justify-content: flex-end;
+     flex-direction: row-reverse;
+ }
 
+.star {
+    color: gray;
+    cursor: pointer;
+    margin-right: 5px;
+}
 
+.star:hover,
+.star:hover ~ .star,
+input:checked ~ .star {
+    color: #ffe234;
+}
+
+input[type=radio] {
+    display: none;
+}
 
 

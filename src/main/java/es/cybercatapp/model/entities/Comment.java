@@ -16,6 +16,8 @@ public class Comment implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long commentId;
 
+    @Column(name = "description", nullable = false)
+    private String description;
     @Column(name = "creation_date", nullable = false)
     private LocalDate creation_date;
 
@@ -33,14 +35,18 @@ public class Comment implements Serializable {
     @JoinColumn(name = "userId", nullable = false)
     private Users users;
 
-    public Comment(LocalDate creation_date, int grade, String commentary) {
+    public Comment(String description, LocalDate creation_date, int grade, String commentary, Courses courses, Users users) {
+        this.description = description;
         this.creation_date = creation_date;
         this.grade = grade;
         this.commentary = commentary;
+        this.courses = courses;
+        this.users = users;
     }
 
     public Comment() {
     }
+
 
     public Long getCommentId() {
         return commentId;
@@ -90,6 +96,14 @@ public class Comment implements Serializable {
         this.users = users;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -119,9 +133,12 @@ public class Comment implements Serializable {
     public String toString() {
         return "Comment{" +
                 "commentId=" + commentId +
+                ", description='" + description + '\'' +
                 ", creation_date=" + creation_date +
                 ", grade=" + grade +
                 ", commentary='" + commentary + '\'' +
+                ", courses=" + courses +
+                ", users=" + users +
                 '}';
     }
 }

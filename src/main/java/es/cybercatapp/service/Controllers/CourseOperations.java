@@ -1,23 +1,16 @@
 package es.cybercatapp.service.Controllers;
 
-import com.fasterxml.jackson.databind.Module;
 import es.cybercatapp.model.entities.*;
-import es.cybercatapp.model.impl.ContentImpl;
-import es.cybercatapp.model.impl.ModuleImpl;
-import es.cybercatapp.service.dto.CatalogDtoForm;
-import es.cybercatapp.service.dto.ContentDtoForm;
-import es.cybercatapp.service.dto.ModuleDtoForm;
+import es.cybercatapp.model.impl.*;
+import es.cybercatapp.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
-import es.cybercatapp.model.impl.CourseImpl;
-import es.cybercatapp.model.impl.UserImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
 import es.cybercatapp.service.conversor.CoursesConversor;
-import es.cybercatapp.service.dto.CourseDtoForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -61,7 +54,8 @@ public class CourseOperations {
     @Autowired
     private ContentImpl contentImpl;
 
-
+    @Autowired
+    private CommentImpl commentImpl;
 
 
     @Autowired
@@ -107,7 +101,7 @@ public class CourseOperations {
         Courses course;
         try {
             course = courseImpl.create(addModifyCourseDtoForm.getCourseName(), addModifyCourseDtoForm.getPrice(), addModifyCourseDtoForm.getCategory(),
-                    addModifyCourseDtoForm.getMultipartFile() != null ? addModifyCourseDtoForm.getMultipartFile().getOriginalFilename(): null,
+                    addModifyCourseDtoForm.getMultipartFile() != null ? addModifyCourseDtoForm.getMultipartFile().getOriginalFilename() : null,
                     addModifyCourseDtoForm.getMultipartFile() != null ? addModifyCourseDtoForm.getMultipartFile().getBytes() : null, addModifyCourseDtoForm.getDescription(), principal.getName());
             if (logger.isDebugEnabled()) {
                 logger.debug(MessageFormat.format("Course {0} with id {1} created", course.getCourse_name(), course.getCourseId()));
@@ -155,7 +149,7 @@ public class CourseOperations {
         } catch (IOException ex) {
             return serviceExceptions.serviceUnexpectedException(ex, model);
         } catch (DuplicatedResourceException ex) {
-            serviceRedirectExceptions.serviceDuplicatedResourceException(ex,redirectAttributes);
+            serviceRedirectExceptions.serviceDuplicatedResourceException(ex, redirectAttributes);
             return Constants.SEND_REDIRECT + "/managecourses";
         }
         return Constants.SEND_REDIRECT + "/managecourses";
@@ -169,17 +163,23 @@ public class CourseOperations {
             model.addAttribute("ContentDtoForm", new ContentDtoForm());
             model.addAttribute("username", principal.getName());
             courseImpl.updateInscriptionStatus(Long.parseLong(courseId), principal.getName());
-            moduleImpl.updateModuleInscription(principal.getName(),Long.parseLong(courseId));
+            moduleImpl.updateModuleInscription(principal.getName(), Long.parseLong(courseId));
+            Comment comment = commentImpl.findCommentByUserAndCourse(Long.parseLong(courseId), principal.getName());
+            if (comment == null) {
+                model.addAttribute("commentDtoForm", new CommentDtoForm());
+            } else {
+                model.addAttribute("commentDtoForm", new CommentDtoForm(comment.getCreation_date(),comment.getDescription() ,comment.getGrade(), comment.getCommentary()));
+            }
             List<ModuleUser> moduleUsers = moduleImpl.findListModuleUser(principal.getName(), Long.parseLong(courseId));
             List<ModuleDtoForm> moduleDto = new ArrayList<>();
 
 
             for (ModuleUser usuarioModulo : moduleUsers) {
                 Long moduleId = usuarioModulo.getId().getModuleId();
-                contentImpl.updateContentInscription(principal.getName(),moduleId);
+                contentImpl.updateContentInscription(principal.getName(), moduleId);
                 List<ContentDtoForm> contentDto = new ArrayList<>();
-                for (ContentUser contents : contentImpl.findListContentUser(principal.getName(),moduleId)) {
-                    contentDto.add(new ContentDtoForm(contents.getContent().getContentId(), contents.getContent().getContentName(), usuarioModulo.getModule().getModuleName(), contents.getContent().getContentPosition(), contents.getContent().getContent_category().getDescripcion(),contents.getCompleted()));
+                for (ContentUser contents : contentImpl.findListContentUser(principal.getName(), moduleId)) {
+                    contentDto.add(new ContentDtoForm(contents.getContent().getContentId(), contents.getContent().getContentName(), usuarioModulo.getModule().getModuleName(), contents.getContent().getContentPosition(), contents.getContent().getContent_category().getDescripcion(), contents.getCompleted()));
                 }
                 moduleDto.add(new ModuleDtoForm(moduleId, usuarioModulo.getModule().getModuleName(), usuarioModulo.getModule().getModulePosition(), contentDto, usuarioModulo.getCompleted()));
 
