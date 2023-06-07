@@ -18,13 +18,16 @@ public class Courses implements Serializable {
     public Courses() {
     }
 
-    public Courses(String course_name, String course_description, LocalDate creation_date, String course_photo, Category course_category, float course_price, Users user_owner) {
+    public Courses(String course_name, String course_description, LocalDate creation_date, String course_photo, Category course_category, float course_price, int total_comments, int puntuation, float grade, Users user_owner) {
         this.course_name = course_name;
         this.course_description = course_description;
         this.creation_date = creation_date;
         this.course_photo = course_photo;
         this.course_category = course_category;
         this.course_price = course_price;
+        this.total_comments = total_comments;
+        this.puntuation = puntuation;
+        this.grade = grade;
         this.user_owner = user_owner;
     }
 
@@ -35,7 +38,7 @@ public class Courses implements Serializable {
     @Column(name = "course_name", nullable = false)
     private String course_name;
 
-    @Column(name = "course_description", nullable = false)
+    @Column(name = "course_description", columnDefinition = "LONGTEXT", nullable = false)
     private String course_description;
 
     @Column(name = "creation_date", nullable = false)
@@ -49,6 +52,15 @@ public class Courses implements Serializable {
 
     @Column(name = "course_price", nullable = false)
     private float course_price;
+
+    @Column(name = "total_comments", nullable = false)
+    private int total_comments;
+
+    @Column(name = "puntuation", nullable = false)
+    private int puntuation;
+
+    @Column(name = "grade", nullable = false)
+    private float grade;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
@@ -188,6 +200,30 @@ public class Courses implements Serializable {
         this.comments = comments;
     }
 
+    public int getTotal_comments() {
+        return total_comments;
+    }
+
+    public void setTotal_comments(int total_comments) {
+        this.total_comments = total_comments;
+    }
+
+    public int getPuntuation() {
+        return puntuation;
+    }
+
+    public void setPuntuation(int puntuation) {
+        this.puntuation = puntuation;
+    }
+
+    public float getGrade() {
+        return grade;
+    }
+
+    public void setGrade(float grade) {
+        this.grade = grade;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -223,6 +259,9 @@ public class Courses implements Serializable {
                 ", course_photo='" + course_photo + '\'' +
                 ", course_category=" + course_category +
                 ", course_price=" + course_price +
+                ", total_comments=" + total_comments +
+                ", puntuation=" + puntuation +
+                ", grade=" + grade +
                 ", user_owner=" + user_owner +
                 '}';
     }

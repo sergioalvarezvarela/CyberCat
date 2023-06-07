@@ -24,7 +24,7 @@ public class Comment implements Serializable {
     @Column(name = "grade", nullable = false)
     private int grade;
 
-    @Column(name = "commentary")
+    @Column(name = "commentary", columnDefinition = "LONGTEXT")
     private String commentary;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -1,5 +1,3 @@
-
-
 alter table comments
 drop
 foreign key FK7ktrfqv6fgfuw6fvwludvibu;
@@ -82,7 +80,7 @@ drop table if exists users;
 
 create table comments (
                           comment_id bigint not null,
-                          commentary varchar(255),
+                          commentary LONGTEXT,
                           creation_date date not null,
                           description varchar(255) not null,
                           grade integer not null,
@@ -101,11 +99,14 @@ create table content_users (
 create table courses (
                          course_id bigint not null auto_increment,
                          course_category varchar(255) not null,
-                         course_description varchar(255) not null,
+                         course_description LONGTEXT not null,
                          course_name varchar(255) not null,
                          course_photo varchar(255) not null,
                          course_price float not null,
                          creation_date date not null,
+                         grade float not null,
+                         puntuation integer not null,
+                         total_comments integer not null,
                          user_id bigint not null,
                          primary key (course_id)
 ) engine=InnoD;

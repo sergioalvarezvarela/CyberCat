@@ -84,7 +84,45 @@
             </div>
         </div>
     </div>
+    <input id="stars" type="hidden" name="stars" th:value="${commentDtoForm.grade}">
+    <div th:if="${commentDtoForm.creation_date != null}" class="card p-3 mb-3" style="background-color: #f0f0f0">
+        <div class="comment mt-2 justify-content-center">
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <img th:src="'data:' + ${commentDtoForm.imageType} + ';base64,' + ${commentDtoForm.image}"
+                         alt="Profile image" class="rounded-circle" width="40" height="40"
+                         style="border: 2px solid dodgerblue;">
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-10">
+                    <h4 th:text="${commentDtoForm.username}"></h4>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <span th:text="${commentDtoForm.creation_date}"></span>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-6 d-flex justify-content-end">
+                    <i id="edit-icon" class="bi bi-pencil-fill me-2" data-bs-toggle="modal"
+                       data-bs-target="#editcommentModal" style="cursor:pointer;"></i>
+                    <i id="delete-icon" class="bi bi-trash-fill" data-bs-toggle="modal"
+                       data-bs-target="#removecommentModal"
+                       style="cursor:pointer; color: red;"></i>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+            <div class="col">
+            <h5 th:text="${commentDtoForm.description}"></h5>
+            </div>
+            <div class="col-2">
+            <div id="ratingStars"></div>
+            </div>
+            </div>
+            <br>
+            <p th:text="${commentDtoForm.commentary}"></p>
+        </div>
+    </div>
     <div th:replace="addcomment :: #addcommentModal"></div>
+    <div th:replace="editcomment :: #editcommentModal"></div>
+    <div th:replace="removecomment :: #removecommentModal"></div>
     <script>
         function getGrade() {
             const inputGrade = document.getElementById("inputGrade");
@@ -95,6 +133,37 @@
                 }
             });
         }
+
+        function convertirANumeroDeEstrellas(numero) {
+            var starsHtml = '';
+            var entero = Math.floor(numero);
+            for (var i = 0; i < entero; i++) {
+                starsHtml += '<span><i class="bi bi-star-fill" style="color: #ffe234"></i></span>';
+            }
+            for (var j = entero + 1; j <= 5; j++) {
+                starsHtml += '<span><i class="bi bi-star" style="color: black"></i></span>';
+            }
+
+            return starsHtml;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var numeroPuntuacion = document.getElementById("stars").value;
+            var ratingContainer = document.getElementById("ratingStars");
+            ratingContainer.innerHTML = convertirANumeroDeEstrellas(numeroPuntuacion);
+        });
+
+        function getGrade2() {
+            const inputGrade = document.getElementById("inputEditGrade");
+            document.querySelectorAll('.grade input').forEach(input => {
+                if (input.checked) {
+                    inputGrade.field = parseInt(input.value);
+
+                }
+            });
+        }
+
+
     </script>
 </div>
 <footer th:replace="tools/footer :: #footer-include"></footer>

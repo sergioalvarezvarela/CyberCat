@@ -2,6 +2,7 @@ package es.cybercatapp.service.Controllers;
 
 import es.cybercatapp.model.entities.*;
 import es.cybercatapp.model.impl.*;
+import es.cybercatapp.service.conversor.CommentConversor;
 import es.cybercatapp.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -164,11 +165,14 @@ public class CourseOperations {
             model.addAttribute("username", principal.getName());
             courseImpl.updateInscriptionStatus(Long.parseLong(courseId), principal.getName());
             moduleImpl.updateModuleInscription(principal.getName(), Long.parseLong(courseId));
+            Users user = userImpl.findByUsername(principal.getName());
             Comment comment = commentImpl.findCommentByUserAndCourse(Long.parseLong(courseId), principal.getName());
             if (comment == null) {
                 model.addAttribute("commentDtoForm", new CommentDtoForm());
             } else {
-                model.addAttribute("commentDtoForm", new CommentDtoForm(comment.getCreation_date(),comment.getDescription() ,comment.getGrade(), comment.getCommentary()));
+                byte[] image = userImpl.getImage(user.getUserId());
+                CommentDtoForm commentdtoform = CommentConversor.toCommentDtoForm(user.getUsername(), comment,image, user.getImagen_perfil());
+                model.addAttribute("commentDtoForm", commentdtoform);
             }
             List<ModuleUser> moduleUsers = moduleImpl.findListModuleUser(principal.getName(), Long.parseLong(courseId));
             List<ModuleDtoForm> moduleDto = new ArrayList<>();

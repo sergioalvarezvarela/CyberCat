@@ -30,7 +30,11 @@ public class CourseDtoForm {
 
     private MultipartFile multipartFile;
 
-    public CourseDtoForm(Long id, String courseName, float price, String category, String description, String image, String imageType){
+    private float grade;
+
+    private int totalComments;
+
+    public CourseDtoForm(Long id, String courseName, float price, String category, String description, String image, String imageType, float grade, int totalComments) {
         this.id = id;
         this.courseName = courseName;
         this.price = price;
@@ -38,9 +42,9 @@ public class CourseDtoForm {
         this.description = description;
         this.image = image;
         this.imageType = imageType;
+        this.grade = grade;
+        this.totalComments = totalComments;
     }
-
-
 
     public CourseDtoForm(){}
 
@@ -106,5 +110,21 @@ public class CourseDtoForm {
 
     public void setMultipartFile(MultipartFile multipartFile) {
         this.multipartFile = multipartFile;
+    }
+
+    public float getGrade() {
+        return grade;
+    }
+
+    public void setGrade(float grade) {
+        this.grade = grade;
+    }
+
+    public int getTotalComments() {
+        return totalComments;
+    }
+
+    public void setTotalComments(int totalComments) {
+        this.totalComments = totalComments;
     }
 }

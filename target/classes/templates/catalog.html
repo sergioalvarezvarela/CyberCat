@@ -159,19 +159,18 @@
                             <h5 th:text="${course.courseName}"></h5>
                             <div class="d-flex flex-row">
                                 <div class="text-danger mb-1 me-2">
-                                    <i class="bi bi-star-fill" style="color: gold"></i>
-                                    <i class="bi bi-star-fill" style="color: gold"></i>
-                                    <i class="bi bi-star-fill" style="color: gold"></i>
-                                    <i class="bi bi-star-fill" style="color: gold"></i>
-                                    <i class="bi bi-star-fill" style="color: gold"></i>
+                                    <div id="ratingStars"></div>
                                 </div>
-                                <span>310 comentarios</span>
                             </div>
+                            <a th:href="@{'/course/'+ ${course.id} + '/seecomments'(start=0)}">
+                                <span th:text="${course.totalComments + ' comentarios'}"></span>
+                            </a>
+                            <input class="stars" type="hidden" name="stars" th:value="${course.grade}">
                             <div class="mt-1 mb-0 text-muted small">
                                 <span class="text-primary"> • </span>
                                 <span th:text="${course.category}"></span>
                             </div>
-                            <p class="text-truncate mb-4 mb-md-0" th:text="${course.description}"></p>
+                            <p class="mb-4 mb-md-0" th:text="${course.description}"></p>
                         </div>
                         <div class="col-md-6 col-lg-3 col-xl-3 align-self-center">
                             <div class="d-flex flex-row align-items-center mb-1">
@@ -281,5 +280,32 @@
             passwordField.type = 'password';
         }
     })
+
+    function convertirANumeroDeEstrellas(numero) {
+        var starsHtml = '';
+        var entero = Math.floor(numero);
+        var decimal = numero - entero;
+        for (var i = 0; i < entero; i++) {
+            starsHtml += '<span><i class="bi bi-star-fill" style="color: #ffe234"></i></span>';
+        }
+        if (decimal >= 0.5) {
+            starsHtml += '<span><i class="bi bi-star-half" style="color: #ffe234"></i></span>';
+            entero++;
+        }
+        for (var j = entero; j < 5; j++) {
+            starsHtml += '<span><i class="bi bi-star"></i></span>';
+        }
+        return starsHtml;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var starsElements = document.getElementsByClassName("stars");
+
+        for (var i = 0; i < starsElements.length; i++) {
+            var numeroPuntuacion = starsElements[i].value;
+            var ratingContainer = starsElements[i].nextElementSibling;
+            ratingContainer.innerHTML = convertirANumeroDeEstrellas(numeroPuntuacion);
+        }
+    });
 </script>
 </html>

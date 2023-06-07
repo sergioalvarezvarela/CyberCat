@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<header th:replace="tools/package :: #package-include"></header>
+<header id="header-include-nr" style="background-color: #173753">
+    <nav class="navbar navbar-expand" id="nav">
+        <div class="container col-md-12 col-sm-6 mt-3">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-dark navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-around" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item mx-lg-2">
+                        <a href="/">
+                            <img src="/images/logo.png" alt="Error al cargar la imagen" class="logo_tamano"
+                                 style="width: 70% ; height: 70%">
+                        </a>
+                    </li>
+
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <div th:if="${principal != null}">
+                            <form th:action="@{/catalog}">
+                                <div class="input-group" style="width: 80%">
+                                    <div class="input-group-prepend">
+                                        <input type="hidden" name="start" value="0"/>
+                                        <select class="form-select rounded-0 "
+                                                style="background-color:  #d4e4f4"
+                                                id="cat1"
+                                                name="category">
+                                            <option>Todos</option>
+                                            <option>Forense</option>
+                                            <option>Criptografia</option>
+                                            <option>Infraestructura</option>
+                                            <option>Virus</option>
+                                            <option>Malware</option>
+                                            <option>Nube</option>
+                                            <option>Red</option>
+                                            <option>Otro</option>
+                                        </select>
+                                    </div>
+                                    <input type="hidden" name="filter" value="1"/>
+                                    <input name="word" type="text" class="form-control"
+                                           aria-label="Text input with dropdown button">
+                                    <button type="submit" class="btn btn-light rounded-0"
+                                            style="background-color:  #d4e4f4 "><i
+                                            class="bi bi-search"></i></button>
+
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+
+
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <div th:if="${principal == null}">
+                            <a class="nav-link" style="color: white; font-size: 16px; font-weight: bold"
+                               href="register">Regístrate</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <a class="nav-item nav-link home-letter-nav" style="font-size: 16px"
+                           th:href="@{/catalog(start=0, category= 'Todos', word='', filter=1)}">Catálogo</a>
+                    </li>
+
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <div th:if="${principal == null}">
+                            <a class="nav-link" style="color: white; font-size: 16px; font-weight: bold"
+                               href="#loginModal"
+                               data-bs-toggle="modal">Inicia Sesión</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item mx-lg-2 mt-3">
+                        <div th:if="${principal != null}">
+                            <a class="nav-item nav-link home-letter-nav" data-method="post" th:href="@{/logout}"
+                               style="font-size: 16px">Cerrar sesión</a>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <script>
+        const navbarToggler = document.getElementById("nav");
+
+        function checkWindowSize() {
+            if (window.innerWidth < 1200) {
+                navbarToggler.className = "navbar";
+            } else {
+                navbarToggler.className = "navbar navbar-expand-md";
+            }
+        }
+
+        checkWindowSize();
+        window.addEventListener('resize', checkWindowSize);
+
+    </script>
+</header>
+<body>
+<div class="container mt-2">
+    <div th:replace="tools/Messages :: #messages-fragment"></div>
+
+    <div class="row d-flex align-items-center mb-2">
+        <div class="col d-flex justify-content-start">
+            <a th:href="@{/catalog(start=0, category= 'Todos', word='', filter=1)}">
+                <button type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Atrás
+                </button>
+            </a>
+        </div>
+    </div>
+    <input type="hidden" id="hiddenCourse" th:value="${courseId}"/>
+    <div class="row justify-content-center mt-4 mb-3" th:each="comment : ${CommentDtoForm}">
+        <div class="col-md-12 col-xl-10">
+            <div class="card p-3 mb-3">
+                <div class="comment mt-2 justify-content-center">
+                    <div class="row">
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <img th:src="'data:' + ${comment.imageType} + ';base64,' + ${comment.image}"
+                                 alt="Profile image" class="rounded-circle" width="40" height="40"
+                                 style="border: 2px solid dodgerblue;">
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-10">
+                            <h4 th:text="${comment.username}"></h4>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6">
+                            <span th:text="${comment.creation_date}"></span>
+                        </div>
+
+                        <input class="stars" type="hidden" name="stars" th:value="${comment.grade}">
+                        <div class="col-2">
+                        </div>
+
+
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            <h5 th:text="${comment.description}"></h5>
+                        </div>
+
+                    </div>
+                    <br>
+                    <p th:text="${comment.commentary}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav aria-label="Page navigation example">
+        <input type="hidden" id="hiddenStart" th:value="${start}"/>
+        <ul class="pagination justify-content-end">
+            <li class="page-item"><a id="previous" class="page-link" style="cursor: pointer"
+                                     onclick="updatePreviusLink()">Anterior</a></li>
+            <li class="page-item">
+                <a class="page-link"
+                   th:href="@{'/course/'+ ${courseId} + '/seecomments'(start=0)}">1</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link"
+                   th:href="@{'/course/'+ ${courseId} + '/seecomments'(start=5)}">2</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link"
+                   th:href="@{'/course/'+ ${courseId} + '/seecomments'(start=10)}">3</a>
+            </li>
+            <li class="page-item"><a id="next" class="page-link" style="cursor: pointer" onclick="updateNextLink()">Siguiente</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<div th:replace="login :: #loginModal"></div>
+<script>
+    function convertirANumeroDeEstrellas(numero) {
+        var starsHtml = '';
+        var entero = Math.floor(numero);
+        var decimal = numero - entero;
+        for (var i = 0; i < entero; i++) {
+            starsHtml += '<span><i class="bi bi-star-fill" style="color: #ffe234"></i></span>';
+        }
+        if (decimal >= 0.5) {
+            starsHtml += '<span><i class="bi bi-star-half" style="color: #ffe234"></i></span>';
+            entero++;
+        }
+        for (var j = entero; j < 5; j++) {
+            starsHtml += '<span><i class="bi bi-star"></i></span>';
+        }
+        return starsHtml;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var starsElements = document.getElementsByClassName("stars");
+
+        for (var i = 0; i < starsElements.length; i++) {
+            var numeroPuntuacion = starsElements[i].value;
+            var ratingContainer = starsElements[i].nextElementSibling;
+            ratingContainer.innerHTML = convertirANumeroDeEstrellas(numeroPuntuacion);
+        }
+    });
+
+    function updateNextLink() {
+        var hiddenStart = parseInt(document.getElementById("hiddenStart").value) + 5;
+        var hiddenCourse = parseInt(document.getElementById("hiddenCourse").value);
+        var next = document.getElementById("next");
+        newHref = '/catalog?start=' + hiddenStart;
+        newHref = '/course/'+ hiddenCourse + '/seecomments?start='+ hiddenStart;
+        next.setAttribute("href", newHref);
+
+    }
+
+    function updatePreviusLink() {
+        var hiddenStart = parseInt(document.getElementById("hiddenStart").value) - 5;
+        var hiddenCourse = parseInt(document.getElementById("hiddenCourse").value);
+        var previous = document.getElementById("previous");
+        var newHref = "";
+        if (hiddenStart >= 0) {
+            newHref = '/course/'+ hiddenCourse + '/seecomments?start='+ hiddenStart;
+            previous.setAttribute("href", newHref);
+        } else if (hiddenStart >= 0) {
+            newHref = '/course/'+ hiddenCourse + '/seecomments?start='+ hiddenStart;
+            previous.setAttribute("href", newHref);
+        }
+
+    }
+
+    let eye = document.getElementById('eyeid');
+
+    eye.addEventListener("click", function () {
+        var passwordField = document.getElementById('password');
+
+        if (passwordField.type === 'password') {
+            eye.className = "bi bi-eye-slash-fill show-password-icon-index";
+            passwordField.type = 'text';
+        } else {
+            eye.className = "bi bi-eye-fill show-password-icon-index";
+            passwordField.type = 'password';
+        }
+    })
+</script>
+</body>
+<footer th:replace="tools/footer :: #footer-include"></footer>
+
+
+
+</html>
