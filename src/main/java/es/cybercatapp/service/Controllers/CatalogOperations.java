@@ -6,6 +6,7 @@ import es.cybercatapp.model.entities.Courses;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.CourseImpl;
+import es.cybercatapp.model.impl.InscriptionsImpl;
 import es.cybercatapp.model.impl.UserImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
@@ -44,7 +45,7 @@ public class CatalogOperations {
     private CourseImpl courseImpl;
 
     @Autowired
-    private UserImpl userImpl;
+    private InscriptionsImpl inscrImpl;
 
     @GetMapping(value = {"/catalog"})
     public String doGetCatalog(@RequestParam("start") String start, @RequestParam("filter") String filter, @RequestParam("category") String category, @RequestParam("word") String word, @ModelAttribute("CatalogDtoForm") CatalogDtoForm catalogDtoForm, Model model, Principal principal, Locale locale) {
@@ -76,7 +77,7 @@ public class CatalogOperations {
                                Model model) {
 
         try {
-            userImpl.signOn(principal.getName(), Long.valueOf(courseid));
+            inscrImpl.signOn(principal.getName(), Long.valueOf(courseid));
 
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);

@@ -1,6 +1,7 @@
 package es.cybercatapp.service.Controllers;
 
 import es.cybercatapp.model.entities.*;
+import es.cybercatapp.model.impl.ContentUserImpl;
 import es.cybercatapp.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,9 @@ public class ContentOperations {
     @Autowired
     private ContentImpl contentImpl;
 
+    @Autowired
+    private ContentUserImpl contentUserImpl;
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = {"/managecourses/{courseId}/editcourses/{moduleId}/addcontent"})
     public String doPostAddContent(@PathVariable("courseId") String courseId, @PathVariable("moduleId") String moduleId, @Valid @ModelAttribute("ContentDtoForm") ContentDtoForm addContentDtoForm,
@@ -94,7 +98,7 @@ public class ContentOperations {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = {"/managecourses/{courseId}/editcourses/{moduleId}/updatepositions"})
-    public String doPostUpdateModulePositions(@PathVariable("courseId") String courseId, @PathVariable("moduleId") String moduleId, @ModelAttribute("ListContentDtoForm") ListContentDtoForm listContentDtoForm,
+    public String doPostUpdateContentPositions(@PathVariable("courseId") String courseId, @PathVariable("moduleId") String moduleId, @ModelAttribute("ListContentDtoForm") ListContentDtoForm listContentDtoForm,
                                               Locale locale, Model model, RedirectAttributes redirectAttributes) {
         try {
             Modules module = moduleImpl.findModulesById(Long.parseLong(moduleId));
@@ -108,6 +112,9 @@ public class ContentOperations {
             }
             module.setContents(contents);
             moduleImpl.updatePositions(module);
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Posiciones de modulo con id {0} actualizadas", moduleId));
+            }
         } catch (InstanceNotFoundException ex) {
             serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
@@ -124,6 +131,9 @@ public class ContentOperations {
 
         try {
             contentImpl.remove(Long.valueOf(contentId));
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Modulo con id {0} eliminado", moduleId));
+            }
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
@@ -143,6 +153,9 @@ public class ContentOperations {
         }
         try {
             contentImpl.contentUpdate(Long.valueOf(moduleId), Long.valueOf(contentId), contentDtoForm.getContentName());
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Contenido con id {0} actualizado", contentId));
+            }
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         } catch (DuplicatedResourceException ex) {
@@ -192,6 +205,9 @@ public class ContentOperations {
 
         try {
             contentImpl.stringContentUpdate(teoricDtoForm.getHtml(), Long.parseLong(contentId));
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Contenido con id {0} actualizado", contentId));
+            }
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         } catch (DuplicatedResourceException ex) {
@@ -216,6 +232,9 @@ public class ContentOperations {
 
         try {
             contentImpl.puzzleContentUpdate(stringCompleteDtoForm.getContentId(), stringCompleteDtoForm.getEnunciado(), stringCompleteDtoForm.getFrase(), stringCompleteDtoForm.getFraseCorrecta(), stringCompleteDtoForm.getWords());
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Contenido con id {0} actualizado", contentId));
+            }
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         } catch (DuplicatedResourceException ex) {
@@ -240,6 +259,9 @@ public class ContentOperations {
 
         try {
             contentImpl.testContentUpdate(Long.valueOf(contentId), testOptionsDtoForm.getEnunciado(), testOptionsDtoForm.getOpcion1(), testOptionsDtoForm.getOpcion2(), testOptionsDtoForm.getOpcion3(), testOptionsDtoForm.getOpcion4(), testOptionsDtoForm.getSelectedOption());
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Contenido con id {0} actualizado", contentId));
+            }
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         } catch (DuplicatedResourceException ex) {
@@ -273,7 +295,7 @@ public class ContentOperations {
                     model.addAttribute("next", new ContentDtoForm(next.getContentId(), next.getContentName(), next.getModule().getModuleName(), next.getContentPosition(), next.getContent_category().getDescripcion(), null));
                 }
                 model.addAttribute("progress", Math.round((float) (content.getContentPosition() - 1) / modules.getContents().size() * 100));
-                contentImpl.updateUserContent(principal.getName(), Long.parseLong(contentId),true);
+                contentUserImpl.updateUserContent(principal.getName(), Long.parseLong(contentId),true);
                 return "seeTeoricContent";
             } else if (contentType.equals("select")) {
                 TestQuestions content = (TestQuestions) contentImpl.findByContentId(Long.parseLong(contentId));
@@ -331,8 +353,11 @@ public class ContentOperations {
                 return "redirect:/course/" + courseid + "/module/" + moduleId + "/learn/" + contentId + "?contenttype=select" ;
             }
             boolean correct = contentImpl.isTestCorrect(Long.parseLong(contentId), testCheckDtoForm.getSelectedOption());
-            contentImpl.updateUserContent(principal.getName(), Long.parseLong(contentId), correct);
+            contentUserImpl.updateUserContent(principal.getName(), Long.parseLong(contentId), correct);
             redirectAttributes.addFlashAttribute("TestCheckDtoForm", new TestCheckDtoForm(testCheckDtoForm.getSelectedOption(),correct));
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Contenido con id {0} corregido", contentId));
+            }
             return "redirect:/course/" + courseid + "/module/" + moduleId + "/learn/" + contentId + "?contenttype=select";
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
@@ -353,8 +378,11 @@ public class ContentOperations {
                 return "redirect:/course/" + courseid + "/module/" + moduleId + "/learn/" + contentId + "?contenttype=puzzle" ;
             }
             PuzzleCheckReturn puzzleCheckReturn = contentImpl.isPuzzleCorrect(Long.parseLong(contentId), puzzleCheckDtoForm.getWords());
-            contentImpl.updateUserContent(principal.getName(), Long.parseLong(contentId), puzzleCheckReturn.isCorrect());
+            contentUserImpl.updateUserContent(principal.getName(), Long.parseLong(contentId), puzzleCheckReturn.isCorrect());
             redirectAttributes.addFlashAttribute("PuzzleCheckDtoForm", new PuzzleCheckDtoForm(puzzleCheckReturn.getFormatedSentence(),puzzleCheckReturn.isCorrect()));
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Contenido con id {0} corregido", contentId));
+            }
             if (puzzleCheckReturn.isCorrect()){
                 redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                         "puzzlecontent.success", new Object[]{moduleId}, locale));

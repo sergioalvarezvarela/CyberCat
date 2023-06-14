@@ -12,15 +12,15 @@ import java.util.List;
 @Repository
 public class InscriptionsRepository extends AbstractRepository<Inscriptions>{
 
-    private static final String FIND_INSCRIPTION = "SELECT t FROM Inscription t where t.courses.courseId = :courseId AND t.users.userId = :userId";
+    private static final String FIND_INSCRIPTION = "SELECT t FROM Inscription t where t.courses.courseId = :courseId AND t.users.username = :username";
 
     private static final String FIND_COURSES_BY_USERID = "SELECT t.courses FROM Inscription t where t.users.username = :userName";
 
-    public Inscriptions findInscription (Long courseId, Long userId) {
+    public Inscriptions findInscription (Long courseId, String username) {
         try {
             TypedQuery<Inscriptions> query = entityManager.createQuery(FIND_INSCRIPTION, Inscriptions.class);
             query.setParameter("courseId", courseId);
-            query.setParameter("userId", userId);
+            query.setParameter("username", username);
             return query.getSingleResult();
         } catch (NoResultException e) {
             logger.error(e.getMessage(), e);

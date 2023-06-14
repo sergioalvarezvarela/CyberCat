@@ -122,12 +122,12 @@ public class Modules implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Modules modules = (Modules) o;
-        return modulePosition == modules.modulePosition && moduleId.equals(modules.moduleId) && moduleName.equals(modules.moduleName) && moduleDate.equals(modules.moduleDate) && courseId.equals(modules.courseId) && Objects.equals(contents, modules.contents);
+        return modulePosition == modules.modulePosition && Objects.equals(moduleId, modules.moduleId) && Objects.equals(moduleName, modules.moduleName) && Objects.equals(moduleDate, modules.moduleDate) && Objects.equals(courseId, modules.courseId) && Objects.equals(contents, modules.contents) && Objects.equals(moduleUsers, modules.moduleUsers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(moduleId, moduleName, moduleDate, courseId, modulePosition, contents);
+        return Objects.hash(moduleId, moduleName, moduleDate, courseId, modulePosition, contents, moduleUsers);
     }
 
     @Override

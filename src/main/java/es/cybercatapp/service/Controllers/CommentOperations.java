@@ -1,10 +1,7 @@
 package es.cybercatapp.service.Controllers;
 
 import es.cybercatapp.common.Constants;
-import es.cybercatapp.model.entities.Category;
 import es.cybercatapp.model.entities.Comment;
-import es.cybercatapp.model.entities.Courses;
-import es.cybercatapp.model.entities.Users;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.impl.CommentImpl;
@@ -13,10 +10,10 @@ import es.cybercatapp.model.impl.UserImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
 import es.cybercatapp.service.conversor.CommentConversor;
-import es.cybercatapp.service.conversor.CoursesConversor;
 import es.cybercatapp.service.dto.CommentDtoForm;
-import es.cybercatapp.service.dto.CourseDtoForm;
 import es.cybercatapp.service.dto.LoginDtoForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -26,8 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.security.Principal;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -39,14 +36,13 @@ public class CommentOperations {
     @Autowired
     ServiceExceptions serviceExceptions;
 
+    private static final Logger logger = LoggerFactory.getLogger(UserOperations.class);
+
     @Autowired
     ServiceRedirectExceptions serviceRedirectExceptions;
 
     @Autowired
     private CommentImpl commentImpl;
-
-    @Autowired
-    private CourseImpl courseImpl;
 
     @Autowired
     private UserImpl userImpl;
@@ -61,8 +57,12 @@ public class CommentOperations {
             serviceRedirectExceptions.serviceInvalidFormError(result, "addcomment.invalid.parameters", id, locale, redirectAttributes);
             return Constants.SEND_REDIRECT + "/course/" + id;
         }
+        Comment comment;
         try {
-            commentImpl.create(Long.parseLong(id), principal.getName(), commentDtoForm.getDescription(), commentDtoForm.getGrade(), commentDtoForm.getCommentary());
+           comment = commentImpl.create(Long.parseLong(id), principal.getName(), commentDtoForm.getDescription(), commentDtoForm.getGrade(), commentDtoForm.getCommentary());
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Comentario con id {1} creado", comment.getCommentId()));
+            }
             redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                     "addcomment.success", new Object[]{id}, locale));
         } catch (DuplicatedResourceException ex) {
@@ -80,6 +80,9 @@ public class CommentOperations {
                                       RedirectAttributes redirectAttributes, Locale locale, Model model) {
         try {
             commentImpl.remove(Long.parseLong(commentId));
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Comentario con id {1} eliminado", commentId));
+            }
             redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                     "removecomment.success", new Object[]{commentId}, locale));
         } catch (InstanceNotFoundException ex) {
@@ -99,6 +102,9 @@ public class CommentOperations {
         }
         try {
             commentImpl.update(Long.parseLong(commentId), commentDtoForm.getDescription(), commentDtoForm.getGrade(), commentDtoForm.getCommentary());
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Comentario con id {1} editado", commentId));
+            }
             redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                     "editcomment.success", new Object[]{commentId}, locale));
         } catch (InstanceNotFoundException ex) {

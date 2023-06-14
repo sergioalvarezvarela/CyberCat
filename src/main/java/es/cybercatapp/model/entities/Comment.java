@@ -6,6 +6,7 @@ import es.cybercatapp.common.Constants;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity(name = Constants.COMMENT_ENTITY)
 @Table(name = Constants.COMMENT_TABLE)
@@ -105,28 +106,16 @@ public class Comment implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Comment other = (Comment) obj;
-        if (commentId == null) {
-            if (other.getCommentId() != null)
-                return false;
-        } else if (!commentId.equals(other.getCommentId()))
-            return false;
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment comment = (Comment) o;
+        return grade == comment.grade && Objects.equals(commentId, comment.commentId) && Objects.equals(description, comment.description) && Objects.equals(creation_date, comment.creation_date) && Objects.equals(commentary, comment.commentary) && Objects.equals(courses, comment.courses) && Objects.equals(users, comment.users);
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((commentId == null) ? 0 : commentId.hashCode());
-        return result;
+        return Objects.hash(commentId, description, creation_date, grade, commentary, courses, users);
     }
 
     @Override

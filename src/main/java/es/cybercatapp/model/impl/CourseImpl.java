@@ -1,20 +1,18 @@
 package es.cybercatapp.model.impl;
 
 import es.cybercatapp.common.ConfigurationParameters;
-import es.cybercatapp.common.Constants;
-import es.cybercatapp.model.entities.*;
+import es.cybercatapp.model.entities.Category;
+import es.cybercatapp.model.entities.Courses;
+import es.cybercatapp.model.entities.Users;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.repositories.CourseRepository;
-import es.cybercatapp.model.repositories.InscriptionsRepository;
-import es.cybercatapp.model.repositories.ModuleUserRepository;
 import es.cybercatapp.model.repositories.UserRepository;
 import es.cybercatapp.model.utils.ExceptionGenerationUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +24,7 @@ import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.List;
 
-@Service
+@Service(value = "courseImpl")
 public class CourseImpl {
 
     private static final Logger logger = LoggerFactory.getLogger(UserImpl.class);
@@ -44,10 +42,7 @@ public class CourseImpl {
     private UserRepository userRepository;
 
     @Autowired
-    private InscriptionsRepository inscriptionsRepository;
-
-    @Autowired
-    private ModuleUserRepository moduleUserRepository;
+    private DiplomaImpl diplomaImpl;
 
     private File resourcesDir;
 
@@ -82,10 +77,7 @@ public class CourseImpl {
 
     }
 
-    @Transactional(readOnly = true)
-    public List<Courses> findCoursesInscriptionsByUser(String username) {
-        return inscriptionsRepository.findCoursesByUser(username);
-    }
+
 
 
     @Transactional
@@ -102,7 +94,7 @@ public class CourseImpl {
         if (course == null) {
             throw new InstanceNotFoundException(String.valueOf(id), Courses.class.toString(), "Course not found");
         } else {
-            Courses newcourse = new Courses(coursename, description, course.getCreation_date(), course.getCourse_photo(), Category.valueOf(category), price,0,0,0, user);
+            Courses newcourse = new Courses(coursename, description, course.getCreation_date(), course.getCourse_photo(), Category.valueOf(category), price,course.getTotal_comments(),course.getPuntuation(),course.getGrade(), user);
             newcourse.setCourseId(course.getCourseId());
             newcourse.setModules(course.getModules());
             if (image != null && image.trim().length() > 0 && imageContents != null) {
@@ -116,7 +108,11 @@ public class CourseImpl {
                 course.setCourse_photo(image);
             }
             if (!course.equals(newcourse)) {
-                courseRepository.update(newcourse);
+                course.setCourse_name(coursename);
+                course.setCourse_price(price);
+                course.setCourse_category(Category.valueOf(category));
+                course.setCourse_description(description);
+                courseRepository.update(course);
             } else {
                 throw exceptionGenerationUtils.toDuplicatedResourceException("Course", course.getCourseId().toString(),
                         "updatecourse.duplicated.exception");
@@ -124,45 +120,26 @@ public class CourseImpl {
         }
     }
 
-    @Transactional
-    public void updateInscriptionStatus(long courseId, String username) throws InstanceNotFoundException {
 
-        Users user = userRepository.findByUsername(username);
-        Inscriptions inscriptions = inscriptionsRepository.findInscription(courseId, user.getUserId());
-        if (inscriptions == null) {
-            throw new InstanceNotFoundException(String.valueOf(courseId), Inscriptions.class.toString(), "Inscription not found");
-        } else {
-            List<ModuleUser> modules = moduleUserRepository.findListModuleUser(user.getUserId(), courseId);
-            for (ModuleUser module : modules) {
-                Boolean moduleCompleted = module.getCompleted();
-                Boolean inscriptionCompleted = inscriptions.isCompleted();
-                if ((moduleCompleted == null || !moduleCompleted) && (inscriptionCompleted != null && inscriptionCompleted)) {
-                    inscriptions.setCompleted(false);
-                    inscriptionsRepository.update(inscriptions);
-                } else if ((moduleCompleted != null && moduleCompleted) && (inscriptionCompleted == null || !inscriptionCompleted)) {
-                    inscriptions.setCompleted(true);
-                    inscriptionsRepository.update(inscriptions);
-                }
-            }
-        }
-    }
 
     @Transactional
-    public void remove(long id) throws InstanceNotFoundException {
+    public void remove(long id) throws InstanceNotFoundException, IOException {
         Courses course = courseRepository.findById(id);
         if (course == null) {
             throw new InstanceNotFoundException(String.valueOf(id), Courses.class.toString(), "Course not found");
         } else {
             courseRepository.remove(course);
+            deleteCourseImage(id,course.getCourse_photo());
+            diplomaImpl.deletePdfByPrefix(String.valueOf(id));
         }
 
     }
 
     private void saveCourseImage(Long id, String image, byte[] imageContents) {
         if (image != null && image.trim().length() > 0 && imageContents != null) {
-            File userDir = new File(resourcesDir, id.toString());
-            userDir.mkdirs();
-            File profilePicture = new File(userDir, image);
+            File courseDir = new File(resourcesDir, id.toString());
+            courseDir.mkdirs();
+            File profilePicture = new File(courseDir, image);
             try (FileOutputStream outputStream = new FileOutputStream(profilePicture);) {
                 IOUtils.copy(new ByteArrayInputStream(imageContents), outputStream);
             } catch (Exception e) {
@@ -184,9 +161,9 @@ public class CourseImpl {
 
     private byte[] getImageCourse(Long id, String image) throws IOException {
         if (image != null && image.trim().length() > 0) {
-            File userDir = new File(resourcesDir, id.toString());
-            File profilePicture = new File(userDir, image);
-            try (FileInputStream input = new FileInputStream(profilePicture)) {
+            File courseDir = new File(resourcesDir, id.toString());
+            File coursePicture = new File(courseDir, image);
+            try (FileInputStream input = new FileInputStream(coursePicture)) {
                 return IOUtils.toByteArray(input);
             }
         }
@@ -195,9 +172,9 @@ public class CourseImpl {
 
     private void deleteCourseImage(Long id, String image) throws IOException {
         if (image != null && image.trim().length() > 0) {
-            File userDir = new File(resourcesDir, id.toString());
-            File profilePicture = new File(userDir, image);
-            Files.delete(profilePicture.toPath());
+            File courseDir = new File(resourcesDir, id.toString());
+            File coursePicture = new File(courseDir, image);
+            Files.delete(coursePicture.toPath());
         }
     }
 

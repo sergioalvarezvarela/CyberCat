@@ -100,28 +100,16 @@ public abstract class Content implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Content other = (Content) obj;
-        if (getContentId() == null) {
-            if (other.getContentId() != null)
-                return false;
-        } else if (!getContentId().equals(other.getContentId()))
-            return false;
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Content content = (Content) o;
+        return contentPosition == content.contentPosition && Objects.equals(contentId, content.contentId) && Objects.equals(contentName, content.contentName) && content_category == content.content_category && Objects.equals(module, content.module) && Objects.equals(contentUsers, content.contentUsers);
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getContentId() == null) ? 0 : getContentId().hashCode());
-        return result;
+        return Objects.hash(contentId, contentName, contentPosition, content_category, module, contentUsers);
     }
 
     @Override

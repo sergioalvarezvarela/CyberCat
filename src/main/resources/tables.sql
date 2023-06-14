@@ -113,6 +113,7 @@ create table courses (
 
 create table diplomas (
                           diploma_id bigint not null auto_increment,
+                          fobtencion date not null,
                           pdf varchar(255) not null,
                           course_id bigint not null,
                           user_id bigint not null,
@@ -122,7 +123,7 @@ create table diplomas (
 create table hibernate_sequence (
     next_val bigint
 ) engine=InnoD;
-
+    
     insert into hibernate_sequence values ( 1 ;
 
 create table inscriptions (
@@ -196,9 +197,6 @@ create table users (
                        username varchar(255) not null,
                        primary key (user_id)
 ) engine=InnoD;
-
-alter table diplomas
-    add constraint UK_6rlaclpljsr7yjotjtsxbg3h1 unique (pdf);
 
 alter table users
     add constraint UK_6dotkott2kjsp8vw4d0m25fb7 unique (email);

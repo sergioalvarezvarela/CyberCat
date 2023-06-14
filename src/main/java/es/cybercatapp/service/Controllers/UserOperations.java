@@ -2,6 +2,7 @@ package es.cybercatapp.service.Controllers;
 
 import es.cybercatapp.model.entities.Courses;
 import es.cybercatapp.model.impl.CourseImpl;
+import es.cybercatapp.model.impl.InscriptionsImpl;
 import es.cybercatapp.service.conversor.CoursesConversor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +60,11 @@ public class UserOperations {
     @Autowired
     private CourseImpl courseImpl;
 
+    @Autowired
+    private InscriptionsImpl inscriptionsImpl;
+
+
+
 
     @GetMapping(value = {"/register"})
     public String doGetRegisterPage(Model model) {
@@ -86,7 +92,7 @@ public class UserOperations {
                     registerDtoForm.getImage() != null ? registerDtoForm.getImage().getOriginalFilename() : null,
                     registerDtoForm.getImage() != null ? registerDtoForm.getImage().getBytes() : null);
             if (logger.isDebugEnabled()) {
-                logger.debug(MessageFormat.format("User {0} with username {1} registered", user.getEmail(), user.getUsername()));
+                logger.debug(MessageFormat.format("Usuario {0} con nombre de usuario {1} registrado", user.getEmail(), user.getUsername()));
             }
             session.setAttribute(Constants.USER_SESSION, user);
             redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
@@ -122,7 +128,7 @@ public class UserOperations {
             ProfileDtoForm profileDtoForm = UserConversor.toProfile(user, image, user.getImagen_perfil());
             model.addAttribute("ProfileDtoForm", profileDtoForm);
             AdminChecker.isAdmin(model, authentication);
-            List<Courses> courses = courseImpl.findCoursesInscriptionsByUser(authentication.getName());
+            List<Courses> courses = inscriptionsImpl.findCoursesInscriptionsByUser(authentication.getName());
             List<CourseDtoForm> courseDto = new ArrayList<>();
 
             for (Courses course : courses) {
@@ -160,11 +166,19 @@ public class UserOperations {
     @PostMapping("/editprofile/remove/{username}")
     @PreAuthorize("#username == authentication.principal.username")
     public String doPostRemoveProfile(@PathVariable String username, Principal principal, Locale locale,
-                                      RedirectAttributes redirectAttributes) {
+                                      RedirectAttributes redirectAttributes, Model model) {
 
-        userImpl.Remove(principal.getName());
+        try{
+            userImpl.Remove(principal.getName());
+
         redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                 "removeprofile.success", new Object[]{principal.getName()}, locale));
+        if (logger.isDebugEnabled()) {
+            logger.debug(MessageFormat.format("Perfil de usuario {0} elimiado", principal.getName()));
+        }
+        } catch (IOException ex) {
+            return serviceExceptions.serviceUnexpectedException(ex, model);
+        }
         return Constants.SEND_REDIRECT + "/logout";
     }
 
@@ -179,7 +193,6 @@ public class UserOperations {
             model.addAttribute("EditProfileDtoForm", editProfileDtoForm);
             model.addAttribute("UpdateImageProfileDtoForm", new UpdateImageProfileDtoForm());
 
-
             if (result.hasErrors()) {
                 serviceRedirectExceptions.serviceInvalidFormError(result,
                         "changepassword.invalid.parameters",principal.getName(),locale,redirectAttributes);
@@ -188,6 +201,9 @@ public class UserOperations {
 
 
             userImpl.changePassword(principal.getName(), changePasswordDtoForm.getOldPass(), changePasswordDtoForm.getNewPassword());
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Contraseña de usuario {0} cambiada", principal.getName()));
+            }
         } catch (AuthenticationException e) {
             serviceRedirectExceptions.serviceAuthenticationException(e, redirectAttributes);
             return "redirect:/profile/" + principal.getName() + "/editprofile";
@@ -213,6 +229,9 @@ public class UserOperations {
 
         try {
             userImpl.modifyProfile(principal.getName(), editProfileDtoForm.getUsername(), editProfileDtoForm.getEmail());
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Perfil de usuario {0} modificado", principal.getName()));
+            }
         } catch (DuplicatedResourceException ex) {
             serviceRedirectExceptions.serviceDuplicatedResourceException(ex,redirectAttributes);
             return "redirect:/profile/" + editProfileDtoForm.getUsername() + "/editprofile";
@@ -238,6 +257,9 @@ public class UserOperations {
             byte[] image = userImpl.getImage(user.getUserId());
             ProfileDtoForm editProfileDtoForm = UserConversor.toProfile(user, image, user.getImagen_perfil());
             model.addAttribute("EditProfileDtoForm", editProfileDtoForm);
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Fotografía de usuario {0} cambiada", principal.getName()));
+            }
         } catch (IOException ex) {
             return serviceExceptions.serviceUnexpectedException(ex, model);
         } catch (InstanceNotFoundException ex) {

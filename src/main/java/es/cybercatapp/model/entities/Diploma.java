@@ -5,6 +5,9 @@ import es.cybercatapp.common.Constants;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Objects;
 
 @Entity(name = Constants.DIPLOMA_ENTITY)
 @Table(name = Constants.DIPLOMA_TABLE)
@@ -15,8 +18,11 @@ public class Diploma implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long diplomaId;
 
-    @Column(name = "pdf", nullable = false, unique = true)
+    @Column(name = "pdf", nullable = false)
     private String pdf;
+
+    @Column(name = "fobtencion", nullable = false)
+    private LocalDate fobtencion;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "courseId", nullable = false)
@@ -26,8 +32,9 @@ public class Diploma implements Serializable {
     @JoinColumn(name = "userId", nullable = false)
     private Users users;
 
-    public Diploma(String pdf, Courses courses, Users users) {
+    public Diploma( String pdf, LocalDate fobtencion, Courses courses, Users users) {
         this.pdf = pdf;
+        this.fobtencion = fobtencion;
         this.courses = courses;
         this.users = users;
     }
@@ -43,6 +50,7 @@ public class Diploma implements Serializable {
     public void setDiplomaId(Long diplomaId) {
         this.diplomaId = diplomaId;
     }
+
 
     public String getPdf() {
         return pdf;
@@ -68,29 +76,25 @@ public class Diploma implements Serializable {
         this.users = users;
     }
 
+    public LocalDate getFobtencion() {
+        return fobtencion;
+    }
+
+    public void setFobtencion(LocalDate fobtencion) {
+        this.fobtencion = fobtencion;
+    }
+
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Diploma other = (Diploma) obj;
-        if (getDiplomaId() == null) {
-            if (other.getDiplomaId() != null)
-                return false;
-        } else if (!getDiplomaId().equals(other.getDiplomaId()))
-            return false;
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Diploma diploma = (Diploma) o;
+        return Objects.equals(diplomaId, diploma.diplomaId) && Objects.equals(pdf, diploma.pdf) && Objects.equals(fobtencion, diploma.fobtencion) && Objects.equals(courses, diploma.courses) && Objects.equals(users, diploma.users);
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getDiplomaId() == null) ? 0 : getDiplomaId().hashCode());
-        return result;
+        return Objects.hash(diplomaId, pdf, fobtencion, courses, users);
     }
 
     @Override
@@ -98,6 +102,9 @@ public class Diploma implements Serializable {
         return "Diploma{" +
                 "diplomaId=" + diplomaId +
                 ", pdf='" + pdf + '\'' +
+                ", fobtencion=" + fobtencion +
+                ", courses=" + courses +
+                ", users=" + users +
                 '}';
     }
 }

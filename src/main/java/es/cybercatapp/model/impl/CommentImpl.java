@@ -1,22 +1,21 @@
 package es.cybercatapp.model.impl;
 
 import es.cybercatapp.common.ConfigurationParameters;
-import es.cybercatapp.model.entities.*;
+import es.cybercatapp.model.entities.Comment;
+import es.cybercatapp.model.entities.Courses;
+import es.cybercatapp.model.entities.Users;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.repositories.CommentRepository;
 import es.cybercatapp.model.repositories.CourseRepository;
-import es.cybercatapp.model.repositories.ModuleRepository;
 import es.cybercatapp.model.repositories.UserRepository;
 import es.cybercatapp.model.utils.ExceptionGenerationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.List;
 

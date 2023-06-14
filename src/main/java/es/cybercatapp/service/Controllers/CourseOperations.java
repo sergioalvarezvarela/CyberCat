@@ -47,16 +47,22 @@ public class CourseOperations {
     private CourseImpl courseImpl;
 
     @Autowired
-    private ModuleImpl moduleImpl;
-
-    @Autowired
     private UserImpl userImpl;
 
     @Autowired
-    private ContentImpl contentImpl;
+    private CommentImpl commentImpl;
 
     @Autowired
-    private CommentImpl commentImpl;
+    private InscriptionsImpl inscriptionsImpl;
+
+    @Autowired
+    private ModuleUserImpl moduleUserImpl;
+
+    @Autowired
+    private ContentUserImpl contentUserImpl;
+
+    @Autowired
+    private DiplomaImpl diplomaImpl;
 
 
     @Autowired
@@ -105,7 +111,7 @@ public class CourseOperations {
                     addModifyCourseDtoForm.getMultipartFile() != null ? addModifyCourseDtoForm.getMultipartFile().getOriginalFilename() : null,
                     addModifyCourseDtoForm.getMultipartFile() != null ? addModifyCourseDtoForm.getMultipartFile().getBytes() : null, addModifyCourseDtoForm.getDescription(), principal.getName());
             if (logger.isDebugEnabled()) {
-                logger.debug(MessageFormat.format("Course {0} with id {1} created", course.getCourse_name(), course.getCourseId()));
+                logger.debug(MessageFormat.format("Curso {0} con id {1} creado", course.getCourse_name(), course.getCourseId()));
             }
             session.setAttribute(Constants.USER_SESSION, course);
             redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
@@ -121,10 +127,15 @@ public class CourseOperations {
     public String doPostRemoveCourses(@PathVariable String id, Locale locale, RedirectAttributes redirectAttributes, Model model) {
         try {
             courseImpl.remove(Long.parseLong(id));
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Curso {0} eliminado", id));
+            }
             redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                     "removecourses.success", new Object[]{id}, locale));
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        } catch (IOException ex) {
+            return serviceExceptions.serviceUnexpectedException(ex, model);
         }
         return Constants.SEND_REDIRECT + "/managecourses";
     }
@@ -143,6 +154,9 @@ public class CourseOperations {
             courseImpl.update(Long.parseLong(id), addModifyCourseDtoForm.getCourseName(), addModifyCourseDtoForm.getPrice(), addModifyCourseDtoForm.getCategory(),
                     addModifyCourseDtoForm.getMultipartFile() != null ? addModifyCourseDtoForm.getMultipartFile().getOriginalFilename() : null,
                     addModifyCourseDtoForm.getMultipartFile() != null ? addModifyCourseDtoForm.getMultipartFile().getBytes() : null, addModifyCourseDtoForm.getDescription(), principal.getName());
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Curso {0} actualizado", id));
+            }
             redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                     "updatecourse.success", new Object[]{id}, locale));
         } catch (InstanceNotFoundException ex) {
@@ -157,16 +171,24 @@ public class CourseOperations {
     }
 
     @GetMapping("/course/{courseId}")
-    public String doGetCourseContent(@PathVariable String courseId, Locale locale, RedirectAttributes redirectAttributes, Model model, Principal principal) {
+    public String doGetCourseContent(@PathVariable String courseId, Locale locale, Model model, Principal principal) {
         try {
             model.addAttribute("courseId", courseId);
             model.addAttribute("ModuleDtoForm", new ModuleDtoForm());
             model.addAttribute("ContentDtoForm", new ContentDtoForm());
             model.addAttribute("username", principal.getName());
-            courseImpl.updateInscriptionStatus(Long.parseLong(courseId), principal.getName());
-            moduleImpl.updateModuleInscription(principal.getName(), Long.parseLong(courseId));
+            inscriptionsImpl.updateInscriptionStatus(Long.parseLong(courseId), principal.getName());
+            moduleUserImpl.updateModuleInscription(principal.getName(), Long.parseLong(courseId));
             Users user = userImpl.findByUsername(principal.getName());
             Comment comment = commentImpl.findCommentByUserAndCourse(Long.parseLong(courseId), principal.getName());
+            Inscriptions inscriptions = inscriptionsImpl.findInscription(Long.parseLong(courseId),principal.getName());
+            Diploma diploma = diplomaImpl.findDiplomaByCourseAndUsername(Long.parseLong(courseId),principal.getName());
+            if (diploma != null){
+                model.addAttribute("DiplomaDtoForm", new DiplomaDtoForm(inscriptions.isCompleted(), diploma.getDiplomaId()));
+            } else{
+                model.addAttribute("DiplomaDtoForm", new DiplomaDtoForm(inscriptions.isCompleted()));
+            }
+
             if (comment == null) {
                 model.addAttribute("commentDtoForm", new CommentDtoForm());
             } else {
@@ -174,20 +196,21 @@ public class CourseOperations {
                 CommentDtoForm commentdtoform = CommentConversor.toCommentDtoForm(user.getUsername(), comment,image, user.getImagen_perfil());
                 model.addAttribute("commentDtoForm", commentdtoform);
             }
-            List<ModuleUser> moduleUsers = moduleImpl.findListModuleUser(principal.getName(), Long.parseLong(courseId));
+            List<ModuleUser> moduleUsers = moduleUserImpl.findListModuleUser(principal.getName(), Long.parseLong(courseId));
             List<ModuleDtoForm> moduleDto = new ArrayList<>();
 
 
             for (ModuleUser usuarioModulo : moduleUsers) {
                 Long moduleId = usuarioModulo.getId().getModuleId();
-                contentImpl.updateContentInscription(principal.getName(), moduleId);
+                contentUserImpl.updateContentInscription(principal.getName(), moduleId);
                 List<ContentDtoForm> contentDto = new ArrayList<>();
-                for (ContentUser contents : contentImpl.findListContentUser(principal.getName(), moduleId)) {
+                for (ContentUser contents : contentUserImpl.findListContentUser(principal.getName(), moduleId)) {
                     contentDto.add(new ContentDtoForm(contents.getContent().getContentId(), contents.getContent().getContentName(), usuarioModulo.getModule().getModuleName(), contents.getContent().getContentPosition(), contents.getContent().getContent_category().getDescripcion(), contents.getCompleted()));
                 }
                 moduleDto.add(new ModuleDtoForm(moduleId, usuarioModulo.getModule().getModuleName(), usuarioModulo.getModule().getModulePosition(), contentDto, usuarioModulo.getCompleted()));
 
             }
+
 
             model.addAttribute("ModuleDtoList", moduleDto);
 

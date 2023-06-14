@@ -109,15 +109,55 @@
             </div>
             <br>
             <div class="row">
-            <div class="col">
-            <h5 th:text="${commentDtoForm.description}"></h5>
-            </div>
-            <div class="col-2">
-            <div id="ratingStars"></div>
-            </div>
+                <div class="col">
+                    <h5 th:text="${commentDtoForm.description}"></h5>
+                </div>
+                <div class="col-2">
+                    <div id="ratingStars"></div>
+                </div>
             </div>
             <br>
             <p th:text="${commentDtoForm.commentary}"></p>
+        </div>
+    </div>
+    <div class="card p-3 mb-3" style="background-color: #f0f0f0">
+        <div class="row d-flex justify-content-start">
+            <div th:if="${DiplomaDtoForm.courseCompleted == false}" class="col-2">
+                <span><i class="bi bi-lock" style="font-size: 25px"></i></span>
+            </div>
+        </div>
+        <div th:if="${DiplomaDtoForm.courseCompleted == true}" class="row d-flex justify-content-center">
+            <div class="col-2">
+                <span><img src="/images/certificate.png" style="width: 100%; height: 100%; color: #173753"
+                           alt="certificado"></span>
+            </div>
+            <div class="row d-flex justify-content-center mt-2">
+                    <h4 class="text-center">Tu certificado ya está listo</h4>
+            </div>
+            <div class="row d-flex justify-content-center mt-2">
+                    <p class="text-center">Felicidades, has completado el curso y ya puedes obtener tu certificado</p>
+            </div>
+            <div class="row d-flex justify-content-center mt-2">
+                <div class="col-2">
+                    <form th:action="@{'/course/' +${courseId}+ '/createDiploma'}" method="post">
+                    <button type="submit" class="btn btn-primary"> Obtener certificado
+                    </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div th:if="${DiplomaDtoForm.courseCompleted == false}" class="row d-flex justify-content-center">
+            <div class="row d-flex justify-content-center">
+                <div class="col-2">
+                    <span><img src="/images/certificate.png" style="width: 100%; height: 100%" alt="certificado"></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center mt-2">
+                    <h4 class="text-center">Tu certificado aún no está listo</h4>
+            </div>
+            <div class="row d-flex justify-content-center mt-2">
+                    <p class="text-center">Falta poco para obtener tu certificado, sigue así y completa todo el temario. </p>
+            </div>
         </div>
     </div>
     <div th:replace="addcomment :: #addcommentModal"></div>

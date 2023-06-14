@@ -51,13 +51,8 @@ public class UserImpl implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
-    private ContentUserRepository contentUserRepository;
+    private DiplomaImpl diplomaImpl;
 
-    @Autowired
-    private ModuleUserRepository moduleUserRepository;
-
-    @Autowired
-    private InscriptionsRepository inscriptionsRepository;
 
     private File resourcesDir;
 
@@ -106,46 +101,18 @@ public class UserImpl implements UserDetailsService {
     }
 
     @Transactional
-    public void Remove(String username) {
+    public void Remove(String username) throws IOException {
         Users user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
         } else {
-            List<Courses> coursesbyUserOwner = user.getCourses();
-            for (Courses courses : coursesbyUserOwner) {
-                courseRepository.remove(courses);
-            }
             userRepository.remove(user);
+            deleteProfileImage(user.getUserId(), user.getImagen_perfil());
+            diplomaImpl.deletePdfContaining(username);
         }
     }
 
-    @Transactional
-    public void signOn(String username, Long courseId) throws InstanceNotFoundException, DuplicatedResourceException {
-        Users user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
-        } else {
-            Inscriptions inscriptions;
-            inscriptions = inscriptionsRepository.findInscription(courseId,user.getUserId());
-            if (inscriptions!= null){
-                throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USERNAME_FIELD, username,
-                        "inscription.duplicated.exception");
-            }else {
-                Courses courses = courseRepository.findById(courseId);
-                inscriptions = new Inscriptions(user,courses,false);
-                user.getInscriptions().add(inscriptions);
-                for (Modules module: courses.getModules()) {
-                    ModuleUser moduleUser = new ModuleUser(user,module,null);
-                    for (Content content: module.getContents()) {
-                        ContentUser contentUser = new ContentUser(user,content,null);
-                        contentUserRepository.create(contentUser);
-                    }
-                    moduleUserRepository.create(moduleUser);
-                }
-            }
 
-        }
-    }
 
 
     @Transactional

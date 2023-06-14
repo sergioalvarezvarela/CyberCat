@@ -121,6 +121,9 @@ public class ModuleOperations {
 
         try {
             moduleImpl.remove(Long.valueOf(moduleId));
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Modulo con id {0} eliminado", courseid));
+            }
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
@@ -142,6 +145,9 @@ public class ModuleOperations {
 
         try {
             moduleImpl.update(Long.valueOf(courseid), Long.valueOf(moduleId), moduleDtoForm.getModuleName());
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Modulo con id {0} editado", courseid));
+            }
         } catch (DuplicatedResourceException ex) {
             serviceRedirectExceptions.serviceDuplicatedResourceException(ex, redirectAttributes);
             return "redirect:/managecourses/" + courseid + "/editcourses";
@@ -169,6 +175,9 @@ public class ModuleOperations {
             }
             courses.setModules(modules);
             courseImpl.updatePositions( courses);
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Posiciones de curso con id {0} actualizados", id));
+            }
         } catch (InstanceNotFoundException ex) {
             serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }

@@ -205,28 +205,16 @@ public class Users implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Users other = (Users) obj;
-        if (getUserId() == null) {
-            if (other.getUserId() != null)
-                return false;
-        } else if (!getUserId().equals(other.getUserId()))
-            return false;
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Users users = (Users) o;
+        return Objects.equals(userId, users.userId) && Objects.equals(username, users.username) && Objects.equals(email, users.email) && Objects.equals(password, users.password) && tipo == users.tipo && Objects.equals(fecha_creacion, users.fecha_creacion) && Objects.equals(imagen_perfil, users.imagen_perfil) && Objects.equals(courses, users.courses) && Objects.equals(inscriptions, users.inscriptions) && Objects.equals(module_users, users.module_users) && Objects.equals(content_users, users.content_users) && Objects.equals(diplomas, users.diplomas) && Objects.equals(comments, users.comments);
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
-        return result;
+        return Objects.hash(userId, username, email, password, tipo, fecha_creacion, imagen_perfil, courses, inscriptions, module_users, content_users, diplomas, comments);
     }
 
     @Override
