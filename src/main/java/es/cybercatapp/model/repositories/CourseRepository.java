@@ -29,7 +29,9 @@ public class CourseRepository extends AbstractRepository<Courses> {
 
     private static final String FIND_ALL_QUERY_CAT = "SELECT t FROM Courses t where t.course_name LIKE :coursename AND t.course_category = :category";
 
-    /* private static final String FIND_ALL_COURSES_BY_NOTE = "SELECT c FROM Contents c WHERE c.contentName = :contentName AND c.module.moduleId = :moduleId";*/
+     private static final String FIND_ALL_COURSES_BY_GRADE = "SELECT t FROM Courses t where t.course_name LIKE :coursename ORDER BY t.grade DESC";
+
+    private static final String FIND_ALL_COURSES_BY_GRADE_CAT = "SELECT t FROM Courses t where t.course_name LIKE :coursename AND t.course_category = :category  order by t.grade DESC";
 
 
     public List<Courses> findAllFiltered(int pageIndex, int filter, String category, String word) {
@@ -45,6 +47,8 @@ public class CourseRepository extends AbstractRepository<Courses> {
 
                 } else if (filter == 2) {
                     query = entityManager.createQuery(FIND_ALL_COURSES_BY_PRICES_ASC, Courses.class);
+                } else{
+                    query = entityManager.createQuery(FIND_ALL_COURSES_BY_GRADE, Courses.class);
                 }
                 query.setParameter("coursename", "%" + word + "%");
                 query.setFirstResult(pageIndex);
@@ -58,7 +62,10 @@ public class CourseRepository extends AbstractRepository<Courses> {
                 } else if (filter == 3) {
                     query = entityManager.createQuery(FIND_ALL_COURSES_BY_PRICES_DESC_CAT, Courses.class);
                 } else if (filter == 2) {
-                    query = entityManager.createQuery(FIND_ALL_COURSES_BY_PRICES_ASC_CAT, Courses.class);                }
+                    query = entityManager.createQuery(FIND_ALL_COURSES_BY_PRICES_ASC_CAT, Courses.class);
+                } else{
+                    query = entityManager.createQuery(FIND_ALL_COURSES_BY_GRADE_CAT, Courses.class);
+                }
             }
             query.setParameter("coursename", "%" + word + "%");
             query.setParameter("category", Category.valueOf(category.toUpperCase()));

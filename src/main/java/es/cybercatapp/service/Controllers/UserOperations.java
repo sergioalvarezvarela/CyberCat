@@ -110,10 +110,21 @@ public class UserOperations {
     }
 
     @GetMapping("/")
-    public String doGetIndex(Model model) {
+    public String doGetIndex(Model model, Locale locale) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication instanceof AnonymousAuthenticationToken) {
             model.addAttribute("LoginDtoForm", new LoginDtoForm());
+            List<Courses> courses = courseImpl.findCoursesMoreInscriptions();
+            List<CourseDtoForm> courseDto = new ArrayList<>();
+            for (Courses course : courses) {
+                try {
+                    byte[] image2 = courseImpl.getImage(course.getCourseId());
+                    courseDto.add(CoursesConversor.toCourseDtoForm(course, image2, course.getCourse_photo()));
+                    model.addAttribute("CourseDtoForm", courseDto);
+                }catch (InstanceNotFoundException ex){
+                    return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+                }
+            }
             return "Index";
         } else {
             return "redirect:/profile/" + authentication.getName();

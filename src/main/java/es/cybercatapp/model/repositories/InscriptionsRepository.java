@@ -16,6 +16,9 @@ public class InscriptionsRepository extends AbstractRepository<Inscriptions>{
 
     private static final String FIND_COURSES_BY_USERID = "SELECT t.courses FROM Inscription t where t.users.username = :userName";
 
+    private static final String FIND_COURSES_BY_COUNTUSERS = "SELECT t.courses FROM Inscription t GROUP BY t.courses ORDER BY COUNT(t.users) DESC";
+
+
     public Inscriptions findInscription (Long courseId, String username) {
         try {
             TypedQuery<Inscriptions> query = entityManager.createQuery(FIND_INSCRIPTION, Inscriptions.class);
@@ -32,6 +35,18 @@ public class InscriptionsRepository extends AbstractRepository<Inscriptions>{
         try {
             TypedQuery<Courses> query = entityManager.createQuery(FIND_COURSES_BY_USERID, Courses.class);
             query.setParameter("userName", userName);
+            return query.getResultList();
+        } catch (NoResultException e) {
+            logger.error(e.getMessage(), e);
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Courses> findCoursesByCountUsers () {
+        try {
+            TypedQuery<Courses> query = entityManager.createQuery(FIND_COURSES_BY_COUNTUSERS, Courses.class);
+            query.setFirstResult(0);
+            query.setMaxResults(3);
             return query.getResultList();
         } catch (NoResultException e) {
             logger.error(e.getMessage(), e);

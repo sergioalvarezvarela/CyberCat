@@ -7,6 +7,7 @@ import es.cybercatapp.model.entities.Users;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.repositories.CourseRepository;
+import es.cybercatapp.model.repositories.InscriptionsRepository;
 import es.cybercatapp.model.repositories.UserRepository;
 import es.cybercatapp.model.utils.ExceptionGenerationUtils;
 import org.apache.commons.io.IOUtils;
@@ -43,6 +44,9 @@ public class CourseImpl {
 
     @Autowired
     private DiplomaImpl diplomaImpl;
+
+    @Autowired
+    private InscriptionsRepository inscriptionsRepository;
 
     private File resourcesDir;
 
@@ -133,6 +137,11 @@ public class CourseImpl {
             diplomaImpl.deletePdfByPrefix(String.valueOf(id));
         }
 
+    }
+
+    @Transactional(readOnly = true)
+    public List<Courses> findCoursesMoreInscriptions()  {
+         return inscriptionsRepository.findCoursesByCountUsers();
     }
 
     private void saveCourseImage(Long id, String image, byte[] imageContents) {
