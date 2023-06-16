@@ -6,7 +6,6 @@ import es.cybercatapp.common.Constants;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Objects;
 
 @Entity(name = Constants.DIPLOMA_ENTITY)
@@ -24,6 +23,9 @@ public class Diploma implements Serializable {
     @Column(name = "fobtencion", nullable = false)
     private LocalDate fobtencion;
 
+    @Column(name = "paymentCompleted", nullable = false)
+    private boolean paymentCompleted;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "courseId", nullable = false)
     private Courses courses;
@@ -32,9 +34,10 @@ public class Diploma implements Serializable {
     @JoinColumn(name = "userId", nullable = false)
     private Users users;
 
-    public Diploma( String pdf, LocalDate fobtencion, Courses courses, Users users) {
+    public Diploma(String pdf, LocalDate fobtencion, boolean paymentCompleted, Courses courses, Users users) {
         this.pdf = pdf;
         this.fobtencion = fobtencion;
+        this.paymentCompleted = paymentCompleted;
         this.courses = courses;
         this.users = users;
     }
@@ -84,17 +87,25 @@ public class Diploma implements Serializable {
         this.fobtencion = fobtencion;
     }
 
+    public boolean isPaymentCompleted() {
+        return paymentCompleted;
+    }
+
+    public void setPaymentCompleted(boolean paymentCompleted) {
+        this.paymentCompleted = paymentCompleted;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Diploma diploma = (Diploma) o;
-        return Objects.equals(diplomaId, diploma.diplomaId) && Objects.equals(pdf, diploma.pdf) && Objects.equals(fobtencion, diploma.fobtencion) && Objects.equals(courses, diploma.courses) && Objects.equals(users, diploma.users);
+        return paymentCompleted == diploma.paymentCompleted && Objects.equals(diplomaId, diploma.diplomaId) && Objects.equals(pdf, diploma.pdf) && Objects.equals(fobtencion, diploma.fobtencion) && Objects.equals(courses, diploma.courses) && Objects.equals(users, diploma.users);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(diplomaId, pdf, fobtencion, courses, users);
+        return Objects.hash(diplomaId, pdf, fobtencion, paymentCompleted, courses, users);
     }
 
     @Override
@@ -103,6 +114,7 @@ public class Diploma implements Serializable {
                 "diplomaId=" + diplomaId +
                 ", pdf='" + pdf + '\'' +
                 ", fobtencion=" + fobtencion +
+                ", paymentCompleted=" + paymentCompleted +
                 ", courses=" + courses +
                 ", users=" + users +
                 '}';

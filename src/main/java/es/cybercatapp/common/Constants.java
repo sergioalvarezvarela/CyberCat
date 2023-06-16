@@ -26,6 +26,9 @@ public class Constants {
     public static final String INSCRIPTIONS_ENTITY = "Inscription";
     public static final String INSCRIPTIONS_TABLE = "Inscriptions";
 
+    public static final String PAYMENT_ENTITY = "Payment";
+    public static final String PAYMENT_TABLE = "Payments";
+
     public static final String CONTENT_ENTITY = "Content";
     public static final String CONTENT_TABLE = "Contents";
 

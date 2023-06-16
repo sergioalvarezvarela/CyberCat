@@ -1,10 +1,7 @@
 package es.cybercatapp.model.impl;
 
 import es.cybercatapp.common.ConfigurationParameters;
-import es.cybercatapp.model.entities.Content;
-import es.cybercatapp.model.entities.ContentUser;
-import es.cybercatapp.model.entities.Modules;
-import es.cybercatapp.model.entities.Users;
+import es.cybercatapp.model.entities.*;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.repositories.ContentRepository;
 import es.cybercatapp.model.repositories.ContentUserRepository;
@@ -71,5 +68,15 @@ public class ContentUserImpl {
         contentUserRepository.update(contentUser);
     }
 
-
+    @Transactional
+    public void remove(long courseId, String username) throws InstanceNotFoundException {
+        Users users = userRepository.findByUsername(username);
+        List<ContentUser> contentUsers = contentUserRepository.findListContentUser(users.getUserId(), courseId);
+        for (ContentUser contentUser : contentUsers) {
+            contentUserRepository.remove(contentUser);
+        }
+    }
 }
+
+
+

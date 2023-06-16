@@ -1,6 +1,7 @@
 package es.cybercatapp.service.Controllers;
 
 import es.cybercatapp.model.entities.Courses;
+import es.cybercatapp.model.entities.ProfilePhoto;
 import es.cybercatapp.model.impl.CourseImpl;
 import es.cybercatapp.model.impl.InscriptionsImpl;
 import es.cybercatapp.service.conversor.CoursesConversor;
@@ -87,10 +88,12 @@ public class UserOperations {
         }
         Users user;
         try {
+            ProfilePhoto profilePhoto = new ProfilePhoto();
+            ProfilePhoto.PhotoData randomPhoto = profilePhoto.getRandomPhoto();
             user = userImpl.create(registerDtoForm.getUsername(), registerDtoForm.getEmail(),
                     registerDtoForm.getPassword(),
-                    registerDtoForm.getImage() != null ? registerDtoForm.getImage().getOriginalFilename() : null,
-                    registerDtoForm.getImage() != null ? registerDtoForm.getImage().getBytes() : null);
+                    !registerDtoForm.getImage().isEmpty() ? registerDtoForm.getImage().getOriginalFilename() : randomPhoto.getName(),
+                    !registerDtoForm.getImage().isEmpty() ? registerDtoForm.getImage().getBytes() : randomPhoto.getBytes());
             if (logger.isDebugEnabled()) {
                 logger.debug(MessageFormat.format("Usuario {0} con nombre de usuario {1} registrado", user.getEmail(), user.getUsername()));
             }

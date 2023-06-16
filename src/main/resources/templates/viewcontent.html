@@ -13,6 +13,10 @@
                 </button>
             </a>
         </div>
+        <div class="col d-flex justify-content-end">
+            <button type="button" class="btn btn-danger" href="#removeinscriptionModal" data-bs-toggle="modal">Abandonar
+            </button>
+        </div>
     </div>
     <div class="card p-3 mb-3" th:each="modules : ${ModuleDtoList}">
         <div class="d-flex justify-content-between" style="cursor: pointer">
@@ -72,6 +76,7 @@
             </div>
         </div>
     </div>
+
     <div th:if="${commentDtoForm.creation_date == null}" class="card p-3 mb-3" style="background-color: #f0f0f0">
         <div class="row align-content-center">
             <div class="col">
@@ -132,19 +137,66 @@
                            alt="certificado"></span>
             </div>
             <div class="row d-flex justify-content-center mt-2">
-                    <h4 class="text-center">Tu certificado ya está listo</h4>
+                <h4 class="text-center">Tu certificado ya está listo</h4>
             </div>
             <div class="row d-flex justify-content-center mt-2">
+                <div class="col-12 col-sm-8 col-md-6 col-lg-4">
                     <p class="text-center">Felicidades, has completado el curso y ya puedes obtener tu certificado</p>
+                    <p th:if="${DiplomaDtoForm.paymentCompleted == false}" class="mt-2 text-center">Realiza el pago para obtener el diploma</p>
+                    <div th:if="${DiplomaDtoForm.paymentCompleted == false}" class="mt-2 text-center" id="paypal-button-container"></div>
+                </div>
             </div>
             <div class="row d-flex justify-content-center mt-2">
-                <div class="col-2">
+                <div class="col-5 col-sm-3 col-md-3 col-lg-2">
                     <form th:action="@{'/course/' +${courseId}+ '/createDiploma'}" method="post">
-                    <button type="submit" class="btn btn-primary"> Obtener certificado
-                    </button>
+                        <input type="hidden" id="coursePrice" th:value="${DiplomaDtoForm.price}">
+                        <input type="hidden" id="payment" th:value="${DiplomaDtoForm.paymentCompleted}">
+                        <button type="submit" class="btn btn-primary"> Obtener certificado
+                        </button>
                     </form>
                 </div>
             </div>
+
+
+            <script>
+                paypal.Buttons({
+                    createOrder() {
+                        return fetch("/my-server/create-paypal-order", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                cart: [
+                                    {
+                                        sku: "YOUR_PRODUCT_STOCK_KEEPING_UNIT",
+                                        quantity: "YOUR_PRODUCT_QUANTITY",
+                                    },
+                                ],
+                            }),
+                        })
+                            .then((response) => response.json())
+                            .then((order) => order.id);
+                    },
+                    onApprove(data) {
+                        return fetch("/my-server/capture-paypal-order", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                orderID: data.orderID
+                            })
+                        })
+                            .then((response) => response.json())
+                            .then((orderData) => {
+                                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                                const transaction = orderData.purchase_units[0].payments.captures[0];
+                                alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+                            });
+                    }
+                }).render('#paypal-button-container');
+            </script>
         </div>
         <div th:if="${DiplomaDtoForm.courseCompleted == false}" class="row d-flex justify-content-center">
             <div class="row d-flex justify-content-center">
@@ -153,16 +205,18 @@
                 </div>
             </div>
             <div class="row d-flex justify-content-center mt-2">
-                    <h4 class="text-center">Tu certificado aún no está listo</h4>
+                <h4 class="text-center">Tu certificado aún no está listo</h4>
             </div>
             <div class="row d-flex justify-content-center mt-2">
-                    <p class="text-center">Falta poco para obtener tu certificado, sigue así y completa todo el temario. </p>
+                <p class="text-center">Falta poco para obtener tu certificado, sigue así y completa todo el
+                    temario. </p>
             </div>
         </div>
     </div>
     <div th:replace="addcomment :: #addcommentModal"></div>
     <div th:replace="editcomment :: #editcommentModal"></div>
     <div th:replace="removecomment :: #removecommentModal"></div>
+    <div th:replace="removeinscription :: #removeinscriptionModal"></div>
     <script>
         function getGrade() {
             const inputGrade = document.getElementById("inputGrade");

@@ -114,6 +114,7 @@ create table courses (
 create table diplomas (
                           diploma_id bigint not null auto_increment,
                           fobtencion date not null,
+                          payment_completed bit not null,
                           pdf varchar(255) not null,
                           course_id bigint not null,
                           user_id bigint not null,
@@ -123,7 +124,7 @@ create table diplomas (
 create table hibernate_sequence (
     next_val bigint
 ) engine=InnoD;
-    
+
     insert into hibernate_sequence values ( 1 ;
 
 create table inscriptions (

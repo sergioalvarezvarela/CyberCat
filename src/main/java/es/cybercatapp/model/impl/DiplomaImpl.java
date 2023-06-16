@@ -65,9 +65,9 @@ public class DiplomaImpl {
     }
 
     @Transactional
-    public Diploma create(Long courseId, String username) throws InstanceNotFoundException, DuplicatedResourceException, IOException {
+    public Diploma create(Long courseId, String username, boolean payment) throws InstanceNotFoundException, DuplicatedResourceException, IOException {
         Diploma diploma1 = diplomaRepository.findContentsByContentNameAndModule(courseId, username);
-        Diploma diploma = null;
+        Diploma diploma;
 
         Inscriptions inscriptions = inscriptionsImpl.findInscription(courseId, username);
         if (!inscriptions.isCompleted()) {
@@ -114,7 +114,7 @@ public class DiplomaImpl {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             document.save(outputStream);
             byte[] diplomaBytes = outputStream.toByteArray();
-            diploma = new Diploma(courseId+"_"+username+".pdf",LocalDate.now(), courses, user);
+            diploma = new Diploma(courseId+"_"+username+".pdf",LocalDate.now(), payment, courses, user);
             if (diploma1!=null){
                 deleteDiplomaPdfById(diploma1.getDiplomaId());
                 savePdf(diploma1.getDiplomaId(),diploma.getPdf(),diplomaBytes);

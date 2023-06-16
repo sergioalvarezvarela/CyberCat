@@ -184,9 +184,9 @@ public class CourseOperations {
             Inscriptions inscriptions = inscriptionsImpl.findInscription(Long.parseLong(courseId),principal.getName());
             Diploma diploma = diplomaImpl.findDiplomaByCourseAndUsername(Long.parseLong(courseId),principal.getName());
             if (diploma != null){
-                model.addAttribute("DiplomaDtoForm", new DiplomaDtoForm(inscriptions.isCompleted(), diploma.getDiplomaId()));
+                model.addAttribute("DiplomaDtoForm", new DiplomaDtoForm(inscriptions.isCompleted(), diploma.getDiplomaId(), diploma.isPaymentCompleted(), diploma.getCourses().getCourse_price()));
             } else{
-                model.addAttribute("DiplomaDtoForm", new DiplomaDtoForm(inscriptions.isCompleted()));
+                model.addAttribute("DiplomaDtoForm", new DiplomaDtoForm(inscriptions.isCompleted(), inscriptions.getCourses().getCourse_price(), false));
             }
 
             if (comment == null) {
@@ -219,6 +219,25 @@ public class CourseOperations {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
         }
         return "viewcontent";
+    }
+
+    @PostMapping("/course/{courseId}/leave")
+    public String doPostRemoveInscription(@PathVariable String courseId, Principal principal, Locale locale,
+                                          RedirectAttributes redirectAttributes, Model model) {
+
+        try{
+            inscriptionsImpl.remove(principal.getName(), Long.parseLong(courseId));
+
+            redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
+                    "removeinscription.success", new Object[]{principal.getName()}, locale));
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Inscripcion a curso {0} por usuario {1} elimiado",courseId, principal.getName()));
+            }
+
+        } catch (InstanceNotFoundException ex) {
+            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        }
+        return "redirect:/profile/" + principal.getName();
     }
 
 }

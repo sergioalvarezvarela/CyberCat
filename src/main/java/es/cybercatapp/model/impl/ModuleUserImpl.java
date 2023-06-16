@@ -37,6 +37,7 @@ public class ModuleUserImpl {
 
     @Autowired
     ContentUserRepository contentUserRepository;
+
     @Transactional(readOnly = true)
     public List<ModuleUser> findListModuleUser(String username, long courseId) throws InstanceNotFoundException {
         Users user = userRepository.findByUsername(username);
@@ -95,5 +96,14 @@ public class ModuleUserImpl {
         }
     }
 
-
+    @Transactional
+    public void remove(long courseId, String username) throws InstanceNotFoundException {
+        Users users = userRepository.findByUsername(username);
+        List<ModuleUser> moduleUsers = moduleUserRepository.findListModuleUser(users.getUserId(), courseId);
+        for (ModuleUser moduleUser : moduleUsers) {
+            moduleUserRepository.remove(moduleUser);
+        }
+    }
 }
+
+

@@ -43,6 +43,12 @@ public class InscriptionsImpl {
     @Autowired
     private ModuleUserRepository moduleUserRepository;
 
+    @Autowired
+    private ModuleUserImpl moduleUserImpl;
+
+    @Autowired
+    private ContentUserImpl contentUserImpl;
+
     @Transactional
     public void signOn(String username, Long courseId) throws InstanceNotFoundException, DuplicatedResourceException {
         Users user = userRepository.findByUsername(username);
@@ -50,18 +56,18 @@ public class InscriptionsImpl {
             throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
         } else {
             Inscriptions inscriptions;
-            inscriptions = inscriptionsRepository.findInscription(courseId,username);
-            if (inscriptions!= null){
+            inscriptions = inscriptionsRepository.findInscription(courseId, username);
+            if (inscriptions != null) {
                 throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USERNAME_FIELD, username,
                         "inscription.duplicated.exception");
-            }else {
+            } else {
                 Courses courses = courseRepository.findById(courseId);
-                inscriptions = new Inscriptions(user,courses,false);
+                inscriptions = new Inscriptions(user, courses, false);
                 user.getInscriptions().add(inscriptions);
-                for (Modules module: courses.getModules()) {
-                    ModuleUser moduleUser = new ModuleUser(user,module,null);
-                    for (Content content: module.getContents()) {
-                        ContentUser contentUser = new ContentUser(user,content,null);
+                for (Modules module : courses.getModules()) {
+                    ModuleUser moduleUser = new ModuleUser(user, module, null);
+                    for (Content content : module.getContents()) {
+                        ContentUser contentUser = new ContentUser(user, content, null);
                         contentUserRepository.create(contentUser);
                     }
                     moduleUserRepository.create(moduleUser);
@@ -71,14 +77,26 @@ public class InscriptionsImpl {
         }
     }
 
+    @Transactional
+    public void remove(String username, Long courseId) throws InstanceNotFoundException {
+        Inscriptions inscriptions = inscriptionsRepository.findInscription(courseId, username);
+        if (inscriptions == null) {
+            throw new InstanceNotFoundException(courseId.toString(), "Inscriptions", "Inscription not found");
+        } else {
+            inscriptionsRepository.remove(inscriptions);
+            contentUserImpl.remove(courseId,username);
+            moduleUserImpl.remove(courseId,username);
+        }
+    }
+
     @Transactional(readOnly = true)
     public List<Courses> findCoursesInscriptionsByUser(String username) {
         return inscriptionsRepository.findCoursesByUser(username);
     }
 
     @Transactional(readOnly = true)
-    public Inscriptions findInscription(long courseId,String username) {
-        return inscriptionsRepository.findInscription(courseId,username);
+    public Inscriptions findInscription(long courseId, String username) {
+        return inscriptionsRepository.findInscription(courseId, username);
     }
 
     @Transactional

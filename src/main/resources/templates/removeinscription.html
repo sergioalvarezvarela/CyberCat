@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div id='removeinscription'>
+  <div class="modal" id="removeinscriptionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">¿Estás seguro?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row iconx-size">
+            <i class="bi bi-x-circle"
+               style="color: red; display: flex; justify-content: center; align-items: center"></i>
+          </div>
+          <div class="row mt-3">
+            <p>¿Estás seguro de que deseas abandonar el curso? Este proceso es definitivo. </p>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar
+          </button>
+          <form th:action="@{'/course/'+ ${courseId}+ '/leave'}" method="post" id="delete-form">
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
