@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -32,6 +33,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 @Controller
 public class CourseOperations {
@@ -171,12 +173,13 @@ public class CourseOperations {
     }
 
     @GetMapping("/course/{courseId}")
-    public String doGetCourseContent(@PathVariable String courseId, Locale locale, Model model, Principal principal) {
+    public String doGetCourseContent(@PathVariable String courseId, Locale locale, Model model, Principal principal, HttpServletRequest request) {
         try {
             model.addAttribute("courseId", courseId);
             model.addAttribute("ModuleDtoForm", new ModuleDtoForm());
             model.addAttribute("ContentDtoForm", new ContentDtoForm());
             model.addAttribute("username", principal.getName());
+            Map<String, Object> paymentResponse = (Map<String, Object>) request.getSession().getAttribute("paymentResponse");
             inscriptionsImpl.updateInscriptionStatus(Long.parseLong(courseId), principal.getName());
             moduleUserImpl.updateModuleInscription(principal.getName(), Long.parseLong(courseId));
             Users user = userImpl.findByUsername(principal.getName());
@@ -186,7 +189,14 @@ public class CourseOperations {
             if (diploma != null){
                 model.addAttribute("DiplomaDtoForm", new DiplomaDtoForm(inscriptions.isCompleted(), diploma.getDiplomaId(), diploma.isPaymentCompleted(), diploma.getCourses().getCourse_price()));
             } else{
-                model.addAttribute("DiplomaDtoForm", new DiplomaDtoForm(inscriptions.isCompleted(), inscriptions.getCourses().getCourse_price(), false));
+                if (paymentResponse != null) {
+                    model.addAttribute("DiplomaDtoForm", new DiplomaDtoForm(inscriptions.isCompleted(), inscriptions.getCourses().getCourse_price(), (Boolean) paymentResponse.get("payment")));
+                }
+
+                else {
+                    model.addAttribute("DiplomaDtoForm", new DiplomaDtoForm(inscriptions.isCompleted(), inscriptions.getCourses().getCourse_price(), false));
+                }
+
             }
 
             if (comment == null) {

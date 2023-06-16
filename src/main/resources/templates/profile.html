@@ -79,7 +79,7 @@
                         <div id="carouselCourses" class="carousel slide carousel-border" style="width: 100%" data-bs-ride="carousel">
 
                             <div class="carousel-inner">
-                                <!-- Imagen estática -->
+
                                 <div class="carousel-item active">
                                     <a href="#">
                                         <img class="d-block w-100 tam-car-fot-car-prof"
@@ -88,7 +88,6 @@
                                     </a>
                                 </div>
 
-                                <!-- Iterar sobre los cursos -->
                                 <div th:each="course, iterStat : ${CourseDtoForm}" class="carousel-item">
                                     <a th:href="@{/course/{courseId}(courseId=${course.id})}">
                                         <img class="d-block w-100 tam-car-fot-car-prof"
@@ -113,7 +112,6 @@
                         <div id="demo1" class="carousel slide carousel-border" style="width: 100%"
                              data-bs-ride="carousel">
 
-                            <!-- Indicators/dots -->
                             <div class="carousel-indicators">
                                 <button type="button" data-bs-target="#demo1" data-bs-slide-to="0"
                                         class="active"></button>
@@ -121,7 +119,6 @@
                                 <button type="button" data-bs-target="#demo1" data-bs-slide-to="2"></button>
                             </div>
 
-                            <!-- The slideshow/carousel -->
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
                                     <img src="/images/descarga.jpeg" alt="Error en foto 1"
@@ -147,8 +144,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Left and right controls/icons -->
                             <button class="carousel-control-prev" type="button" data-bs-target="#demo1"
                                     data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon"></span>

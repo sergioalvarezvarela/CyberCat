@@ -43,12 +43,12 @@ public class DiplomaOperations {
     ServiceRedirectExceptions serviceRedirectExceptions;
 
     @PostMapping(value = {"/course/{courseId}/createDiploma"})
-    public String doPostAddDiploma(@PathVariable String courseId, @ModelAttribute("AddModifyCourseDtoForm") DiplomaDtoForm diplomaDtoForm, RedirectAttributes redirectAttributes,
+    public String doPostAddDiploma(@PathVariable String courseId, @ModelAttribute("DiplomaDtoForm") DiplomaDtoForm diplomaDtoForm, RedirectAttributes redirectAttributes,
                                    Principal principal, Locale locale, Model model) {
         Diploma diploma = diplomaImpl.findDiplomaByCourseAndUsername(Long.parseLong(courseId), principal.getName());
         if (diplomaDtoForm.isPaymentCompleted()){
             try {
-                diploma = diplomaImpl.create(Long.valueOf(courseId), principal.getName(), diploma.isPaymentCompleted());
+                diploma = diplomaImpl.create(Long.valueOf(courseId), principal.getName(), diplomaDtoForm.isPaymentCompleted());
                 if (logger.isDebugEnabled()) {
                     logger.debug(MessageFormat.format("Diploma con id {0} creado", diploma.getDiplomaId()));
                 }

@@ -54,26 +54,25 @@
                                                                      style="color: orangered"></i></h3>
         </div>
         <div class="row mt-3 justify-content-around">
-            <div class="col-lg-4 col-md-10 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div id="demo" class="carousel slide carousel-border" style="width: 100%" data-bs-ride="carousel">
 
-                    <!-- Indicators/dots -->
+
                     <div class="carousel-indicators">
                         <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
                         <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
                         <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
                     </div>
 
-                    <!-- The slideshow/carousel -->
+
                     <div class="carousel-inner">
                         <div th:each="course, iterStat : ${CourseDtoForm}" class="carousel-item" th:classappend="${iterStat.first} ? 'active' : ''">
                                 <img class="d-block w-100 tam-car-fot-car-prof"
                                      th:src="'data:' + ${course.imageType} + ';base64,' + ${course.image}"
-                                     style="width: 100%; height: 70%" alt="Imagen de curso">
+                                     alt="Imagen de curso">
                         </div>
                     </div>
 
-                    <!-- Left and right controls/icons -->
                     <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon"></span>
                     </button>
