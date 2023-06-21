@@ -2,6 +2,7 @@ package es.cybercatapp.service.Controllers;
 
 import es.cybercatapp.model.entities.Courses;
 import es.cybercatapp.model.entities.ProfilePhoto;
+import es.cybercatapp.model.exceptions.UsernameNotFound;
 import es.cybercatapp.model.impl.CourseImpl;
 import es.cybercatapp.model.impl.InscriptionsImpl;
 import es.cybercatapp.service.conversor.CoursesConversor;
@@ -192,6 +193,8 @@ public class UserOperations {
         }
         } catch (IOException ex) {
             return serviceExceptions.serviceUnexpectedException(ex, model);
+        } catch (UsernameNotFound ex) {
+            return serviceExceptions.serviceUsernameNotFoundException(ex, model);
         }
         return Constants.SEND_REDIRECT + "/logout";
     }
@@ -223,6 +226,8 @@ public class UserOperations {
             return "redirect:/profile/" + principal.getName() + "/editprofile";
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        } catch (UsernameNotFound ex) {
+            return serviceExceptions.serviceUsernameNotFoundException(ex, model);
         }
         redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                 "changepassword.success", new Object[]{principal.getName()}, locale));
@@ -249,6 +254,8 @@ public class UserOperations {
         } catch (DuplicatedResourceException ex) {
             serviceRedirectExceptions.serviceDuplicatedResourceException(ex,redirectAttributes);
             return "redirect:/profile/" + editProfileDtoForm.getUsername() + "/editprofile";
+        } catch (UsernameNotFound ex) {
+            return serviceExceptions.serviceUsernameNotFoundException(ex, model);
         }
         redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                 "modifyprofile.success", new Object[]{principal.getName()}, locale));
@@ -278,6 +285,8 @@ public class UserOperations {
             return serviceExceptions.serviceUnexpectedException(ex, model);
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        } catch (UsernameNotFound ex) {
+            return serviceExceptions.serviceUsernameNotFoundException(ex, model);
         }
         redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                 "photoprofile.success", new Object[]{principal.getName()}, locale));

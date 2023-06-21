@@ -2,11 +2,14 @@ package es.cybercatapp.model.impl;
 
 import es.cybercatapp.common.ConfigurationParameters;
 import es.cybercatapp.common.Constants;
-import es.cybercatapp.model.entities.*;
+import es.cybercatapp.model.entities.Roles;
+import es.cybercatapp.model.entities.Users;
 import es.cybercatapp.model.exceptions.AuthenticationException;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
-import es.cybercatapp.model.repositories.*;
+import es.cybercatapp.model.exceptions.UsernameNotFound;
+import es.cybercatapp.model.repositories.CourseRepository;
+import es.cybercatapp.model.repositories.UserRepository;
 import es.cybercatapp.model.utils.ExceptionGenerationUtils;
 import org.apache.commons.io.IOUtils;
 import org.mindrot.jbcrypt.BCrypt;
@@ -30,8 +33,10 @@ import javax.annotation.PostConstruct;
 import java.io.*;
 import java.nio.file.Files;
 import java.text.MessageFormat;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 @Service(value = "userImpl")
 public class UserImpl implements UserDetailsService {
@@ -45,8 +50,6 @@ public class UserImpl implements UserDetailsService {
     @Autowired
     ExceptionGenerationUtils exceptionGenerationUtils;
 
-    @Autowired
-    private CourseRepository courseRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -83,7 +86,7 @@ public class UserImpl implements UserDetailsService {
 
 
 
-    @Transactional
+    @Transactional // tested
     public Users create(String username, String email, String password,
                         String image, byte[] imageContents) throws DuplicatedResourceException {
         if (userRepository.findByEmail(email) != null) {
@@ -95,16 +98,16 @@ public class UserImpl implements UserDetailsService {
             throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USERNAME_FIELD, username,
                     "registration.duplicated.exception");
         }
-        Users user = userRepository.create(new Users(username, email, BCrypt.hashpw(password, BCrypt.gensalt(SALT_ROUNDS)), Roles.ROLE_USER, LocalDateTime.now(), image));
+        Users user = userRepository.create(new Users(username, email, BCrypt.hashpw(password, BCrypt.gensalt(SALT_ROUNDS)), Roles.ROLE_USER, LocalDate.now(), image));
         saveProfileImage(user.getUserId(), image, imageContents);
         return user;
     }
 
     @Transactional
-    public void Remove(String username) throws IOException {
+    public void Remove(String username) throws IOException, UsernameNotFound {
         Users user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
+            throw exceptionGenerationUtils.toUsernameNotFoundException(Constants.USERNAME_FIELD, username, "user.not.found");
         } else {
             userRepository.remove(user);
             deleteProfileImage(user.getUserId(), user.getImagen_perfil());
@@ -116,11 +119,11 @@ public class UserImpl implements UserDetailsService {
 
 
     @Transactional
-    public void changePassword(String username, String oldPass, String password) throws AuthenticationException {
+    public void changePassword(String username, String oldPass, String password) throws AuthenticationException,  UsernameNotFound{
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Users user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
+            throw exceptionGenerationUtils.toUsernameNotFoundException(Constants.USERNAME_FIELD, username, "user.not.found");
         }
         if (passwordEncoder.matches(oldPass, user.getPassword())) {
             user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt(SALT_ROUNDS)));
@@ -134,12 +137,12 @@ public class UserImpl implements UserDetailsService {
 
 
     @Transactional
-    public void modifyProfile(String username, String newusername, String newemail) throws DuplicatedResourceException {
+    public void modifyProfile(String username, String newusername, String newemail) throws DuplicatedResourceException,  UsernameNotFound {
         Users user = userRepository.findByUsername(username);
         Users user1 = userRepository.findByUsername(newusername);
         Users user2 = userRepository.findByEmail(newemail);
         if (user == null) {
-            throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
+            throw exceptionGenerationUtils.toUsernameNotFoundException(Constants.USERNAME_FIELD, username, "user.not.found");
         } else {
             if (user1 != null && user2 != null) {
                 throw exceptionGenerationUtils.toDuplicatedResourceException(Constants.USERNAME_FIELD, newusername,
@@ -156,10 +159,10 @@ public class UserImpl implements UserDetailsService {
     }
 
     @Transactional
-    public void updateProfileImage(String username, String image, byte[] imageContents) {
+    public void updateProfileImage(String username, String image, byte[] imageContents) throws UsernameNotFound{
         Users user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
+            throw exceptionGenerationUtils.toUsernameNotFoundException(Constants.USERNAME_FIELD, username, "user.not.found");
         } else {
             if (image != null && image.trim().length() > 0 && imageContents != null) {
                 try {
@@ -235,6 +238,7 @@ public class UserImpl implements UserDetailsService {
         Authentication newAuth = new UsernamePasswordAuthenticationToken(updatedUser, auth.getCredentials(), auth.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
+
 
 
 }

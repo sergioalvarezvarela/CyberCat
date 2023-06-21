@@ -122,6 +122,19 @@
             <artifactId>pdfbox</artifactId>
             <version>3.0.0-alpha3</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>3.1.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-runner</artifactId>
+            <version>1.10.0-M1</version>
+            <scope>test</scope>
+        </dependency>
+
 
         <!-- Web -->
 
@@ -161,18 +174,6 @@
                         <version>8.0.29</version>
                     </dependency>
                 </dependencies>
-                <configuration>
-                    <driver>com.mysql.cj.jdbc.Driver</driver>
-                    <url>jdbc:mysql://localhost/work</url>
-                    <username>root</username>
-                    <password>root</password>
-                    <autocommit>true</autocommit>
-                    <onError>continue</onError>
-                    <srcFiles>
-                        <srcFile>src/main/resources/tables.sql</srcFile>
-                        <srcFile>src/main/resources/data.sql</srcFile>
-                    </srcFiles>
-                </configuration>
             </plugin>
 
         </plugins>

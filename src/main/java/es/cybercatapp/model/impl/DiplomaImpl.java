@@ -8,6 +8,7 @@ import es.cybercatapp.model.entities.Inscriptions;
 import es.cybercatapp.model.entities.Users;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
+import es.cybercatapp.model.exceptions.UsernameNotFound;
 import es.cybercatapp.model.repositories.CourseRepository;
 import es.cybercatapp.model.repositories.DiplomaRepository;
 import es.cybercatapp.model.repositories.UserRepository;
@@ -65,7 +66,7 @@ public class DiplomaImpl {
     }
 
     @Transactional
-    public Diploma create(Long courseId, String username, boolean payment) throws InstanceNotFoundException, DuplicatedResourceException, IOException {
+    public Diploma create(Long courseId, String username, boolean payment) throws InstanceNotFoundException, DuplicatedResourceException, IOException, UsernameNotFound {
         Diploma diploma1 = diplomaRepository.findContentsByContentNameAndModule(courseId, username);
         Diploma diploma;
 
@@ -75,7 +76,7 @@ public class DiplomaImpl {
         }
         Users user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
+            throw exceptionGenerationUtils.toUsernameNotFoundException(Constants.USERNAME_FIELD, username, "user.not.found");
         }
         Courses courses = courseRepository.findById(courseId);
         File pdf = new File("src/main/resources/static/pdf/diploma.pdf");

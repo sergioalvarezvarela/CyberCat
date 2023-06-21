@@ -42,4 +42,6 @@ public class ServiceRedirectExceptions {
         logger.error(e.getMessage(),e);
         redirectAttributes.addFlashAttribute(Constants.ERROR_MESSAGE,e.getMessage());
     }
+
+
 }

@@ -23,14 +23,6 @@ public class ServiceExceptions {
     @Autowired
     private MessageSource messageSource;
 
-    public void serviceInvalidFormError(BindingResult result, String template,
-                                        Model model, Locale locale) {
-        if (logger.isErrorEnabled()) {
-            logger.error(result.toString());
-        }
-        String message = messageSource.getMessage(template, new Object[0], locale);
-        model.addAttribute(Constants.ERROR_MESSAGE, message);
-    }
 
     public String serviceInstanceNotFoundException(InstanceNotFoundException e, Model model, Locale locale) {
         logger.error(e.getMessage(), e);
@@ -39,21 +31,18 @@ public class ServiceExceptions {
         return Constants.ERROR_PAGE;
     }
 
-    public void serviceDuplicatedResourceException(DuplicatedResourceException e ,
-                                                     Model model) {
-        logger.error(e.getMessage(),e);
-        model.addAttribute(Constants.ERROR_MESSAGE, e.getMessage());
-    }
     public String serviceUnexpectedException(Exception e, Model model) {
         logger.error(e.getMessage(), e);
         model.addAttribute(Constants.ERROR_MESSAGE, e.getMessage());
         model.addAttribute(Constants.EXCEPTION, e);
         return Constants.ERROR_PAGE;
     }
-    public void serviceAuthenticationException(AuthenticationException e,
-                                               Model model) {
-        logger.error(e.getMessage(),e);
+
+    public String serviceUsernameNotFoundException(Exception e, Model model) {
+        logger.error(e.getMessage(), e);
         model.addAttribute(Constants.ERROR_MESSAGE, e.getMessage());
+        model.addAttribute(Constants.EXCEPTION, e);
+        return Constants.ERROR_PAGE;
     }
 
 }

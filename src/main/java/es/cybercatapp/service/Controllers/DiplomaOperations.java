@@ -4,6 +4,7 @@ import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Diploma;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
+import es.cybercatapp.model.exceptions.UsernameNotFound;
 import es.cybercatapp.model.impl.DiplomaImpl;
 import es.cybercatapp.service.Exceptions.ServiceExceptions;
 import es.cybercatapp.service.Exceptions.ServiceRedirectExceptions;
@@ -59,6 +60,8 @@ public class DiplomaOperations {
                 return Constants.SEND_REDIRECT + "/diploma/" + diploma.getDiplomaId().toString();
             } catch (IOException ex) {
                 return serviceExceptions.serviceUnexpectedException(ex, model);
+            } catch (UsernameNotFound ex) {
+                return serviceExceptions.serviceUsernameNotFoundException(ex, model);
             }
             return Constants.SEND_REDIRECT + "/diploma/" + diploma.getDiplomaId().toString();
         } else {

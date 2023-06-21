@@ -1,11 +1,13 @@
 package es.cybercatapp.model.impl;
 
 import es.cybercatapp.common.ConfigurationParameters;
+import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Category;
 import es.cybercatapp.model.entities.Courses;
 import es.cybercatapp.model.entities.Users;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
+import es.cybercatapp.model.exceptions.UsernameNotFound;
 import es.cybercatapp.model.repositories.CourseRepository;
 import es.cybercatapp.model.repositories.InscriptionsRepository;
 import es.cybercatapp.model.repositories.UserRepository;
@@ -58,10 +60,10 @@ public class CourseImpl {
 
     @Transactional
     public Courses create(String coursename, float price, String category,
-                          String image, byte[] imageContents, String description, String userowner) {
+                          String image, byte[] imageContents, String description, String userowner) throws UsernameNotFound {
         Users user = userRepository.findByUsername(userowner);
         if (user == null) {
-            throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", userowner));
+            throw exceptionGenerationUtils.toUsernameNotFoundException(Constants.USERNAME_FIELD, userowner, "user.not.found");
         }
         Courses courses = courseRepository.create(new Courses(coursename, description, LocalDate.now(), image, Category.valueOf(category), price,0,0,0, user));
         saveCourseImage(courses.getCourseId(), image, imageContents);

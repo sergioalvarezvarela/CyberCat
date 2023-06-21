@@ -5,6 +5,7 @@ import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.*;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
+import es.cybercatapp.model.exceptions.UsernameNotFound;
 import es.cybercatapp.model.repositories.*;
 import es.cybercatapp.model.utils.ExceptionGenerationUtils;
 import org.slf4j.Logger;
@@ -50,10 +51,10 @@ public class InscriptionsImpl {
     private ContentUserImpl contentUserImpl;
 
     @Transactional
-    public void signOn(String username, Long courseId) throws InstanceNotFoundException, DuplicatedResourceException {
+    public void signOn(String username, Long courseId) throws InstanceNotFoundException, DuplicatedResourceException, UsernameNotFound {
         Users user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException(MessageFormat.format("Usuario {0} no existe", username));
+            throw exceptionGenerationUtils.toUsernameNotFoundException(Constants.USERNAME_FIELD, username, "user.not.found");
         } else {
             Inscriptions inscriptions;
             inscriptions = inscriptionsRepository.findInscription(courseId, username);

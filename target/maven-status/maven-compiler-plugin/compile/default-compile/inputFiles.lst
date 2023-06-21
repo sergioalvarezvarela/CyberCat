@@ -14,6 +14,7 @@ C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\utils\ExceptionGenerationUtils.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\impl\ModuleUserImpl.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\Controllers\CourseOperations.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\Controllers\DiplomaOperations.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\Roles.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\Controllers\UserOperations.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\Exceptions\ServiceExceptions.java
@@ -47,11 +48,14 @@ C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\impl\Insc
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\repositories\ContentRepository.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\Users.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\dto\ProfileDtoForm.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\ProfilePhoto.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\ContentUserId.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\StringContent.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\StringComplete.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\repositories\DiplomaRepository.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\service\Controllers\PaymentOperations.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\impl\ContentImpl.java
+C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\PaypalOrder.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\entities\Diploma.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\exceptions\InstanceNotFoundException.java
 C:\Users\34698\Desktop\TFG\CyberCat\src\main\java\es\cybercatapp\model\repositories\ModuleUserRepository.java

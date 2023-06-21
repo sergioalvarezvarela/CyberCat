@@ -5,6 +5,7 @@ import es.cybercatapp.common.Constants;
 import es.cybercatapp.model.entities.Courses;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
+import es.cybercatapp.model.exceptions.UsernameNotFound;
 import es.cybercatapp.model.impl.CourseImpl;
 import es.cybercatapp.model.impl.InscriptionsImpl;
 import es.cybercatapp.model.impl.UserImpl;
@@ -84,6 +85,8 @@ public class CatalogOperations {
         } catch (DuplicatedResourceException ex) {
             serviceRedirectExceptions.serviceDuplicatedResourceException(ex, redirectAttributes);
             return "redirect:/catalog?start=0&count=5&category=Todos&word=&filter=1";
+        } catch (UsernameNotFound ex) {
+            return serviceExceptions.serviceUsernameNotFoundException(ex, model);
         }
         redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                 "inscription.success", new Object[]{principal.getName()}, locale));

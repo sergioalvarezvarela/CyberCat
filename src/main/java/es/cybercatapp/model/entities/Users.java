@@ -2,6 +2,7 @@ package es.cybercatapp.model.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -17,7 +18,7 @@ public class Users implements Serializable {
     public Users() {
     }
 
-    public Users(String username, String email, String password, Roles tipo, LocalDateTime fecha_creacion, String imagen_perfil) {
+    public Users(String username, String email, String password, Roles tipo, LocalDate fecha_creacion, String imagen_perfil) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -45,7 +46,7 @@ public class Users implements Serializable {
     private Roles tipo;
 
     @Column(name = "fecha_creacion", nullable = false)
-    private LocalDateTime fecha_creacion;
+    private LocalDate fecha_creacion;
 
     @Column(name = "imagen_perfil")
     private String imagen_perfil;
@@ -140,11 +141,11 @@ public class Users implements Serializable {
         this.tipo = tipo;
     }
 
-    public LocalDateTime getFecha_creacion() {
+    public LocalDate getFecha_creacion() {
         return fecha_creacion;
     }
 
-    public void setFecha_creacion(LocalDateTime fecha_creacion) {
+    public void setFecha_creacion(LocalDate fecha_creacion) {
         this.fecha_creacion = fecha_creacion;
     }
 
@@ -209,12 +210,12 @@ public class Users implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Users users = (Users) o;
-        return Objects.equals(userId, users.userId) && Objects.equals(username, users.username) && Objects.equals(email, users.email) && Objects.equals(password, users.password) && tipo == users.tipo && Objects.equals(fecha_creacion, users.fecha_creacion) && Objects.equals(imagen_perfil, users.imagen_perfil) && Objects.equals(courses, users.courses) && Objects.equals(inscriptions, users.inscriptions) && Objects.equals(module_users, users.module_users) && Objects.equals(content_users, users.content_users) && Objects.equals(diplomas, users.diplomas) && Objects.equals(comments, users.comments);
+        return Objects.equals(userId, users.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, username, email, password, tipo, fecha_creacion, imagen_perfil, courses, inscriptions, module_users, content_users, diplomas, comments);
+        return Objects.hash(userId);
     }
 
     @Override

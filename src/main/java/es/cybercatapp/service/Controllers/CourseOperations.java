@@ -1,6 +1,7 @@
 package es.cybercatapp.service.Controllers;
 
 import es.cybercatapp.model.entities.*;
+import es.cybercatapp.model.exceptions.UsernameNotFound;
 import es.cybercatapp.model.impl.*;
 import es.cybercatapp.service.conversor.CommentConversor;
 import es.cybercatapp.service.dto.*;
@@ -120,6 +121,8 @@ public class CourseOperations {
                     "addcourse.success", new Object[]{course.getCourse_name()}, locale));
         } catch (IOException ex) {
             return serviceExceptions.serviceUnexpectedException(ex, model);
+        } catch (UsernameNotFound ex) {
+            return serviceExceptions.serviceUsernameNotFoundException(ex, model);
         }
         return Constants.SEND_REDIRECT + "/managecourses";
     }
