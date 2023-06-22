@@ -210,12 +210,12 @@ public class Users implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Users users = (Users) o;
-        return Objects.equals(userId, users.userId);
+        return Objects.equals(userId, users.userId) && Objects.equals(username, users.username) && Objects.equals(email, users.email) && Objects.equals(password, users.password) && tipo == users.tipo && Objects.equals(fecha_creacion, users.fecha_creacion) && Objects.equals(imagen_perfil, users.imagen_perfil);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId);
+        return Objects.hash(userId, username, email, password, tipo, fecha_creacion, imagen_perfil);
     }
 
     @Override

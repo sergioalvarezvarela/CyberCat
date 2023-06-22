@@ -229,13 +229,14 @@ public class Courses implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Courses courses = (Courses) o;
-        return Float.compare(courses.course_price, course_price) == 0 && total_comments == courses.total_comments && puntuation == courses.puntuation && Float.compare(courses.grade, grade) == 0 && Objects.equals(courseId, courses.courseId) && Objects.equals(course_name, courses.course_name) && Objects.equals(course_description, courses.course_description) && Objects.equals(creation_date, courses.creation_date) && Objects.equals(course_photo, courses.course_photo) && course_category == courses.course_category && Objects.equals(user_owner, courses.user_owner) && Objects.equals(inscriptions, courses.inscriptions) && Objects.equals(modules, courses.modules) && Objects.equals(comments, courses.comments) && Objects.equals(diplomas, courses.diplomas);
+        return Float.compare(courses.course_price, course_price) == 0 && total_comments == courses.total_comments && puntuation == courses.puntuation && Float.compare(courses.grade, grade) == 0 && Objects.equals(courseId, courses.courseId) && Objects.equals(course_name, courses.course_name) && Objects.equals(course_description, courses.course_description) && Objects.equals(creation_date, courses.creation_date) && Objects.equals(course_photo, courses.course_photo) && course_category == courses.course_category && Objects.equals(user_owner, courses.user_owner);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(courseId, course_name, course_description, creation_date, course_photo, course_category, course_price, total_comments, puntuation, grade, user_owner, inscriptions, modules, comments, diplomas);
+        return Objects.hash(courseId);
     }
+
 
     @Override
     public String toString() {

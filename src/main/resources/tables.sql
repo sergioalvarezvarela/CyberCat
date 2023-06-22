@@ -125,7 +125,7 @@ create table hibernate_sequence (
     next_val bigint
 ) engine=InnoD;
 
-    insert into hibernate_sequence values ( 1 ;
+insert into hibernate_sequence values ( 1 ;
 
 create table inscriptions (
                               completed bit not null,
@@ -191,7 +191,7 @@ create table teststring (
 create table users (
                        user_id bigint not null auto_increment,
                        email varchar(255) not null,
-                       fecha_creacion datetime not null,
+                       fecha_creacion date not null,
                        imagen_perfil varchar(255),
                        password varchar(255) not null,
                        tipo varchar(255) not null,

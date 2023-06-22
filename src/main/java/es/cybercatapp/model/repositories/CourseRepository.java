@@ -29,10 +29,12 @@ public class CourseRepository extends AbstractRepository<Courses> {
 
     private static final String FIND_ALL_QUERY_CAT = "SELECT t FROM Courses t where t.course_name LIKE :coursename AND t.course_category = :category";
 
-     private static final String FIND_ALL_COURSES_BY_GRADE = "SELECT t FROM Courses t where t.course_name LIKE :coursename ORDER BY t.grade DESC";
+    private static final String FIND_ALL_COURSES_BY_GRADE = "SELECT t FROM Courses t where t.course_name LIKE :coursename ORDER BY t.grade DESC";
 
     private static final String FIND_ALL_COURSES_BY_GRADE_CAT = "SELECT t FROM Courses t where t.course_name LIKE :coursename AND t.course_category = :category  order by t.grade DESC";
 
+
+    private static final String INICIALIZAR_MODULOS = "SELECT c FROM Courses c LEFT JOIN FETCH c.modules WHERE c.courseId = :courseId";
 
     public List<Courses> findAllFiltered(int pageIndex, int filter, String category, String word) {
         TypedQuery<Courses> query = null;
@@ -47,7 +49,7 @@ public class CourseRepository extends AbstractRepository<Courses> {
 
                 } else if (filter == 2) {
                     query = entityManager.createQuery(FIND_ALL_COURSES_BY_PRICES_ASC, Courses.class);
-                } else{
+                } else {
                     query = entityManager.createQuery(FIND_ALL_COURSES_BY_GRADE, Courses.class);
                 }
                 query.setParameter("coursename", "%" + word + "%");
@@ -63,7 +65,7 @@ public class CourseRepository extends AbstractRepository<Courses> {
                     query = entityManager.createQuery(FIND_ALL_COURSES_BY_PRICES_DESC_CAT, Courses.class);
                 } else if (filter == 2) {
                     query = entityManager.createQuery(FIND_ALL_COURSES_BY_PRICES_ASC_CAT, Courses.class);
-                } else{
+                } else {
                     query = entityManager.createQuery(FIND_ALL_COURSES_BY_GRADE_CAT, Courses.class);
                 }
             }
@@ -77,6 +79,17 @@ public class CourseRepository extends AbstractRepository<Courses> {
             logger.error(e.getMessage(), e);
             return Collections.emptyList();
 
+        }
+    }
+
+    public Courses inicializarModulos(Courses courses) {
+        try {
+            TypedQuery<Courses> query = entityManager.createQuery(INICIALIZAR_MODULOS, Courses.class);
+            query.setParameter("courseId", courses.getCourseId());
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            logger.error(e.getMessage(), e);
+            return null;
         }
     }
 }

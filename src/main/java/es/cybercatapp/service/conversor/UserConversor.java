@@ -5,13 +5,14 @@ import es.cybercatapp.service.dto.ProfileDtoForm;
 import es.cybercatapp.service.utils.ImageUtils;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class UserConversor {
 
     public static String formatDateTime(String inputDateTime, String outputFormat) {
-        LocalDateTime dateTime = LocalDateTime.parse(inputDateTime);
+        LocalDate dateTime = LocalDate.parse(inputDateTime);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(outputFormat);
 
         return dateTime.format(formatter);
@@ -22,3 +23,4 @@ public class UserConversor {
     }
 
 }
+

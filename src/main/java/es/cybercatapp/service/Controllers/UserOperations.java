@@ -173,7 +173,9 @@ public class UserOperations {
             model.addAttribute("UpdateImageProfileDtoForm", new UpdateImageProfileDtoForm());
             return "editprofile";
         } catch (InstanceNotFoundException ex) {
-           return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+            return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        } catch (UsernameNotFound ex) {
+            return serviceExceptions.serviceUsernameNotFoundException(ex, model);
         }
 
     }
@@ -186,11 +188,11 @@ public class UserOperations {
         try{
             userImpl.Remove(principal.getName());
 
-        redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
-                "removeprofile.success", new Object[]{principal.getName()}, locale));
-        if (logger.isDebugEnabled()) {
-            logger.debug(MessageFormat.format("Perfil de usuario {0} elimiado", principal.getName()));
-        }
+            redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
+                    "removeprofile.success", new Object[]{principal.getName()}, locale));
+            if (logger.isDebugEnabled()) {
+                logger.debug(MessageFormat.format("Perfil de usuario {0} elimiado", principal.getName()));
+            }
         } catch (IOException ex) {
             return serviceExceptions.serviceUnexpectedException(ex, model);
         } catch (UsernameNotFound ex) {
@@ -201,7 +203,7 @@ public class UserOperations {
 
     @PostMapping("/editprofile/changepassword")
     public String doPostChangePassword(Principal principal, @Valid @ModelAttribute("ChangePasswordDtoForm") ChangePasswordDtoForm changePasswordDtoForm,
-                                        BindingResult result, Locale locale,
+                                       BindingResult result, Locale locale,
                                        Model model, RedirectAttributes redirectAttributes) {
         try {
             Users user = userImpl.findByUsername(principal.getName());
@@ -259,7 +261,7 @@ public class UserOperations {
         }
         redirectAttributes.addFlashAttribute(Constants.SUCCESS_MESSAGE, messageSource.getMessage(
                 "modifyprofile.success", new Object[]{principal.getName()}, locale));
-         return "redirect:/profile/" + editProfileDtoForm.getUsername() + "/editprofile";
+        return "redirect:/profile/" + editProfileDtoForm.getUsername() + "/editprofile";
     }
 
     @PostMapping("/editprofile/updatephoto")
@@ -295,6 +297,8 @@ public class UserOperations {
 
 
 }
+
+
 
 
 

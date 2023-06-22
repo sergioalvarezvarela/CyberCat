@@ -16,14 +16,12 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.nio.file.Files;
-import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -65,7 +63,7 @@ public class CourseImpl {
         if (user == null) {
             throw exceptionGenerationUtils.toUsernameNotFoundException(Constants.USERNAME_FIELD, userowner, "user.not.found");
         }
-        Courses courses = courseRepository.create(new Courses(coursename, description, LocalDate.now(), image, Category.valueOf(category), price,0,0,0, user));
+        Courses courses = courseRepository.create(new Courses(coursename, description, LocalDate.now(), image, Category.valueOf(category), price, 0, 0, 0, user));
         saveCourseImage(courses.getCourseId(), image, imageContents);
         return courses;
     }
@@ -84,8 +82,6 @@ public class CourseImpl {
     }
 
 
-
-
     @Transactional
     public void updatePositions(Courses courses) {
         courseRepository.update(courses);
@@ -97,53 +93,45 @@ public class CourseImpl {
                        String image, byte[] imageContents, String description, String userowner) throws InstanceNotFoundException, DuplicatedResourceException {
         Courses course = courseRepository.findById(id);
         Users user = userRepository.findByUsername(userowner);
-        if (course == null) {
-            throw new InstanceNotFoundException(String.valueOf(id), Courses.class.toString(), "Course not found");
+        Courses newcourse = new Courses(coursename, description, course.getCreation_date(), course.getCourse_photo(), Category.valueOf(category), price, course.getTotal_comments(), course.getPuntuation(), course.getGrade(), user);
+        newcourse.setCourseId(course.getCourseId());
+        newcourse.setModules(course.getModules());
+        if (image != null && image.trim().length() > 0 && imageContents != null) {
+            try {
+                deleteCourseImage(id, user.getImagen_perfil());
+            } catch (Exception ex) {
+                logger.error(ex.getMessage(), ex);
+            }
+            saveCourseImage(id, image, imageContents);
+            newcourse.setCourse_photo(image);
+            course.setCourse_photo(image);
+        }
+        if (!course.equals(newcourse)) {
+            course.setCourse_name(coursename);
+            course.setCourse_price(price);
+            course.setCourse_category(Category.valueOf(category));
+            course.setCourse_description(description);
+            courseRepository.update(course);
         } else {
-            Courses newcourse = new Courses(coursename, description, course.getCreation_date(), course.getCourse_photo(), Category.valueOf(category), price,course.getTotal_comments(),course.getPuntuation(),course.getGrade(), user);
-            newcourse.setCourseId(course.getCourseId());
-            newcourse.setModules(course.getModules());
-            if (image != null && image.trim().length() > 0 && imageContents != null) {
-                try {
-                    deleteCourseImage(id, user.getImagen_perfil());
-                } catch (Exception ex) {
-                    logger.error(ex.getMessage(), ex);
-                }
-                saveCourseImage(id, image, imageContents);
-                newcourse.setCourse_photo(image);
-                course.setCourse_photo(image);
-            }
-            if (!course.equals(newcourse)) {
-                course.setCourse_name(coursename);
-                course.setCourse_price(price);
-                course.setCourse_category(Category.valueOf(category));
-                course.setCourse_description(description);
-                courseRepository.update(course);
-            } else {
-                throw exceptionGenerationUtils.toDuplicatedResourceException("Course", course.getCourseId().toString(),
-                        "updatecourse.duplicated.exception");
-            }
+            throw exceptionGenerationUtils.toDuplicatedResourceException("Course", course.getCourseId().toString(),
+                    "updatecourse.duplicated.exception");
         }
     }
-
 
 
     @Transactional
     public void remove(long id) throws InstanceNotFoundException, IOException {
         Courses course = courseRepository.findById(id);
-        if (course == null) {
-            throw new InstanceNotFoundException(String.valueOf(id), Courses.class.toString(), "Course not found");
-        } else {
-            courseRepository.remove(course);
-            deleteCourseImage(id,course.getCourse_photo());
-            diplomaImpl.deletePdfByPrefix(String.valueOf(id));
-        }
+        courseRepository.remove(course);
+        deleteCourseImage(id, course.getCourse_photo());
+        diplomaImpl.deletePdfByPrefix(String.valueOf(id));
+
 
     }
 
     @Transactional(readOnly = true)
-    public List<Courses> findCoursesMoreInscriptions()  {
-         return inscriptionsRepository.findCoursesByCountUsers();
+    public List<Courses> findCoursesMoreInscriptions() {
+        return inscriptionsRepository.findCoursesByCountUsers();
     }
 
     private void saveCourseImage(Long id, String image, byte[] imageContents) {

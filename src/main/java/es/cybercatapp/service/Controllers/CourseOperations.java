@@ -92,6 +92,8 @@ public class CourseOperations {
             model.addAttribute("category", Category.values());
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        } catch (UsernameNotFound e) {
+            return serviceExceptions.serviceUsernameNotFoundException(e,model);
         }
 
         return "managecourses";
@@ -230,6 +232,8 @@ public class CourseOperations {
             model.addAttribute("courseId", courseId);
         } catch (InstanceNotFoundException ex) {
             return serviceExceptions.serviceInstanceNotFoundException(ex, model, locale);
+        }catch (UsernameNotFound ex) {
+            return serviceExceptions.serviceUsernameNotFoundException(ex, model);
         }
         return "viewcontent";
     }
@@ -254,5 +258,7 @@ public class CourseOperations {
     }
 
 }
+
+
 
 

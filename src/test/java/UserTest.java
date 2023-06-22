@@ -1,6 +1,5 @@
 import es.cybercatapp.Application;
 import es.cybercatapp.model.entities.DummyAuthentication;
-import es.cybercatapp.model.entities.Roles;
 import es.cybercatapp.model.entities.Users;
 import es.cybercatapp.model.exceptions.AuthenticationException;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
@@ -29,12 +28,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = Application.class)
@@ -115,7 +111,9 @@ public class UserTest {
 
         userImpl.create(username, email, password, imageName, imageBytes);
         userImpl.Remove(username);
-        assertNull(userImpl.findByUsername(username));
+        assertThrows(UsernameNotFound.class, () -> {
+            userImpl.findByUsername(username);
+        });
         assertThrows(UsernameNotFound.class, () -> {
             userImpl.Remove("usernameNotRegistered");
         });
@@ -132,37 +130,37 @@ public class UserTest {
         String imageName1 = image1.getName();
         Users user= null;
         try {
-        FileInputStream fis1 = new FileInputStream(image1);
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            FileInputStream fis1 = new FileInputStream(image1);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
-        byte[] buffer = new byte[1024];
-        int bytesRead;
+            byte[] buffer = new byte[1024];
+            int bytesRead;
 
-        while ((bytesRead = fis1.read(buffer)) != -1) {
-            bos.write(buffer, 0, bytesRead);
-        }
-        byte[] imageBytes1 = bos.toByteArray();
+            while ((bytesRead = fis1.read(buffer)) != -1) {
+                bos.write(buffer, 0, bytesRead);
+            }
+            byte[] imageBytes1 = bos.toByteArray();
 
-        fis1.close();
-        bos.close();
+            fis1.close();
+            bos.close();
 
-        user = userImpl.create(username, email, password, imageName1, imageBytes1);
-        assertThrows(DuplicatedResourceException.class, () -> {
-            userImpl.modifyProfile(username,username,email);
-        });
-        List <GrantedAuthority> roles = new ArrayList<>();
-        SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_USER");
-        roles.add(grantedAuthority);
-        User dummyUser = new User(username,password,roles);
-        Authentication dummyAuthentification = new DummyAuthentication(dummyUser);
-        SecurityContextHolder.getContext().setAuthentication(dummyAuthentification);
-        userImpl.modifyProfile(user.getUsername(),"newusername",user.getEmail());
-        assertEquals("newusername",userImpl.findByUsername("newusername").getUsername());
-        userImpl.modifyProfile("newusername","newusername","newusername@gmail.com");
-        assertEquals("newusername@gmail.com",userImpl.findByUsername("newusername").getEmail());
-        assertThrows(UsernameNotFound.class, () -> {
-            userImpl.modifyProfile(username,username,email);
-        });
+            user = userImpl.create(username, email, password, imageName1, imageBytes1);
+            assertThrows(DuplicatedResourceException.class, () -> {
+                userImpl.modifyProfile(username,username,email);
+            });
+            List <GrantedAuthority> roles = new ArrayList<>();
+            SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_USER");
+            roles.add(grantedAuthority);
+            User dummyUser = new User(username,password,roles);
+            Authentication dummyAuthentification = new DummyAuthentication(dummyUser);
+            SecurityContextHolder.getContext().setAuthentication(dummyAuthentification);
+            userImpl.modifyProfile(user.getUsername(),"newusername",user.getEmail());
+            assertEquals("newusername",userImpl.findByUsername("newusername").getUsername());
+            userImpl.modifyProfile("newusername","newusername","newusername@gmail.com");
+            assertEquals("newusername@gmail.com",userImpl.findByUsername("newusername").getEmail());
+            assertThrows(UsernameNotFound.class, () -> {
+                userImpl.modifyProfile(username,username,email);
+            });
 
         } finally {
             if (user != null) {

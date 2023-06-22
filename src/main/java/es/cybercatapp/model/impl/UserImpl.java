@@ -80,13 +80,19 @@ public class UserImpl implements UserDetailsService {
 
 
     @Transactional(readOnly = true)
-    public Users findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public Users findByUsername(String username) throws UsernameNotFound {
+
+        Users users = userRepository.findByUsername(username);
+        if (users == null) {
+            throw exceptionGenerationUtils.toUsernameNotFoundException(Constants.USERNAME_FIELD, username, "user.not.found");
+
+        } else {
+            return users;
+        }
     }
 
 
-
-    @Transactional // tested
+    @Transactional
     public Users create(String username, String email, String password,
                         String image, byte[] imageContents) throws DuplicatedResourceException {
         if (userRepository.findByEmail(email) != null) {
@@ -116,10 +122,8 @@ public class UserImpl implements UserDetailsService {
     }
 
 
-
-
     @Transactional
-    public void changePassword(String username, String oldPass, String password) throws AuthenticationException,  UsernameNotFound{
+    public void changePassword(String username, String oldPass, String password) throws AuthenticationException, UsernameNotFound {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Users user = userRepository.findByUsername(username);
         if (user == null) {
@@ -137,7 +141,7 @@ public class UserImpl implements UserDetailsService {
 
 
     @Transactional
-    public void modifyProfile(String username, String newusername, String newemail) throws DuplicatedResourceException,  UsernameNotFound {
+    public void modifyProfile(String username, String newusername, String newemail) throws DuplicatedResourceException, UsernameNotFound {
         Users user = userRepository.findByUsername(username);
         Users user1 = userRepository.findByUsername(newusername);
         Users user2 = userRepository.findByEmail(newemail);
@@ -159,7 +163,7 @@ public class UserImpl implements UserDetailsService {
     }
 
     @Transactional
-    public void updateProfileImage(String username, String image, byte[] imageContents) throws UsernameNotFound{
+    public void updateProfileImage(String username, String image, byte[] imageContents) throws UsernameNotFound {
         Users user = userRepository.findByUsername(username);
         if (user == null) {
             throw exceptionGenerationUtils.toUsernameNotFoundException(Constants.USERNAME_FIELD, username, "user.not.found");
@@ -238,7 +242,6 @@ public class UserImpl implements UserDetailsService {
         Authentication newAuth = new UsernamePasswordAuthenticationToken(updatedUser, auth.getCredentials(), auth.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
-
 
 
 }
