@@ -41,7 +41,6 @@ public class ContentImpl {
 
     @Transactional
     public StringContent createTeoricContent(Long moduleId, String contentName, String html) throws InstanceNotFoundException, DuplicatedResourceException {
-        try {
 
             Modules module = moduleRepository.findById(moduleId);
             Content contenido = contentRepository.findContentsByContentNameAndModule(moduleId, contentName);
@@ -57,19 +56,14 @@ public class ContentImpl {
                 return content;
             }
 
-        } catch (InstanceNotFoundException ex) {
-            throw new InstanceNotFoundException(moduleId.toString(), Modules.class.toString(), "Module not found");
-        }
     }
 
     @Transactional
     public TestQuestions createTestQuestionContent(Long moduleId, String contentName, String enunciado) throws InstanceNotFoundException, DuplicatedResourceException {
-        try {
 
             Modules module = moduleRepository.findById(moduleId);
             Content contenido = contentRepository.findContentsByContentNameAndModule(moduleId, contentName);
             if (contenido != null) {
-
                 throw exceptionGenerationUtils.toDuplicatedResourceException("Content", contentName,
                         "createcontent.duplicated.exception");
             } else {
@@ -77,15 +71,10 @@ public class ContentImpl {
                 contentRepository.create(content);
                 return content;
             }
-
-        } catch (InstanceNotFoundException ex) {
-            throw new InstanceNotFoundException(moduleId.toString(), Modules.class.toString(), "Module not found");
-        }
     }
 
     @Transactional
     public StringComplete createStringCompleteContent(Long moduleId, String contentName, String enunciado, String frase, String frasecorrecta, String words) throws InstanceNotFoundException, DuplicatedResourceException {
-        try {
 
             Modules module = moduleRepository.findById(moduleId);
             Content contenido = contentRepository.findContentsByContentNameAndModule(moduleId, contentName);
@@ -99,9 +88,6 @@ public class ContentImpl {
                 return content;
             }
 
-        } catch (InstanceNotFoundException ex) {
-            throw new InstanceNotFoundException(moduleId.toString(), Modules.class.toString(), "Module not found");
-        }
     }
 
 
@@ -116,9 +102,6 @@ public class ContentImpl {
     public void remove(Long contentId) throws InstanceNotFoundException {
 
         Content content = contentRepository.findById(contentId);
-        if (content == null) {
-            throw new InstanceNotFoundException(contentId.toString(), Content.class.toString(), "Content not found");
-        }
         contentRepository.remove(content);
 
 
@@ -129,9 +112,6 @@ public class ContentImpl {
 
         Content content = contentRepository.findById(contentId);
         Content content1 = contentRepository.findContentsByContentNameAndModule(moduleId, newContentName);
-        if (content == null) {
-            throw new InstanceNotFoundException(contentId.toString(), Content.class.toString(), "Content not found");
-        }
         if (content1 != null) {
             throw exceptionGenerationUtils.toDuplicatedResourceException("Content", content1.getContentId().toString(),
                     "updatecontent.duplicated.exception");
@@ -147,11 +127,6 @@ public class ContentImpl {
     public void puzzleContentUpdate(Long contentId, String enunciado, String sentence, String correctsentence, String words) throws InstanceNotFoundException, DuplicatedResourceException {
 
         StringComplete content = (StringComplete) contentRepository.findById(contentId);
-        if (content == null) {
-            throw new InstanceNotFoundException(contentId.toString(), Content.class.toString(), "Content not found");
-        }
-
-
         if (content.getEnunciado().equals(enunciado) && content.getSentence().equals(sentence) && content.getCorrectSentence().equals(correctsentence) && words.equals(content.getContent())) {
             throw exceptionGenerationUtils.toDuplicatedResourceException("Content", content.getContentId().toString(),
                     "editcontent.duplicated.exception");
@@ -168,10 +143,6 @@ public class ContentImpl {
     public void testContentUpdate(Long contentId, String question, String word1, String word2, String word3, String word4, int correct) throws InstanceNotFoundException, DuplicatedResourceException {
 
         TestQuestions content = (TestQuestions) contentRepository.findById(contentId);
-        if (content == null) {
-            throw new InstanceNotFoundException(contentId.toString(), Content.class.toString(), "Content not found");
-        }
-
         if (content.getQuestion().equals(question) && content.getOption1().equals(word1) && content.getOption2().equals(word2) && content.getOption3().equals(word3) && content.getOption4().equals(word4) && content.getCorrect() == correct) {
             throw exceptionGenerationUtils.toDuplicatedResourceException("Content", content.getContentId().toString(),
                     "editcontent.duplicated.exception");
@@ -190,9 +161,6 @@ public class ContentImpl {
     public void stringContentUpdate(String html, Long contentId) throws InstanceNotFoundException, DuplicatedResourceException {
 
         StringContent content = (StringContent) contentRepository.findById(contentId);
-        if (content == null) {
-            throw new InstanceNotFoundException(contentId.toString(), Content.class.toString(), "Content not found");
-        }
         if (content.getHtml().equals(html)) {
             throw exceptionGenerationUtils.toDuplicatedResourceException("Content", content.getContentId().toString(),
                     "editcontent.duplicated.exception");

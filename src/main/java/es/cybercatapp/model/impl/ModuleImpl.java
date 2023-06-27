@@ -44,7 +44,6 @@ public class ModuleImpl {
     @Transactional
     public Modules create(String modulename, Long courseId) throws InstanceNotFoundException, DuplicatedResourceException {
 
-        try {
             Modules modules = moduleRepository.findModulesByModuleNameAndCourse(courseId, modulename);
             if (modules != null) {
 
@@ -61,9 +60,6 @@ public class ModuleImpl {
                 return modules;
             }
 
-        } catch (InstanceNotFoundException ex) {
-            throw new InstanceNotFoundException(courseId.toString(), Courses.class.toString(), "Course not found");
-        }
     }
 
     @Transactional(readOnly = true)
@@ -78,9 +74,6 @@ public class ModuleImpl {
     public void remove(Long moduleId) throws InstanceNotFoundException {
 
         Modules modules = moduleRepository.findById(moduleId);
-        if (modules == null) {
-            throw new InstanceNotFoundException(moduleId.toString(), Modules.class.toString(), "Module not found");
-        }
         moduleRepository.remove(modules);
 
 
