@@ -75,9 +75,6 @@ public class DiplomaImpl {
             return null;
         }
         Users user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw exceptionGenerationUtils.toUsernameNotFoundException(Constants.USERNAME_FIELD, username, "user.not.found");
-        }
         Courses courses = courseRepository.findById(courseId);
         File pdf = new File("src/main/resources/static/pdf/diploma.pdf");
         try (PDDocument document = Loader.loadPDF(pdf)) {

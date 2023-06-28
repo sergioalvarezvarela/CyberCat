@@ -79,9 +79,6 @@ public class ModuleImpl {
 
     }
 
-
-
-
     @Transactional
     public void updatePositions(Modules modules) {
         moduleRepository.update(modules);

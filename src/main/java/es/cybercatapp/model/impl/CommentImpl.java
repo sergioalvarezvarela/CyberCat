@@ -67,9 +67,6 @@ public class CommentImpl {
     @Transactional
     public void remove(Long commentId) throws InstanceNotFoundException {
         Comment commentary = commentRepository.findById(commentId);
-        if (commentary == null) {
-            throw new InstanceNotFoundException(commentId.toString(), Comment.class.toString(), "Comment not found");
-        }
         commentary.getCourses().setPuntuation((commentary.getCourses().getPuntuation() - commentary.getGrade()));
         commentary.getCourses().setTotal_comments(commentary.getCourses().getTotal_comments() - 1);
         if (commentary.getCourses().getTotal_comments() != 0) {
@@ -84,9 +81,6 @@ public class CommentImpl {
     @Transactional
     public void update(Long commentId, String description, int grade, String comment) throws InstanceNotFoundException, DuplicatedResourceException {
         Comment commentary = commentRepository.findById(commentId);
-        if (commentary == null) {
-            throw new InstanceNotFoundException(commentId.toString(), Comment.class.toString(), "Comment not found");
-        }
         if (commentary.getDescription().equals(description) && commentary.getGrade() == grade && commentary.getCommentary().equals(comment)) {
             throw exceptionGenerationUtils.toDuplicatedResourceException("Comment", commentary.getCommentId().toString(),
                     "editcomment.duplicated.exception");
