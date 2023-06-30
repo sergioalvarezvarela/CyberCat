@@ -257,4 +257,34 @@ public class DiplomaTest {
         }
     }
 
+    @Test
+    public void testFindDiplomaByUsername() throws DuplicatedResourceException, IOException, UsernameNotFound, InstanceNotFoundException {
+        Users users = getUser();
+        Courses courses = getCourse(users);
+        String moduleName = "Nombre de modulo";
+        String contentName = "Contenido 1";
+        String html = "Lore Ipsum";
+        Inscriptions inscriptions = null;
+
+
+        try {
+            Modules module = moduleImpl.create(moduleName, courses.getCourseId());
+            inscriptionsImpl.signOn(users.getUsername(), courses.getCourseId());
+            Content content = contentImpl.createTeoricContent(module.getModuleId(), contentName, html);
+            inscriptions = new Inscriptions(users, courses, false);
+            contentUserImpl.updateUserContent(users.getUsername(), content.getContentId(), true);
+            moduleUserImpl.updateModuleInscription(users.getUsername(), courses.getCourseId());
+            inscriptionsImpl.updateInscriptionStatus(courses.getCourseId(), users.getUsername());
+            Diploma diploma = diplomaImpl.create(courses.getCourseId(), users.getUsername(), true);
+            assertEquals(diplomaImpl.findDiplomasByUsername(users.getUsername()).get(0),diploma);
+
+        } finally {
+            if (inscriptions != null) {
+                courseImpl.remove(courses.getCourseId());
+                userImpl.Remove(users.getUsername());
+            }
+
+        }
+    }
+
 }

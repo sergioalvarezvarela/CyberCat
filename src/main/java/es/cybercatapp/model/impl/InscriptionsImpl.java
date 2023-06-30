@@ -76,7 +76,6 @@ public class InscriptionsImpl {
     public void remove(String username, Long courseId) throws InstanceNotFoundException {
         Inscriptions inscriptions = inscriptionsRepository.findInscription(courseId, username);
         inscriptionsRepository.remove(inscriptions);
-        contentUserImpl.remove(courseId, username);
         moduleUserImpl.remove(courseId, username);
     }
 

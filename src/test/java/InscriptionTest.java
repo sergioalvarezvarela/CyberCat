@@ -107,14 +107,9 @@ public class InscriptionTest {
     public void testCreateInscriptions() throws DuplicatedResourceException, IOException, UsernameNotFound, InstanceNotFoundException {
         Users users = getUser();
         Courses courses = getCourse(users);
-        String moduleName = "Nombre de modulo";
-        String contentName = "Contenido 1";
-        String html = "Lore Ipsum";
         Inscriptions inscriptions = null;
 
         try {
-            Modules module = moduleImpl.create(moduleName, courses.getCourseId());
-            contentImpl.createTeoricContent(module.getModuleId(),contentName,html);
             inscriptionsImpl.signOn(users.getUsername(), courses.getCourseId());
             inscriptions = new Inscriptions(users,courses,false);
             assertEquals(inscriptions,inscriptionsImpl.findInscription(courses.getCourseId(),users.getUsername()));
@@ -135,8 +130,13 @@ public class InscriptionTest {
         Users users = getUser();
         Courses courses = getCourse(users);
         Inscriptions inscriptions = null;
+        String moduleName = "Nombre de modulo";
+        String contentName = "Contenido 1";
+        String html = "Lore Ipsum";
 
         try {
+            Modules module = moduleImpl.create(moduleName, courses.getCourseId());
+            contentImpl.createTeoricContent(module.getModuleId(),contentName,html);
             inscriptionsImpl.signOn(users.getUsername(), courses.getCourseId());
             inscriptions = new Inscriptions(users,courses,false);
             inscriptionsImpl.remove(inscriptions.getUsers().getUsername(),inscriptions.getCourses().getCourseId());

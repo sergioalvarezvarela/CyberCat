@@ -33,6 +33,7 @@ import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 @Service(value = "diplomaImpl")
@@ -67,7 +68,7 @@ public class DiplomaImpl {
 
     @Transactional
     public Diploma create(Long courseId, String username, boolean payment) throws InstanceNotFoundException, DuplicatedResourceException, IOException, UsernameNotFound {
-        Diploma diploma1 = diplomaRepository.findContentsByContentNameAndModule(courseId, username);
+        Diploma diploma1 = diplomaRepository.findDiplomaByCourseAndUsername(courseId, username);
         Diploma diploma;
 
         Inscriptions inscriptions = inscriptionsImpl.findInscription(courseId, username);
@@ -134,7 +135,12 @@ public class DiplomaImpl {
 
     @Transactional(readOnly = true)
     public Diploma findDiplomaByCourseAndUsername(long courseId, String username) {
-        return diplomaRepository.findContentsByContentNameAndModule(courseId,username);
+        return diplomaRepository.findDiplomaByCourseAndUsername(courseId,username);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Diploma> findDiplomasByUsername(String username) {
+        return diplomaRepository.findDiplomaByUsername(username);
     }
 
 

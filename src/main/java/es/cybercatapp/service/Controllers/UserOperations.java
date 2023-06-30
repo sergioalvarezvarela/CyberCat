@@ -1,11 +1,14 @@
 package es.cybercatapp.service.Controllers;
 
 import es.cybercatapp.model.entities.Courses;
+import es.cybercatapp.model.entities.Diploma;
 import es.cybercatapp.model.entities.ProfilePhoto;
 import es.cybercatapp.model.exceptions.UsernameNotFound;
 import es.cybercatapp.model.impl.CourseImpl;
+import es.cybercatapp.model.impl.DiplomaImpl;
 import es.cybercatapp.model.impl.InscriptionsImpl;
 import es.cybercatapp.service.conversor.CoursesConversor;
+import es.cybercatapp.service.utils.ImageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import es.cybercatapp.common.Constants;
@@ -65,6 +68,8 @@ public class UserOperations {
     @Autowired
     private InscriptionsImpl inscriptionsImpl;
 
+    @Autowired
+    private DiplomaImpl diplomaImpl;
 
 
 
@@ -145,12 +150,19 @@ public class UserOperations {
             AdminChecker.isAdmin(model, authentication);
             List<Courses> courses = inscriptionsImpl.findCoursesInscriptionsByUser(authentication.getName());
             List<CourseDtoForm> courseDto = new ArrayList<>();
-
+            List<Diploma> diplomas = diplomaImpl.findDiplomasByUsername(authentication.getName());
+            List<DiplomaProfileDtoForm> diplomaProfileDtoForms = new ArrayList<>();
             for (Courses course : courses) {
                 byte[] image2 = courseImpl.getImage(course.getCourseId());
                 courseDto.add(CoursesConversor.toCourseDtoForm(course, image2, course.getCourse_photo()));
             }
             model.addAttribute("CourseDtoForm", courseDto);
+            for (Diploma diploma : diplomas) {
+                byte[] image3 = courseImpl.getImage(diploma.getCourses().getCourseId());
+                diplomaProfileDtoForms.add(new DiplomaProfileDtoForm(diploma.getDiplomaId(), ImageUtils.toString64(image3),diploma.getCourses().getCourse_photo()));
+            }
+            model.addAttribute("DiplomaProfileDtoForm", diplomaProfileDtoForms);
+
             return "profile";
         } catch (Exception ex) {
             return serviceExceptions.serviceUnexpectedException(ex, model);

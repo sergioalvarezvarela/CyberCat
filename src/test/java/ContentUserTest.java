@@ -137,6 +137,7 @@ public class ContentUserTest {
         String html = "Lore Ipsum";
         Inscriptions inscriptions = null;
 
+
         try {
             Modules module = moduleImpl.create(moduleName, courses.getCourseId());inscriptionsImpl.signOn(users.getUsername(), courses.getCourseId());
             Content content = contentImpl.createTeoricContent(module.getModuleId(),contentName,html);
@@ -155,29 +156,4 @@ public class ContentUserTest {
         }
     }
 
-    @Test
-    public void testRemoveUserContent() throws DuplicatedResourceException, IOException, UsernameNotFound, InstanceNotFoundException {
-        Users users = getUser();
-        Courses courses = getCourse(users);
-        String moduleName = "Nombre de modulo";
-        String contentName = "Contenido 1";
-        String html = "Lore Ipsum";
-        Inscriptions inscriptions = null;
-
-        try {
-            Modules module = moduleImpl.create(moduleName, courses.getCourseId());
-            contentImpl.createTeoricContent(module.getModuleId(),contentName,html);
-            inscriptionsImpl.signOn(users.getUsername(), courses.getCourseId());
-            inscriptions = new Inscriptions(users,courses,false);
-            List<ContentUser> list1 = new ArrayList<>(Collections.emptyList());
-            contentUserImpl.remove(courses.getCourseId(),users.getUsername());
-            assertEquals(list1,contentUserImpl.findListContentUser(users.getUsername(),module.getModuleId()));
-        } finally {
-            if (inscriptions != null) {
-                courseImpl.remove(courses.getCourseId());
-                userImpl.Remove(users.getUsername());
-            }
-
-        }
-    }
 }

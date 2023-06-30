@@ -38,6 +38,9 @@ public class ModuleUserImpl {
     @Autowired
     ContentUserRepository contentUserRepository;
 
+    @Autowired
+    ContentUserImpl contentUserImpl;
+
     @Transactional(readOnly = true)
     public List<ModuleUser> findListModuleUser(String username, long courseId) throws InstanceNotFoundException {
         Users user = userRepository.findByUsername(username);
@@ -48,53 +51,54 @@ public class ModuleUserImpl {
     public void updateModuleInscription(String username, long courseId) throws InstanceNotFoundException {
         Users user = userRepository.findByUsername(username);
         Courses courses = courseRepository.findById(courseId);
-        List<Modules> modules = moduleUserRepository.findListModule(user.getUserId(), courseId);
         List<ModuleUser> moduleUsers = moduleUserRepository.findListModuleUser(user.getUserId(), courseId);
-        int i = 0;
 
         for (Modules module : courses.getModules()) {
-            if (!modules.contains(module)) {
-                ModuleUser mU = new ModuleUser(user, module, null);
-                moduleUserRepository.create(mU);
-            } else {
-                List<ContentUser> contentUsers = contentUserRepository.findListContentUser(user.getUserId(), module.getModuleId());
+            ModuleUser moduleUser = findModuleUserInList(moduleUsers, module);
 
-                Boolean allContentUsersNull = true;
-                Boolean allContentUsersTrue = true;
-
-                if (contentUsers.isEmpty()) {
-                    if (moduleUsers.get(i).getCompleted() == null || !moduleUsers.get(i).getCompleted()) {
-                        moduleUsers.get(i).setCompleted(true);
-                        moduleUserRepository.update(moduleUsers.get(i));
-                    }
-                } else {
-                    for (ContentUser contentUser : contentUsers) {
-                        Boolean contentUserCompleted = contentUser.getCompleted();
-                        if (contentUserCompleted == null) {
-                            allContentUsersTrue = false;
-                        } else if (!contentUserCompleted) {
-                            allContentUsersTrue = false;
-                            allContentUsersNull = false;
-                            moduleUsers.get(i).setCompleted(false);
-                            moduleUserRepository.update(moduleUsers.get(i));
-                            break;
-                        } else {
-                            allContentUsersNull = false;
-                        }
-                    }
-
-                    if (allContentUsersTrue && (moduleUsers.get(i).getCompleted() == null || !moduleUsers.get(i).getCompleted())) {
-                        moduleUsers.get(i).setCompleted(true);
-                        moduleUserRepository.update(moduleUsers.get(i));
-                    } else if (allContentUsersNull && moduleUsers.get(i).getCompleted() != null) {
-                        moduleUsers.get(i).setCompleted(null);
-                        moduleUserRepository.update(moduleUsers.get(i));
-                    }
-                }
+            if (moduleUser == null) {
+                moduleUser = new ModuleUser(user, module, null);
+                moduleUserRepository.create(moduleUser);
             }
-            i++;
+
+            updateModuleUserCompletionStatus(user, module, moduleUser);
         }
     }
+
+    private ModuleUser findModuleUserInList(List<ModuleUser> moduleUsers, Modules module) {
+        for (ModuleUser moduleUser : moduleUsers) {
+            if (moduleUser.getModule().equals(module)) {
+                return moduleUser;
+            }
+        }
+
+        return null;
+    }
+
+    private void updateModuleUserCompletionStatus(Users user, Modules module, ModuleUser moduleUser) {
+        List<ContentUser> contentUsers = contentUserRepository.findListContentUser(user.getUserId(), module.getModuleId());
+        Boolean completionStatus = null;
+
+        for (ContentUser contentUser : contentUsers) {
+            Boolean contentUserCompleted = contentUser.getCompleted();
+
+            if (contentUserCompleted == null) {
+                completionStatus = null;
+                break;
+            } else if (!contentUserCompleted) {
+                completionStatus = false;
+                break;
+            } else {
+                completionStatus = true;
+            }
+        }
+
+        if (completionStatus != moduleUser.getCompleted()) {
+            moduleUser.setCompleted(completionStatus);
+            moduleUserRepository.update(moduleUser);
+        }
+    }
+
 
     @Transactional
     public void remove(long courseId, String username) throws InstanceNotFoundException {
@@ -102,6 +106,7 @@ public class ModuleUserImpl {
         List<ModuleUser> moduleUsers = moduleUserRepository.findListModuleUser(users.getUserId(), courseId);
         for (ModuleUser moduleUser : moduleUsers) {
             moduleUserRepository.remove(moduleUser);
+            contentUserImpl.remove(moduleUser.getModule().getModuleId(),users.getUsername());
         }
     }
 }

@@ -172,7 +172,7 @@ input:checked ~ .star {
     color: #ffe234;
 }
 
-input[type=radio] {
+input[type=radio].hide-radio {
     display: none;
 }
 
