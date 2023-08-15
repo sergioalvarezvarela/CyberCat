@@ -3,11 +3,10 @@ import es.cybercatapp.model.entities.*;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.exceptions.UsernameNotFound;
-import es.cybercatapp.model.impl.ContentImpl;
-import es.cybercatapp.model.impl.CourseImpl;
-import es.cybercatapp.model.impl.ModuleImpl;
-import es.cybercatapp.model.impl.UserImpl;
-import es.cybercatapp.service.dto.TeoricDtoForm;
+import es.cybercatapp.model.services.ContentImpl;
+import es.cybercatapp.model.services.CourseImpl;
+import es.cybercatapp.model.services.ModuleImpl;
+import es.cybercatapp.model.services.UserImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +20,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.function.BooleanSupplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 

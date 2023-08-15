@@ -41,18 +41,5 @@ public class ModuleUserRepository extends AbstractRepository<ModuleUser> {
 
     }
 
-    public List<Modules> findListModule(Long userId, Long courseId) {
-        try {
-            TypedQuery<Modules> query = entityManager.createQuery(LIST_MODULES, Modules.class);
-            query.setParameter("courseId", courseId);
-            query.setParameter("userId", userId);
-            return query.getResultList();
-        } catch (NoResultException e) {
-            logger.error(e.getMessage(), e);
-            return null;
-        }
-
-
-    }
 
 }

@@ -21,19 +21,19 @@
                         </div>
                         <div class="col-6">
                             <div class="grade">
-                                <input type="radio" id="star6" name="grade" th:value="5" />
+                                <input type="radio" class="hide-radio" id="star6" name="grade" th:value="5" />
                                 <label for="star6" class="star" title="1 estrella"><i class="bi bi-star"></i></label>
-                                <input type="radio" id="star7" name="grade" th:value="4" />
+                                <input type="radio" class="hide-radio" id="star7" name="grade" th:value="4" />
                                 <label for="star7" class="star" title="2 estrellas"><i class="bi bi-star"></i></label>
-                                <input type="radio" id="star8" name="grade" th:value="3" />
+                                <input type="radio" class="hide-radio" id="star8" name="grade" th:value="3" />
                                 <label for="star8" class="star" title="3 estrellas"><i class="bi bi-star"></i></label>
-                                <input type="radio" id="star9" name="grade" th:value="2" />
+                                <input type="radio" class="hide-radio" id="star9" name="grade" th:value="2" />
                                 <label for="star9" class="star" title="4 estrellas"><i class="bi bi-star"></i></label>
-                                <input type="radio" id="star10" name="grade" th:value="1" />
+                                <input type="radio" class="hide-radio" id="star10" name="grade" th:value="1" />
                                 <label for="star10" class="star" title="5 estrellas"><i class="bi bi-star"></i></label>
                             </div>
                         </div>
-                        <input type="hidden" id="inputEditGrade" name="inputEditGrade" th:field="*{commentDtoForm.grade}"/>
+                        <input type="hidden" id="inputGrade" name="inputGrade" th:field="*{commentDtoForm.grade}"/>
                         <div class="col-12">
                             <label for="inputDescription2" class="form-label">Descripcion detallada</label>
                             <textarea class="form-control" id="inputDescription2" rows="3" th:field="*{commentDtoForm.commentary}"></textarea>

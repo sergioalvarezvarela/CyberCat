@@ -29,7 +29,7 @@ public class DiplomaRepository extends AbstractRepository<Diploma>{
 
     }
 
-    public List<Diploma> findDiplomaByUsername(String username) {
+    public List<Diploma> inicializarDiploma(String username) {
         try {
             TypedQuery<Diploma> query = entityManager.createQuery(FIND_DIPLOMA_BY_USERNAME, Diploma.class);
             query.setParameter("username", username);

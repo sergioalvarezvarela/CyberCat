@@ -31,7 +31,7 @@ public class InscriptionsRepository extends AbstractRepository<Inscriptions>{
         }
     }
 
-    public List<Courses> findCoursesByUser (String userName) {
+    public List<Courses> inicializarCursos (String userName) {
         try {
             TypedQuery<Courses> query = entityManager.createQuery(FIND_COURSES_BY_USERID, Courses.class);
             query.setParameter("userName", userName);

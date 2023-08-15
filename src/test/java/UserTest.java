@@ -5,7 +5,7 @@ import es.cybercatapp.model.exceptions.AuthenticationException;
 import es.cybercatapp.model.exceptions.DuplicatedResourceException;
 import es.cybercatapp.model.exceptions.InstanceNotFoundException;
 import es.cybercatapp.model.exceptions.UsernameNotFound;
-import es.cybercatapp.model.impl.UserImpl;
+import es.cybercatapp.model.services.UserImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -31,8 +31,6 @@ public class ModuleRepository extends AbstractRepository<Modules> {
 
     }
 
-
-
     public Modules inicializarContenidos(Modules modules) {
         try {
             TypedQuery<Modules> query = entityManager.createQuery(INICIALIZAR_CONTENTIDO, Modules.class);
