@@ -24,7 +24,7 @@ public class PaymentOperations {
     @Autowired
     ServiceRedirectExceptions serviceRedirectExceptions;
 
-    @PostMapping("/course/{courseId}/payment/store-paypal-order")
+    @PostMapping("/course/{courseId}/payment")
     public ResponseEntity<Map<String, Boolean>> createOrder(@RequestBody PaypalOrder paypalOrder, @PathVariable String courseId, HttpServletRequest request, Locale locale) {
         Map<String, Boolean> response = new HashMap<>();
         if ("COMPLETED".equals(paypalOrder.getStatus())) {

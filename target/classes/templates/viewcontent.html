@@ -177,7 +177,7 @@
                         return actions.order.capture().then(function (details) {
                             let courseId = document.getElementById("courseId").value;
                             if (details.status === 'COMPLETED') {
-                                fetch("/course/" + courseId + "/payment/store-paypal-order", {
+                                fetch("/course/" + courseId + "/payment", {
                                     method: "POST",
                                     headers: {
                                         "Content-Type": "application/json",
